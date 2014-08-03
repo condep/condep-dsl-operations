@@ -87,7 +87,6 @@
     <Compile Include="Application\Deployment\WindowsService\WindowsServiceOperationBase.cs" />
     <Compile Include="Application\Deployment\WindowsService\WindowsServiceOptions.cs" />
     <Compile Include="Application\Deployment\WindowsService\WindowsServiceWithInstallerOperation.cs" />
-    <Compile Include="Application\Execution\PowerShell\PowerShellOperation.cs" />
     <Compile Include="Application\Execution\PowerShell\PowerShellOptions.cs" />
     <Compile Include="Application\Execution\PowerShell\RemotePowerShellHostOperation.cs" />
     <Compile Include="Application\Execution\RemoteExecutionExtensions.cs" />
