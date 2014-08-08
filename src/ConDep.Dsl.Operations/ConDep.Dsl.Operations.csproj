@@ -35,9 +35,9 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConDep.Dsl, Version=3.0.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ConDep.Dsl, Version=3.0.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ConDep.Dsl.3.0.11-beta\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.3.0.15-beta\lib\net40\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -93,6 +93,12 @@
     <Compile Include="Application\Execution\RunCmd\ConDepUntrappedExitCodeException.cs" />
     <Compile Include="Application\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Application\Execution\RunCmd\RunCmdPsOperation.cs" />
+    <Compile Include="Application\Installation\InstallationExtensions.cs" />
+    <Compile Include="Application\Installation\FileSourceType.cs" />
+    <Compile Include="Application\Installation\Executable\InstallExecutableOperation.cs" />
+    <Compile Include="Application\Installation\Msi\IOfferMsiOptions.cs" />
+    <Compile Include="Application\Installation\Msi\MsiOptions.cs" />
+    <Compile Include="Application\Installation\Msi\MsiOperation.cs" />
     <Compile Include="Application\Local\PreCompile\ClientBuildManagerWrapper.cs" />
     <Compile Include="Application\Local\PreCompile\IWrapClientBuildManager.cs" />
     <Compile Include="Application\Local\PreCompile\PreCompileCallback.cs" />
@@ -105,6 +111,7 @@
     <Compile Include="Builders\RemoteCertDeploymentBuilder.cs" />
     <Compile Include="Application\Deployment\RemoteCertDeploymentExtensions.cs" />
     <Compile Include="Builders\SslInfrastructureBuilder.cs" />
+    <Compile Include="Infrastructure\RestartComputerOperation.cs" />
     <Compile Include="Infrastructure\SslInfrastructureExtensions.cs" />
     <Compile Include="Infrastructure\Certificate\CertificateInfrastructureProvider.cs" />
     <Compile Include="Infrastructure\Certificate\ConDepCertificateDuplicationException.cs" />
@@ -154,6 +161,7 @@
     <EmbeddedResource Include="PSScripts\Iis.ps1" />
     <EmbeddedResource Include="PSScripts\Windows.ps1" />
     <EmbeddedResource Include="PSScripts\WinService.ps1" />
+    <EmbeddedResource Include="PSScripts\Msi.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Deployment\PowerShellScript\" />

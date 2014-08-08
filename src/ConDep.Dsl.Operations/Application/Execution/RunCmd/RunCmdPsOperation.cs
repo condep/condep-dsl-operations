@@ -11,7 +11,7 @@ namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
         public RunCmdPsOperation(string cmd, RunCmdOptions.RunCmdOptionValues values = null)
         {
             _cmd = cmd;
-            _values = values;
+            _values = values ?? new RunCmdOptions.RunCmdOptionValues();
         }
 
         public override string Name
@@ -26,7 +26,17 @@ namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.ExecuteRemote.PowerShell("cmd /c " + _cmd);
+            server.ExecuteRemote.PowerShell(string.Format(@"
+$continueOnError = {0}
+cmd /c {1}
+if($lastexitcode -gt 0) {{
+    if($continueOnError) {{
+        Write-Warning ""Exit code $lastexitcode""
+    }}
+    else {{
+        throw ""Exit code $lastexitcode""
+    }}
+}}", _values.ContinueOnError ? "$true": "$false", _cmd));
         }
     }
 }
