@@ -28,7 +28,7 @@ namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
         {
             server.ExecuteRemote.PowerShell(string.Format(@"
 $continueOnError = {0}
-cmd /c {1}
+cmd /c ""{1}""
 if($lastexitcode -gt 0) {{
     if($continueOnError) {{
         Write-Warning ""Exit code $lastexitcode""
