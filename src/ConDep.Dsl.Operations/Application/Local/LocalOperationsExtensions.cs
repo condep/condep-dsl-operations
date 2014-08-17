@@ -1,4 +1,5 @@
-﻿using ConDep.Dsl.Operations.Application.Local.PreCompile;
+﻿using ConDep.Dsl.Operations.Application.Local;
+using ConDep.Dsl.Operations.Application.Local.PreCompile;
 using ConDep.Dsl.Operations.Application.Local.TransformConfig;
 using ConDep.Dsl.Operations.Application.Local.WebRequest;
 
@@ -45,6 +46,11 @@ namespace ConDep.Dsl
             var operation = new HttpGetOperation(url);
             Configure.Local(local, operation);
             return local;
+        }
+
+        public static IOfferBootstrapOperations Bootstrap(this IOfferLocalOperations local)
+        {
+            return new BootstrapOperationsBuilder(local);
         }
 
     }
