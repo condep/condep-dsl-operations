@@ -40,12 +40,7 @@ namespace ConDep.Dsl
             Logger.Verbose("Waiting for WinRM to succeed");
             WaitForWinRm(WaitForStatus.Success, server);
             Logger.Info("Computer restarted");
-            Logger.WithLogSection("Starting ConDepNode", () => StartConDepNode(server));
-        }
-
-        private void StartConDepNode(ServerConfig server)
-        {
-            ConDepNodePublisher.StartConDepNode(server);
+            Logger.WithLogSection("Starting ConDepNode", () => ConDepNodePublisher.StartNode(server));
         }
 
         private void WaitForWinRm(WaitForStatus status, ServerConfig server)
