@@ -1,26 +1,30 @@
 using System;
 using System.IO;
+using System.Linq;
+using ConDep.Dsl.Config;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Installation.Msi
 {
     public class MsiOperation : RemoteCompositeOperation
     {
-
+        private readonly string _packageName;
         private readonly string _srcMsiFilePath;
         private readonly Uri _srcMsiUri;
         private readonly MsiOptions _msiOptions;
         private readonly FileSourceType _srcType;
 
-        public MsiOperation(string srcMsiFilePath, MsiOptions msiOptions = null)
+        public MsiOperation(string packageName, string srcMsiFilePath, MsiOptions msiOptions = null)
         {
+            _packageName = packageName;
             _srcMsiFilePath = srcMsiFilePath;
             _msiOptions = msiOptions;
             _srcType = FileSourceType.File;
         }
 
-        public MsiOperation(Uri srcMsiUri, MsiOptions msiOptions = null)
+        public MsiOperation(string packageName, Uri srcMsiUri, MsiOptions msiOptions = null)
         {
+            _packageName = packageName;
             _srcMsiUri = srcMsiUri;
             _msiOptions = msiOptions;
             _srcType = FileSourceType.Url;
@@ -54,14 +58,24 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
         private void InstallMsiFromUrl(IOfferRemoteComposition server, Uri url)
         {
             var dstPath = string.Format(@"$env:temp\{0}", Guid.NewGuid() + ".msi");
-            server.ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath));
+            server.OnlyIf(InstallCondtion)
+                .ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath));
+        }
+
+        private bool InstallCondtion(ServerInfo condtion)
+        {
+            return !condtion.OperatingSystem.InstalledSoftwarePackages.Contains(_packageName);
         }
 
         private void InstallMsiFromFile(IOfferRemoteComposition server, string src)
         {
             var dstPath = Path.Combine(@"%temp%\", Path.GetFileName(src));
-            server.Deploy.File(src, dstPath);
-            server.ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath));
+
+            server.OnlyIf(InstallCondtion)
+                .Deploy.File(src, dstPath);
+
+            server.OnlyIf(InstallCondtion)
+                .ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath));
         }
     }
 }
