@@ -113,7 +113,8 @@
     <Compile Include="Builders\RemoteCertDeploymentBuilder.cs" />
     <Compile Include="Application\Deployment\RemoteCertDeploymentExtensions.cs" />
     <Compile Include="Builders\SslInfrastructureBuilder.cs" />
-    <Compile Include="Infrastructure\RestartComputerOperation.cs" />
+    <Compile Include="Infrastructure\RestartComputer\RestartComputerExtensions.cs" />
+    <Compile Include="Infrastructure\RestartComputer\RestartComputerOperation.cs" />
     <Compile Include="Infrastructure\SslInfrastructureExtensions.cs" />
     <Compile Include="Infrastructure\Certificate\CertificateInfrastructureProvider.cs" />
     <Compile Include="Infrastructure\Certificate\ConDepCertificateDuplicationException.cs" />
