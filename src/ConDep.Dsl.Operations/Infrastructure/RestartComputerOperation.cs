@@ -45,38 +45,55 @@ namespace ConDep.Dsl
 
         private void WaitForWinRm(WaitForStatus status, ServerConfig server)
         {
-            var cmd = server.DeploymentUser.IsDefined() ? string.Format("id -r:{0} -u:{1} -p:\"{2}\"", server.Name,
-                server.DeploymentUser.UserName, server.DeploymentUser.Password) : string.Format("id -r:{0}", server.Name);
-
-            var path = Environment.ExpandEnvironmentVariables(@"%windir%\system32\WinRM.cmd");
-            var startInfo = new ProcessStartInfo(path)
+            try
             {
-                Arguments = cmd,
-                Verb = "RunAs",
-                UseShellExecute = false,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
-            var process = Process.Start(startInfo);
-            process.WaitForExit();
+                var cmd = server.DeploymentUser.IsDefined()
+                    ? string.Format("id -r:{0} -u:{1} -p:\"{2}\"", server.Name,
+                        server.DeploymentUser.UserName, server.DeploymentUser.Password)
+                    : string.Format("id -r:{0}", server.Name);
 
-            switch (status)
+                var path = Environment.ExpandEnvironmentVariables(@"%windir%\system32\WinRM.cmd");
+                var startInfo = new ProcessStartInfo(path)
+                {
+                    Arguments = cmd,
+                    Verb = "RunAs",
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                };
+                var process = Process.Start(startInfo);
+                process.WaitForExit();
+
+                switch (status)
+                {
+                    case WaitForStatus.Failure:
+                        if (process.ExitCode == 0)
+                        {
+                            Thread.Sleep(5000);
+                            WaitForWinRm(status, server);
+                        }
+                        break;
+                    case WaitForStatus.Success:
+                        if (process.ExitCode != 0)
+                        {
+                            Thread.Sleep(5000);
+                            WaitForWinRm(status, server);
+                        }
+                        break;
+                }
+            }
+            catch
             {
-                case WaitForStatus.Failure:
-                    if (process.ExitCode == 0)
-                    {
+                switch (status)
+                {
+                    case WaitForStatus.Failure:
+                        return;
+                    case WaitForStatus.Success:
                         Thread.Sleep(5000);
                         WaitForWinRm(status, server);
-                    }
-                    break;
-                case WaitForStatus.Success:
-                    if (process.ExitCode != 0)
-                    {
-                        Thread.Sleep(5000);
-                        WaitForWinRm(status, server);
-                    }
-                    break;
+                        break;
+                }
             }
         }
 
