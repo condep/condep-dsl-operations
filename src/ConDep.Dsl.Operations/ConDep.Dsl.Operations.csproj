@@ -99,12 +99,14 @@
     <Compile Include="Application\Installation\Msi\IOfferMsiOptions.cs" />
     <Compile Include="Application\Installation\Msi\MsiOptions.cs" />
     <Compile Include="Application\Installation\Msi\MsiOperation.cs" />
-    <Compile Include="Application\Local\BootstrapOperationsBuilder.cs" />
+    <Compile Include="Application\Local\IOfferTerminateOperations.cs" />
+    <Compile Include="Builders\BootstrapOperationsBuilder.cs" />
     <Compile Include="Application\Local\IOfferBootstrapOperations.cs" />
     <Compile Include="Application\Local\PreCompile\ClientBuildManagerWrapper.cs" />
     <Compile Include="Application\Local\PreCompile\IWrapClientBuildManager.cs" />
     <Compile Include="Application\Local\PreCompile\PreCompileCallback.cs" />
     <Compile Include="Application\Local\PreCompile\PreCompileOperation.cs" />
+    <Compile Include="Builders\TerminateOperationsBuilder.cs" />
     <Compile Include="Application\Local\TransformConfig\CondepWebConfigTransformException.cs" />
     <Compile Include="Application\Local\TransformConfig\TransformConfigBuildEngine.cs" />
     <Compile Include="Application\Local\LocalOperationsExtensions.cs" />

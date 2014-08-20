@@ -1,10 +1,10 @@
-﻿namespace ConDep.Dsl.Operations.Application.Local
+﻿namespace ConDep.Dsl.Operations.Builders
 {
-    public class BootstrapOperationsBuilder : IOfferBootstrapOperations
+    public class TerminateOperationsBuilder : IOfferTerminateOperations
     {
         private readonly IOfferLocalOperations _local;
 
-        public BootstrapOperationsBuilder(IOfferLocalOperations local)
+        public TerminateOperationsBuilder(IOfferLocalOperations local)
         {
             _local = local;
         }

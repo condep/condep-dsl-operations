@@ -2,6 +2,7 @@
 using ConDep.Dsl.Operations.Application.Local.PreCompile;
 using ConDep.Dsl.Operations.Application.Local.TransformConfig;
 using ConDep.Dsl.Operations.Application.Local.WebRequest;
+using ConDep.Dsl.Operations.Builders;
 
 namespace ConDep.Dsl
 {
@@ -51,6 +52,11 @@ namespace ConDep.Dsl
         public static IOfferBootstrapOperations Bootstrap(this IOfferLocalOperations local)
         {
             return new BootstrapOperationsBuilder(local);
+        }
+
+        public static IOfferTerminateOperations Terminate(this IOfferLocalOperations local)
+        {
+            return new TerminateOperationsBuilder(local);
         }
 
     }
