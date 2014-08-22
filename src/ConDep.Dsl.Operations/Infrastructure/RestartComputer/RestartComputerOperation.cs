@@ -9,7 +9,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
 {
-    public class RestartComputerOperation : RemoteOperation
+    public class RestartComputerOperation : ForEachServerOperation
     {
         private readonly int _delayInSeconds;
 

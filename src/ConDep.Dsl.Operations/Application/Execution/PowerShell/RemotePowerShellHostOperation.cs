@@ -8,7 +8,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Execution.PowerShell
 {
-    public class RemotePowerShellHostOperation : RemoteOperation
+    public class RemotePowerShellHostOperation : ForEachServerOperation
     {
         private readonly string _cmd;
         private readonly FileInfo _scriptFile;
