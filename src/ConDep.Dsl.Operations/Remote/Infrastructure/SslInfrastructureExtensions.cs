@@ -15,11 +15,11 @@ namespace ConDep.Dsl
         /// <param name="findType"></param>
         /// <param name="findValue"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure FromStore(this IOfferSslInfrastructure sslInfra, X509FindType findType, string findValue)
+        public static IOfferRemoteConfiguration FromStore(this IOfferSslInfrastructure sslInfra, X509FindType findType, string findValue)
         {
             var infraBuilder = ((SslInfrastructureBuilder) sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromStoreOperation(findType, findValue);
-            Configure.Infrastructure(infraBuilder, certOp);
+            Configure.ConfigureOperation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -30,14 +30,14 @@ namespace ConDep.Dsl
         /// <param name="findValue"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure FromStore(this IOfferSslInfrastructure sslInfra, X509FindType findType, string findValue, Action<IOfferCertificateOptions> options)
+        public static IOfferRemoteConfiguration FromStore(this IOfferSslInfrastructure sslInfra, X509FindType findType, string findValue, Action<IOfferCertificateOptions> options)
         {
             var infraBuilder = ((SslInfrastructureBuilder)sslInfra).InfrastructureBuilder;
             var certOpt = new CertificateOptions();
             options(certOpt);
 
             var certOp = new CertificateFromStoreOperation(findType, findValue, certOpt);
-            Configure.Infrastructure(infraBuilder, certOp);
+            Configure.ConfigureOperation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -47,11 +47,11 @@ namespace ConDep.Dsl
         /// <param name="path"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure FromFile(this IOfferSslInfrastructure sslInfra, string path, string password)
+        public static IOfferRemoteConfiguration FromFile(this IOfferSslInfrastructure sslInfra, string path, string password)
         {
             var infraBuilder = ((SslInfrastructureBuilder)sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromFileOperation(path, password);
-            Configure.Infrastructure(infraBuilder, certOp);
+            Configure.ConfigureOperation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -62,14 +62,14 @@ namespace ConDep.Dsl
         /// <param name="password"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure FromFile(this IOfferSslInfrastructure sslInfra, string path, string password, Action<IOfferCertificateOptions> options)
+        public static IOfferRemoteConfiguration FromFile(this IOfferSslInfrastructure sslInfra, string path, string password, Action<IOfferCertificateOptions> options)
         {
             var infraBuilder = ((SslInfrastructureBuilder)sslInfra).InfrastructureBuilder;
             var certOpt = new CertificateOptions();
             options(certOpt);
 
             var certOp = new CertificateFromFileOperation(path, password, certOpt);
-            Configure.Infrastructure(infraBuilder, certOp);
+            Configure.ConfigureOperation(infraBuilder, certOp);
             return infraBuilder;
         }
     }

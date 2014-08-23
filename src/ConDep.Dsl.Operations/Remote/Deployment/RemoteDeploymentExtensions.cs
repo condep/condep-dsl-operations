@@ -20,7 +20,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment Directory(this IOfferRemoteDeployment remote, string sourceDir, string destDir)
         {
             var copyDirOperation = new CopyDirOperation(sourceDir, destDir);
-            Configure.Deployment(remote, copyDirOperation);
+            Configure.DeployOperation(remote, copyDirOperation);
             //Configure.DeploymentOperations.AddOperation(copyDirOperation);
             return remote;
         }
@@ -34,7 +34,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment File(this IOfferRemoteDeployment remote, string sourceFile, string destFile)
         {
             var copyFileOperation = new CopyFileOperation(sourceFile, destFile);
-            Configure.Deployment(remote, copyFileOperation);
+            Configure.DeployOperation(remote, copyFileOperation);
             //Configure.DeploymentOperations.AddOperation(copyFileOperation);
             return remote;
         }
@@ -62,7 +62,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment IisWebApplication(this IOfferRemoteDeployment remote, string sourceDir, string destDir, string webAppName, string webSiteName)
         {
             var webAppOperation = new WebAppOperation(sourceDir, webAppName, webSiteName, destDir);
-            Configure.Deployment(remote, webAppOperation);
+            Configure.DeployOperation(remote, webAppOperation);
             //Configure.DeploymentOperations.AddOperation(webAppOperation);
             return remote;
         }
@@ -100,7 +100,7 @@ namespace ConDep.Dsl
             }
 
             var winServiceOperation = new WindowsServiceOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, winServiceOptions.Values);
-            Configure.Deployment(remote, winServiceOperation);
+            Configure.DeployOperation(remote, winServiceOperation);
             //Configure.DeploymentOperations.AddOperation(winServiceOperation);
             return remote;
         }
@@ -140,7 +140,7 @@ namespace ConDep.Dsl
             }
 
             var winServiceOperation = new WindowsServiceWithInstallerOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, installerParams, winServiceOptions.Values);
-            Configure.Deployment(remote, winServiceOperation);
+            Configure.DeployOperation(remote, winServiceOperation);
             //Configure.DeploymentOperations.AddOperation(winServiceOperation);
             return remote;
         }
@@ -170,7 +170,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment NServiceBusEndpoint(this IOfferRemoteDeployment remote, string sourceDir, string destDir, string serviceName, string profile, Action<IOfferWindowsServiceOptions> options)
         {
             var nServiceBusProvider = new NServiceBusOperation(sourceDir, destDir, serviceName, profile, options);
-            Configure.Deployment(remote, nServiceBusProvider);
+            Configure.DeployOperation(remote, nServiceBusProvider);
             //Configure.DeploymentOperations.AddOperation(nServiceBusProvider);
             return remote;
         }

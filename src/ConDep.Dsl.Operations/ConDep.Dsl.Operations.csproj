@@ -35,9 +35,9 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConDep.Dsl, Version=3.0.20.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ConDep.Dsl, Version=3.0.21.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ConDep.Dsl.3.0.20-beta\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.3.0.21-beta\lib\net40\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -163,14 +163,12 @@
   <ItemGroup>
     <None Include="Remote\Deployment\NServiceBus\NServiceBus.ps1" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="PSScripts\Iis.ps1" />
-    <EmbeddedResource Include="PSScripts\Windows.ps1" />
-    <EmbeddedResource Include="PSScripts\WinService.ps1" />
-    <EmbeddedResource Include="PSScripts\Msi.ps1" />
+    <EmbeddedResource Include="Remote\PSScripts\Iis.ps1" />
+    <EmbeddedResource Include="Remote\PSScripts\Windows.ps1" />
+    <EmbeddedResource Include="Remote\PSScripts\WinService.ps1" />
+    <EmbeddedResource Include="Remote\PSScripts\Msi.ps1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Remote\Deployment\PowerShellScript\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,7 +7,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Deployment.CopyDir
 {
-    public class CopyDirOperation : IOperateRemote
+    public class CopyDirOperation : ForEachServerOperation
     {
         private readonly string _srcDir;
         private readonly string _dstDir;
@@ -19,12 +19,12 @@ namespace ConDep.Dsl.Operations.Application.Deployment.CopyDir
             _dstDir = dstDir;
         }
 
-        public bool IsValid(Notification notification)
+        public override bool IsValid(Notification notification)
         {
             return true;
         }
 
-        public void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
             _api = new Api(string.Format("http://{0}/ConDepNode/", server.Name), server.DeploymentUser.UserName, server.DeploymentUser.Password, settings.Options.ApiTimout);
             var result = _api.SyncDir(_srcDir, _dstDir);
@@ -44,7 +44,7 @@ namespace ConDep.Dsl.Operations.Application.Deployment.CopyDir
             }
         }
 
-        public string Name { get { return "Copy Dir"; } }
+        public override string Name { get { return "Copy Dir"; } }
         public void DryRun()
         {
             Logger.WithLogSection(Name, () => { });

@@ -17,12 +17,12 @@ namespace ConDep.Dsl
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IIS(this IOfferInfrastructure infra, Action<IisInfrastructureOptions> options)
+        public static IOfferRemoteConfiguration IIS(this IOfferRemoteConfiguration infra, Action<IisInfrastructureOptions> options)
         {
             var op = new IisInfrastructureOperation();
             options(new IisInfrastructureOptions(op));
 
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -30,10 +30,10 @@ namespace ConDep.Dsl
         /// Installs IIS
         /// </summary>
         /// <returns></returns>
-        public static IOfferInfrastructure IIS(this IOfferInfrastructure infra)
+        public static IOfferRemoteConfiguration IIS(this IOfferRemoteConfiguration infra)
         {
             var op = new IisInfrastructureOperation();
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -41,11 +41,11 @@ namespace ConDep.Dsl
         /// Offer common Windows operations
         /// </summary>
         /// <returns></returns>
-        public static IOfferInfrastructure Windows(this IOfferInfrastructure infra, Action<WindowsInfrastructureOptions> options)
+        public static IOfferRemoteConfiguration Windows(this IOfferRemoteConfiguration infra, Action<WindowsInfrastructureOptions> options)
         {
             var op = new WindowsFeatureInfrastructureOperation();
             options(new WindowsInfrastructureOptions(op));
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -55,10 +55,10 @@ namespace ConDep.Dsl
         /// <param name="name"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISWebSite(this IOfferInfrastructure infra, string name, int id)
+        public static IOfferRemoteConfiguration IISWebSite(this IOfferRemoteConfiguration infra, string name, int id)
         {
             var op = new IisWebSiteOperation(name, id);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -69,12 +69,12 @@ namespace ConDep.Dsl
         /// <param name="id"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISWebSite(this IOfferInfrastructure infra, string name, int id, Action<IOfferIisWebSiteOptions> options)
+        public static IOfferRemoteConfiguration IISWebSite(this IOfferRemoteConfiguration infra, string name, int id, Action<IOfferIisWebSiteOptions> options)
         {
             var opt = new IisWebSiteOptions();
             options(opt);
             var op = new IisWebSiteOperation(name, id, opt);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -83,10 +83,10 @@ namespace ConDep.Dsl
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISAppPool(this IOfferInfrastructure infra, string name)
+        public static IOfferRemoteConfiguration IISAppPool(this IOfferRemoteConfiguration infra, string name)
         {
             var op = new IisAppPoolOperation(name);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -96,12 +96,12 @@ namespace ConDep.Dsl
         /// <param name="name"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISAppPool(this IOfferInfrastructure infra, string name, Action<IOfferIisAppPoolOptions> options)
+        public static IOfferRemoteConfiguration IISAppPool(this IOfferRemoteConfiguration infra, string name, Action<IOfferIisAppPoolOptions> options)
         {
             var opt = new IisAppPoolOptions();
             options(opt);
             var op = new IisAppPoolOperation(name, opt.Values);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -111,10 +111,10 @@ namespace ConDep.Dsl
         /// <param name="name"></param>
         /// <param name="webSite"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISWebApp(this IOfferInfrastructure infra, string name, string webSite)
+        public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite)
         {
             var op = new IisWebAppOperation(name, webSite);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
@@ -125,17 +125,17 @@ namespace ConDep.Dsl
         /// <param name="webSite"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IOfferInfrastructure IISWebApp(this IOfferInfrastructure infra, string name, string webSite, Action<IOfferIisWebAppOptions> options)
+        public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite, Action<IOfferIisWebAppOptions> options)
         {
             var op = new IisWebAppOperation(name, webSite);
-            Configure.Infrastructure(infra, op);
+            Configure.ConfigureOperation(infra, op);
             return infra;
         }
 
         /// <summary>
         /// Provide operations for installing SSL certificates.
         /// </summary>
-        public static IOfferSslInfrastructure SslCertificate(this IOfferInfrastructure infra) { return new SslInfrastructureBuilder(infra); }
+        public static IOfferSslInfrastructure SslCertificate(this IOfferRemoteConfiguration infra) { return new SslInfrastructureBuilder(infra); }
 
     }
 }

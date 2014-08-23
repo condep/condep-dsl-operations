@@ -12,7 +12,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.Windows
         {
             var removeFeatures = _featuresToRemove.Count > 0 ? string.Join(",", _featuresToRemove) : "$null";
             var addFeatures = string.Join(",", _featuresToAdd);
-            server.ExecuteRemote.PowerShell(string.Format("Set-ConDepWindowsFeatures {0} {1}", addFeatures, removeFeatures));
+            server.Execute.PowerShell(string.Format("Set-ConDepWindowsFeatures {0} {1}", addFeatures, removeFeatures));
         }
 
         public override string Name

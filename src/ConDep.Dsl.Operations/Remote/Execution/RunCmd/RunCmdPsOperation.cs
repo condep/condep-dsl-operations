@@ -26,7 +26,7 @@ namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.ExecuteRemote.PowerShell(string.Format(@"
+            server.Execute.PowerShell(string.Format(@"
 $continueOnError = {0}
 cmd /c ""{1}""
 if($lastexitcode -gt 0) {{

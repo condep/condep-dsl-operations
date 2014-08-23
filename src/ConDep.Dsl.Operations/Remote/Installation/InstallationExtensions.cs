@@ -28,7 +28,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, string srcMsiFilePath)
         {
             var msiOperation = new MsiOperation(packageName, srcMsiFilePath);
-            Configure.Installation(install, msiOperation);
+            Configure.InstallOperation(install, msiOperation);
             return install;
         }
 
@@ -52,7 +52,7 @@ namespace ConDep.Dsl
             var msiOptions = new MsiOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiFilePath, msiOptions);
-            Configure.Installation(install, msiOperation);
+            Configure.InstallOperation(install, msiOperation);
             return install;
         }
 
@@ -75,7 +75,7 @@ namespace ConDep.Dsl
             var msiOptions = new MsiOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiUri, msiOptions);
-            Configure.Installation(install, msiOperation);
+            Configure.InstallOperation(install, msiOperation);
             return install;
         }
 
@@ -95,7 +95,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, Uri srcMsiUri)
         {
             var msiOperation = new MsiOperation(packageName, srcMsiUri);
-            Configure.Installation(install, msiOperation);
+            Configure.InstallOperation(install, msiOperation);
             return install;
         }
 
@@ -117,7 +117,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, string srcExecutableFilePath, string exeParams)
         {
             var exeOperation = new InstallExecutableOperation(packageName, srcExecutableFilePath, exeParams);
-            Configure.Installation(install, exeOperation);
+            Configure.InstallOperation(install, exeOperation);
             return install;
         }
 
@@ -139,7 +139,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, Uri srcExecutableUri, string exeParams)
         {
             var exeOperation = new InstallExecutableOperation(packageName, srcExecutableUri, exeParams);
-            Configure.Installation(install, exeOperation);
+            Configure.InstallOperation(install, exeOperation);
             return install;
         }
     }

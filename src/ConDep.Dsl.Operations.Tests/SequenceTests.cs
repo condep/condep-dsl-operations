@@ -40,7 +40,7 @@ namespace ConDep.Dsl.Tests
         }
     }
 
-    public class SequenceTestApp : ApplicationArtifact
+    public class SequenceTestApp : Artifact.Local
     {
         public override void Configure(IOfferLocalOperations local, ConDepSettings settings)
         {
@@ -48,10 +48,10 @@ namespace ConDep.Dsl.Tests
             local.ToEachServer(server =>
                 {
                     server
-                        .Require.IIS();
+                        .Configure.IIS();
 
                     server
-                        .ExecuteRemote.PowerShell("ipconfig");
+                        .Execute.PowerShell("ipconfig");
                 }
             );
             local.HttpGet("http://blog.torresdal.net");

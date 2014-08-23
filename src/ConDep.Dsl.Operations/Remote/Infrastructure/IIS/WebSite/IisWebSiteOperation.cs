@@ -50,7 +50,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
                 bindings.Add(string.Format("@{{protocol='https';bindingInformation='{0}:{1}:{2}';findType=[{3}]::{4};findValue='{5}'}}", httpsBinding.BindingOptions.Ip, httpsBinding.BindingOptions.Port, httpsBinding.BindingOptions.HostName, type.FullName, httpsBinding.FindType, httpsBinding.FindName));
             }
 
-            server.ExecuteRemote.PowerShell(string.Format(@"New-ConDepIisWebSite '{0}' {1} {2} {3} '{4}' '{5}';"
+            server.Execute.PowerShell(string.Format(@"New-ConDepIisWebSite '{0}' {1} {2} {3} '{4}' '{5}';"
                 , _webSiteName
                 , _id
                 , "@(" + string.Join(",", bindings) + ")"
@@ -60,7 +60,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
 
             foreach(var webApp in _options.Values.WebApps)
             {
-                server.Require.IISWebApp(webApp.Item1, _webSiteName, webApp.Item2);
+                server.Configure.IISWebApp(webApp.Item1, _webSiteName, webApp.Item2);
             }
         }
     }

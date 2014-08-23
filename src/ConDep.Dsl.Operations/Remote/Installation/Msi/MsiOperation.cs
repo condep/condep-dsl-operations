@@ -59,7 +59,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
         {
             var dstPath = string.Format(@"$env:temp\{0}", Guid.NewGuid() + ".msi");
             server.OnlyIf(InstallCondtion)
-                .ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath));
+                .Execute.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath));
         }
 
         private bool InstallCondtion(ServerInfo condtion)
@@ -75,7 +75,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
                 .Deploy.File(src, dstPath);
 
             server.OnlyIf(InstallCondtion)
-                .ExecuteRemote.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath));
+                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath));
         }
     }
 }

@@ -77,20 +77,20 @@ namespace ConDep.Dsl.Tests
     }
 
 
-    public class OnlyIfTestApp : ApplicationArtifact
+    public class OnlyIfTestApp : Artifact.Local
     {
         public override void Configure(IOfferLocalOperations onLocalMachine, ConDepSettings settings)
         {
             onLocalMachine.ToEachServer(server => {
 
                 server
-                    .Require
+                    .Configure
                         .OnlyIf(x => x.OperatingSystem.Name.StartsWith("Windows"))
                             .IIS();
 
                 server
                     .OnlyIf(x => x.OperatingSystem.Name.StartsWith("Windows"))
-                    .ExecuteRemote.PowerShell("write-host ''");
+                    .Execute.PowerShell("write-host ''");
 
             }
             );

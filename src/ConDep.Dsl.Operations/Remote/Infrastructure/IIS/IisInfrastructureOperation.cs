@@ -21,7 +21,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.Require
+            server.Configure
                 .Windows(win =>
                 {
                     win.InstallFeature("Web-Server");

@@ -60,7 +60,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Executable
             var filename = Guid.NewGuid() + ".exe";
             var psDstPath = string.Format(@"$env:temp\{0}", filename);
             server.OnlyIf(InstallCondition)
-                    .ExecuteRemote
+                    .Execute
                         .PowerShell(string.Format("Get-ConDepRemoteFile \"{0}\" \"{1}\"", srcExecutableUri, psDstPath))
                         .PowerShell(string.Format("cd $env:temp; cmd /c \"{0} {1}\"", filename, exeParams));
         }
@@ -74,7 +74,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Executable
                 .Deploy.File(srcExecutableFilePath, dstPath);
 
             server.OnlyIf(InstallCondition)
-                .ExecuteRemote.PowerShell(string.Format("cd $env:temp; cmd /c \"{0} {1}\"", filename, exeParams));
+                .Execute.PowerShell(string.Format("cd $env:temp; cmd /c \"{0} {1}\"", filename, exeParams));
         }
 
         private bool InstallCondition(ServerInfo condition)

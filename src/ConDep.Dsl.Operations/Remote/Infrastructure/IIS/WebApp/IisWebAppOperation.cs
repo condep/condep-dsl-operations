@@ -24,7 +24,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebApp
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.ExecuteRemote.PowerShell(string.Format(@"New-ConDepWebApp '{0}' '{1}' {2} {3};"
+            server.Execute.PowerShell(string.Format(@"New-ConDepWebApp '{0}' '{1}' {2} {3};"
                 , _webAppName
                 , _webSiteName
                 , (_options == null || string.IsNullOrWhiteSpace(_options.PhysicalPath)) ? "$null" : "'" + _options.PhysicalPath + "'"

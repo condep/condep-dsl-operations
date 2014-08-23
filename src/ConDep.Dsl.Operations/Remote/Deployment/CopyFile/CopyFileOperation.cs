@@ -2,12 +2,11 @@
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
 using ConDep.Dsl.Remote.Node;
-using ConDep.Dsl.SemanticModel;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Deployment.CopyFile
 {
-    public class CopyFileOperation : IOperateRemote
+    public class CopyFileOperation : ForEachServerOperation
     {
         private readonly string _srcFile;
         private readonly string _dstFile;
@@ -19,7 +18,7 @@ namespace ConDep.Dsl.Operations.Application.Deployment.CopyFile
             _dstFile = dstFile;
         }
 
-        public void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
             _api = new Api(string.Format("http://{0}/ConDepNode/", server.Name), server.DeploymentUser.UserName, server.DeploymentUser.Password, settings.Options.ApiTimout);
             var result = _api.SyncFile(_srcFile, _dstFile);
@@ -39,13 +38,13 @@ namespace ConDep.Dsl.Operations.Application.Deployment.CopyFile
             }
         }
 
-        public string Name { get { return "Copy File"; } }
+        public override string Name { get { return "Copy File"; } }
         public void DryRun()
         {
             Logger.WithLogSection(Name, () => { });
         }
 
-        public bool IsValid(Notification notification)
+        public override bool IsValid(Notification notification)
         {
             return true;
         }

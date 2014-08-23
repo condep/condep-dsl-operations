@@ -34,7 +34,7 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
                                            _values.StartupType.HasValue ? "'" + _values.StartupType + "'" : "'" + ServiceStartMode.Manual + "'"
                 );
 
-            server.ExecuteRemote.PowerShell(installCmd);
+            server.Execute.PowerShell(installCmd);
         }
     }
 }

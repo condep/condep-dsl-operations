@@ -31,9 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConDep.Dsl, Version=3.0.20.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ConDep.Dsl, Version=3.0.21.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ConDep.Dsl.3.0.20-beta\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.3.0.21-beta\lib\net40\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -80,10 +80,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConDep.Dsl.Operations.Aws\ConDep.Dsl.Operations.Aws.csproj">
-      <Project>{d061fe94-6140-4ba9-8da4-61d46931c6d1}</Project>
-      <Name>ConDep.Dsl.Operations.Aws</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ConDep.Dsl.Operations\ConDep.Dsl.Operations.csproj">
       <Project>{a1ff699a-76ff-440c-8fd2-9fca9ee3b26f}</Project>
       <Name>ConDep.Dsl.Operations</Name>

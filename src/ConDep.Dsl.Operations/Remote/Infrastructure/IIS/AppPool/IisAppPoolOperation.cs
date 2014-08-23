@@ -48,7 +48,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
                     , _appPoolOptions.DisableOverlappedRecycle.HasValue ? _appPoolOptions.DisableOverlappedRecycle.Value.ToString() : "false" 
                     );
             }
-            server.ExecuteRemote.PowerShell(string.Format(@"{0} New-ConDepAppPool '{1}' $appPoolOptions;", appPoolOptions, _appPoolName));
+            server.Execute.PowerShell(string.Format(@"{0} New-ConDepAppPool '{1}' $appPoolOptions;", appPoolOptions, _appPoolName));
         }
     }
 }
