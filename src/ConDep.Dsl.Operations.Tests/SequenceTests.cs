@@ -11,13 +11,11 @@ namespace ConDep.Dsl.Tests
     [TestFixture]
     public class SequenceTests
     {
-        private ExecutionSequenceManager _sequenceManager;
         private SequenceTestApp _app;
 
         [SetUp]
         public void Setup()
         {
-            _sequenceManager = new ExecutionSequenceManager(new DefaultLoadBalancer());
             _app = new SequenceTestApp();
         }
 
@@ -28,15 +26,17 @@ namespace ConDep.Dsl.Tests
             var server = new ServerConfig { Name = "jat-web03" };
             config.Servers = new[] { server };
 
+            var sequenceManager = new ExecutionSequenceManager(config.Servers, new DefaultLoadBalancer());
+
             var settings = new ConDepSettings();
             settings.Config = config;
 
-            var local = new LocalOperationsBuilder(_sequenceManager.NewLocalSequence("Test"), config.Servers);
+            var local = new LocalOperationsBuilder(sequenceManager.NewLocalSequence("Test"));
             //Configure.LocalOperations = local;
             _app.Configure(local, settings);
 
             var notification = new Notification();
-            Assert.That(_sequenceManager.IsValid(notification));
+            Assert.That(sequenceManager.IsValid(notification));
         }
     }
 

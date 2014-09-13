@@ -16,59 +16,26 @@ namespace ConDep.Dsl.Tests
         [SetUp]
         public void Setup()
         {
-            _sequenceManager = new ExecutionSequenceManager(new DefaultLoadBalancer());
             var app = new OnlyIfTestApp();
 
             var config = new ConDepEnvConfig { EnvironmentName = "bogusEnv" };
             var server = new ServerConfig { Name = "bogusHost" };
             config.Servers = new[] { server };
 
+            _sequenceManager = new ExecutionSequenceManager(config.Servers, new DefaultLoadBalancer());
+
             var settings = new ConDepSettings { Config = config };
 
-            var local = new LocalOperationsBuilder(_sequenceManager.NewLocalSequence("Test"), config.Servers);
+            var local = new LocalOperationsBuilder(_sequenceManager.NewLocalSequence("Test"));
             app.Configure(local, settings);
 
             _serverInfo = new ServerInfo {OperatingSystem = new OperatingSystemInfo {Name = "Windows Server 2012"}};
         }
 
         [Test]
-        public void TestThat_SequenceManagerHasOnlyOneLocalSequence()
-        {
-            Assert.That(_sequenceManager._sequence.Count, Is.EqualTo(1));
-            Assert.That(_sequenceManager._sequence[0], Is.TypeOf<LocalSequence>());
-        }
-
-        [Test]
-        public void TestThat_LocalSequenceOnlyHaveOneRemoteSequence()
-        {
-            var seq = _sequenceManager._sequence[0];
-            Assert.That(seq._sequence.Count, Is.EqualTo(1));
-            Assert.That(seq._sequence[0], Is.TypeOf<RemoteSequence>());
-        }
-
-        //[Test]
-        //public void TestThat_RemoteSequenceOnlyHaveOneConditionalSequence()
-        //{
-        //    var seq = _sequenceManager._sequence[0]._sequence[0] as RemoteSequence;
-
-        //    Assert.That(seq._sequence.Count, Is.EqualTo(1));
-        //    Assert.That(seq._sequence[0], Is.TypeOf<CompositeConditionalSequence>());
-        //}
-
-        //[Test]
-        //public void TestThat_ConditionalSequenceOnlyHaveOneOperation()
-        //{
-        //    var remSeq = _sequenceManager._sequence[0]._sequence[0] as RemoteSequence;
-        //    var seq = remSeq._sequence[0] as CompositeConditionalSequence;
-
-        //    Assert.That(seq._sequence.Count, Is.EqualTo(1));
-        //    Assert.That(seq._sequence[0], Is.TypeOf<RemoteOperation>());
-        //}
-
-        [Test]
         public void TestThat_ConditionIsTrue()
         {
-            var remSeq = _sequenceManager._sequence[0]._sequence[0] as RemoteSequence;
+            var remSeq = _sequenceManager._remoteSequences[0];
             var compSeq = remSeq._sequence[0] as CompositeConditionalSequence;
 
             Assert.That(compSeq._condition(_serverInfo), Is.True);
