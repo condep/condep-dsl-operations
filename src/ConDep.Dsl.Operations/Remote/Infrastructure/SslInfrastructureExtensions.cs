@@ -19,7 +19,7 @@ namespace ConDep.Dsl
         {
             var infraBuilder = ((SslInfrastructureBuilder) sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromStoreOperation(findType, findValue);
-            Configure.ConfigureOperation(infraBuilder, certOp);
+            Configure.Operation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -37,7 +37,7 @@ namespace ConDep.Dsl
             options(certOpt);
 
             var certOp = new CertificateFromStoreOperation(findType, findValue, certOpt);
-            Configure.ConfigureOperation(infraBuilder, certOp);
+            Configure.Operation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -51,7 +51,7 @@ namespace ConDep.Dsl
         {
             var infraBuilder = ((SslInfrastructureBuilder)sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromFileOperation(path, password);
-            Configure.ConfigureOperation(infraBuilder, certOp);
+            Configure.Operation(infraBuilder, certOp);
             return infraBuilder;
         }
 
@@ -69,7 +69,7 @@ namespace ConDep.Dsl
             options(certOpt);
 
             var certOp = new CertificateFromFileOperation(path, password, certOpt);
-            Configure.ConfigureOperation(infraBuilder, certOp);
+            Configure.Operation(infraBuilder, certOp);
             return infraBuilder;
         }
     }

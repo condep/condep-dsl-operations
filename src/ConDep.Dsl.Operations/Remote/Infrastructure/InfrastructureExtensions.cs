@@ -22,7 +22,7 @@ namespace ConDep.Dsl
             var op = new IisInfrastructureOperation();
             options(new IisInfrastructureOptions(op));
 
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -33,7 +33,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IIS(this IOfferRemoteConfiguration infra)
         {
             var op = new IisInfrastructureOperation();
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -45,7 +45,7 @@ namespace ConDep.Dsl
         {
             var op = new WindowsFeatureInfrastructureOperation();
             options(new WindowsInfrastructureOptions(op));
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -58,7 +58,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISWebSite(this IOfferRemoteConfiguration infra, string name, int id)
         {
             var op = new IisWebSiteOperation(name, id);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -74,7 +74,7 @@ namespace ConDep.Dsl
             var opt = new IisWebSiteOptions();
             options(opt);
             var op = new IisWebSiteOperation(name, id, opt);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -86,7 +86,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISAppPool(this IOfferRemoteConfiguration infra, string name)
         {
             var op = new IisAppPoolOperation(name);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -101,7 +101,7 @@ namespace ConDep.Dsl
             var opt = new IisAppPoolOptions();
             options(opt);
             var op = new IisAppPoolOperation(name, opt.Values);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -114,7 +114,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite)
         {
             var op = new IisWebAppOperation(name, webSite);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 
@@ -128,7 +128,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite, Action<IOfferIisWebAppOptions> options)
         {
             var op = new IisWebAppOperation(name, webSite);
-            Configure.ConfigureOperation(infra, op);
+            Configure.Operation(infra, op);
             return infra;
         }
 

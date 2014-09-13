@@ -37,7 +37,7 @@ namespace ConDep.Dsl
 
             var remoteCertBuilder = ((RemoteCertDeploymentBuilder) remoteCert).RemoteDeployment;
             var certOp = new CertificateFromStoreOperation(findType, findValue, certOptions);
-            Configure.DeployOperation(remoteCertBuilder, certOp);
+            Configure.Operation(remoteCertBuilder, certOp);
             return remoteCertBuilder;
         }
 
@@ -69,7 +69,7 @@ namespace ConDep.Dsl
 
             var remoteCertBuilder = ((RemoteCertDeploymentBuilder)remoteCert).RemoteDeployment;
             var certOp = new CertificateFromFileOperation(path, password, certOptions);
-            Configure.DeployOperation(remoteCertBuilder, certOp);
+            Configure.Operation(remoteCertBuilder, certOp);
             return remoteCertBuilder;
         }
     }
