@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.ServiceProcess;
-using ConDep.Dsl.SemanticModel;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService

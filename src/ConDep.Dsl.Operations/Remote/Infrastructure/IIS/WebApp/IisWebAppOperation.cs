@@ -1,4 +1,3 @@
-using ConDep.Dsl.SemanticModel;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebApp

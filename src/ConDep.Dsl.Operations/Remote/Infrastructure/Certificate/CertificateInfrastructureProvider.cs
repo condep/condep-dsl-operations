@@ -1,8 +1,6 @@
 ﻿using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
-using ConDep.Dsl.Builders;
-using ConDep.Dsl.SemanticModel;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Infrastructure.Certificate
