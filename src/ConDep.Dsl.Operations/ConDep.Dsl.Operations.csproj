@@ -161,6 +161,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Docs\operations.precompile.md" />
     <None Include="Remote\Deployment\NServiceBus\NServiceBus.ps1" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Remote\PSScripts\Iis.ps1" />

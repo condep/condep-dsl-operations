@@ -3,7 +3,7 @@
 ##Operations
 
 ###Local
-* [PreCompile](./src/ConDep.Dsl.Operations/Local/PreCompile/precompile.md)
+* [PreCompile](./src/ConDep.Dsl.Operations/Docs/operations.precompile.md)
 * TransformConfig
 * WebRequest
 
