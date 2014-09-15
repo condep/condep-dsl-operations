@@ -5,7 +5,7 @@ Precompiles Asp.Net code to prevent precompilation during the first hit of the w
 
 Usage:
 
-```
+```cs
 public class MyArtifact : Artifact.Local {
     public override void Configure(IOfferLocalOperations onLocalMachine, ConDepSettings settings)
     {
