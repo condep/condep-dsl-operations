@@ -1,6 +1,6 @@
 ﻿using ConDep.Dsl.Builders;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Operations.LoadBalancer;
+using ConDep.Dsl.LoadBalancer;
 using ConDep.Dsl.Sequence;
 using ConDep.Dsl.Validation;
 using NUnit.Framework;
