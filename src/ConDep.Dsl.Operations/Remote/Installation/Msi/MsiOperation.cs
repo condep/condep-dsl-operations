@@ -59,16 +59,15 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
         {
             var dstPath = string.Format(@"$env:temp\{0}", Guid.NewGuid() + ".msi");
             server.OnlyIf(InstallCondtion)
-                .Execute.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath), opt => GetPowerShellOptions(opt));
+                .Execute.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath), SetPowerShellOptions);
         }
 
-        private IOfferPowerShellOptions GetPowerShellOptions(IOfferPowerShellOptions opt)
+        private void SetPowerShellOptions(IOfferPowerShellOptions opt)
         {
-            if (_msiOptions.UseCredSSP)
+            if (_msiOptions != null && _msiOptions.UseCredSSP)
             {
-                return opt.UseCredSSP(true);
+                opt.UseCredSSP(true);
             }
-            return opt;
         }
 
         private bool InstallCondtion(ServerInfo condtion)
@@ -84,7 +83,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
                 .Deploy.File(src, dstPath);
 
             server.OnlyIf(InstallCondtion)
-                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath), opt => GetPowerShellOptions(opt));
+                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath), opt => SetPowerShellOptions(opt));
         }
     }
 }
