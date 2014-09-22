@@ -16,10 +16,17 @@
             return this;
         }
 
+        public IOfferPowerShellOptions UseCredSSP(bool value)
+        {
+            _values.UseCredSSP = value;
+            return this;
+        }
+
         public PowerShellOptionValues Values { get { return _values; } }
 
         public class PowerShellOptionValues
         {
+            public bool UseCredSSP;
             public bool RequireRemoteLib { get; set; }
 
             public bool ContinueOnError { get; set; }

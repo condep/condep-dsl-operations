@@ -27,9 +27,10 @@ namespace ConDep.Dsl.Operations.Application.Execution.PowerShell
         public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
             var psExec = new PowerShellExecutor(server);
-            if (_values != null && _values.RequireRemoteLib)
+            if (_values != null)
             {
-                psExec.LoadConDepDotNetLibrary = true;
+                if (_values.RequireRemoteLib) psExec.LoadConDepDotNetLibrary = true;
+                if (_values.UseCredSSP) psExec.UseCredSSP = true;
             }
             psExec.Execute(_cmd);
         }

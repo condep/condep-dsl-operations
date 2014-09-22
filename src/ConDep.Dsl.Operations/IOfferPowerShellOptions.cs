@@ -14,5 +14,12 @@ namespace ConDep.Dsl
         /// <param name="value"></param>
         /// <returns></returns>
         IOfferPowerShellOptions ContinueOnError(bool value);
+
+        /// <summary>
+        /// If true, uses CredSSP to support the "double hop" Windows issue
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        IOfferPowerShellOptions UseCredSSP(bool value);
     }
 }

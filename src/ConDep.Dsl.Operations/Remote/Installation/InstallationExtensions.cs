@@ -51,7 +51,7 @@ namespace ConDep.Dsl
         {
             var msiOptions = new MsiOptions();
             options(msiOptions);
-            var msiOperation = new MsiOperation(packageName, srcMsiFilePath, msiOptions);
+            var msiOperation = new MsiOperation(packageName, srcMsiFilePath, msiOptions.Values);
             Configure.Operation(install, msiOperation);
             return install;
         }
@@ -74,7 +74,7 @@ namespace ConDep.Dsl
         {
             var msiOptions = new MsiOptions();
             options(msiOptions);
-            var msiOperation = new MsiOperation(packageName, srcMsiUri, msiOptions);
+            var msiOperation = new MsiOperation(packageName, srcMsiUri, msiOptions.Values);
             Configure.Operation(install, msiOperation);
             return install;
         }
