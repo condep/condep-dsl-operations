@@ -4,29 +4,29 @@ using System.Linq;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Installation.Msi
+namespace ConDep.Dsl.Operations.Remote.Installation.Msi
 {
     public class MsiOperation : RemoteCompositeOperation
     {
         private readonly string _packageName;
         private readonly string _srcMsiFilePath;
         private readonly Uri _srcMsiUri;
-        private readonly MsiOptions.MsiOptionsValues _msiOptions;
+        private readonly InstallOptions.InstallOptionsValues _installOptions;
         private readonly FileSourceType _srcType;
 
-        public MsiOperation(string packageName, string srcMsiFilePath, MsiOptions.MsiOptionsValues msiOptions = null)
+        public MsiOperation(string packageName, string srcMsiFilePath, InstallOptions.InstallOptionsValues installOptions = null)
         {
             _packageName = packageName;
             _srcMsiFilePath = srcMsiFilePath;
-            _msiOptions = msiOptions;
+            _installOptions = installOptions;
             _srcType = FileSourceType.File;
         }
 
-        public MsiOperation(string packageName, Uri srcMsiUri, MsiOptions.MsiOptionsValues msiOptions = null)
+        public MsiOperation(string packageName, Uri srcMsiUri, InstallOptions.InstallOptionsValues installOptions = null)
         {
             _packageName = packageName;
             _srcMsiUri = srcMsiUri;
-            _msiOptions = msiOptions;
+            _installOptions = installOptions;
             _srcType = FileSourceType.Url;
         }
 
@@ -64,7 +64,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
 
         private void SetPowerShellOptions(IOfferPowerShellOptions opt)
         {
-            if (_msiOptions != null && _msiOptions.UseCredSSP)
+            if (_installOptions != null && _installOptions.UseCredSSP)
             {
                 opt.UseCredSSP(true);
             }
@@ -83,7 +83,7 @@ namespace ConDep.Dsl.Operations.Application.Installation.Msi
                 .Deploy.File(src, dstPath);
 
             server.OnlyIf(InstallCondtion)
-                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath), opt => SetPowerShellOptions(opt));
+                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath), SetPowerShellOptions);
         }
     }
 }

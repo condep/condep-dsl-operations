@@ -1,6 +1,6 @@
 ﻿using System;
-using ConDep.Dsl.Operations.Application.Installation.Executable;
-using ConDep.Dsl.Operations.Application.Installation.Msi;
+using ConDep.Dsl.Operations.Remote.Installation.Executable;
+using ConDep.Dsl.Operations.Remote.Installation.Msi;
 
 namespace ConDep.Dsl
 {
@@ -47,9 +47,9 @@ namespace ConDep.Dsl
         /// <param name="srcMsiFilePath">A local file path to the MSI package (not a path on target server).</param>
         /// <param name="options">Additional options to pass in to msiexec.</param>
         /// <returns></returns>
-        public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, string srcMsiFilePath, Action<IOfferMsiOptions> options)
+        public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, string srcMsiFilePath, Action<IOfferInstallOptions> options)
         {
-            var msiOptions = new MsiOptions();
+            var msiOptions = new InstallOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiFilePath, msiOptions.Values);
             Configure.Operation(install, msiOperation);
@@ -70,9 +70,9 @@ namespace ConDep.Dsl
         /// <param name="srcMsiUri">A URI to the MSI package</param>
         /// <param name="options">Additional options to pass in to msiexec.</param>
         /// <returns></returns>
-        public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, Uri srcMsiUri, Action<IOfferMsiOptions> options)
+        public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, Uri srcMsiUri, Action<IOfferInstallOptions> options)
         {
-            var msiOptions = new MsiOptions();
+            var msiOptions = new InstallOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiUri, msiOptions.Values);
             Configure.Operation(install, msiOperation);
@@ -114,9 +114,14 @@ namespace ConDep.Dsl
         /// <param name="srcExecutableFilePath">A local file path to the custom package (not a path on target server).</param>
         /// <param name="exeParams">Parameters needed by the package to install silently, logging etc.</param>
         /// <returns></returns>
-        public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, string srcExecutableFilePath, string exeParams)
+        public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, string srcExecutableFilePath, string exeParams, Action<IOfferInstallOptions> options = null)
         {
-            var exeOperation = new InstallExecutableOperation(packageName, srcExecutableFilePath, exeParams);
+            var installOptions = new InstallOptions();
+            if (options != null)
+            {
+                options(installOptions);
+            }
+            var exeOperation = new InstallExecutableOperation(packageName, srcExecutableFilePath, exeParams, installOptions.Values);
             Configure.Operation(install, exeOperation);
             return install;
         }
@@ -136,9 +141,14 @@ namespace ConDep.Dsl
         /// <param name="srcExecutableUri">A URI to the custom package</param>
         /// <param name="exeParams">Parameters needed by the package to install silently, logging etc.</param>
         /// <returns></returns>
-        public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, Uri srcExecutableUri, string exeParams)
+        public static IOfferRemoteInstallation Custom(this IOfferRemoteInstallation install, string packageName, Uri srcExecutableUri, string exeParams, Action<IOfferInstallOptions> options = null)
         {
-            var exeOperation = new InstallExecutableOperation(packageName, srcExecutableUri, exeParams);
+            var installOptions = new InstallOptions();
+            if (options != null)
+            {
+                options(installOptions);
+            }
+            var exeOperation = new InstallExecutableOperation(packageName, srcExecutableUri, exeParams, installOptions.Values);
             Configure.Operation(install, exeOperation);
             return install;
         }

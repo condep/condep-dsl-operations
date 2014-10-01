@@ -1,4 +1,4 @@
-namespace ConDep.Dsl.Operations.Application.Installation
+namespace ConDep.Dsl.Operations.Remote.Installation
 {
     public enum FileSourceType
     {
