@@ -11,7 +11,7 @@
   {% endif %}
 
   {% for p in site.docs %}
-    {% assign p_url = p.url | prepend:"/condep-dsl-operations/" %}
+    {% assign p_url = p.url | prepend:"/condep-dsl-operations" %}
     <li>{{p_url}} == {{item_url}}</li>
 
     {% if p.url == item_url %}
