@@ -11,7 +11,7 @@
   {% endif %}
 
   {% for p in site.docs %}
-    {% if p_url == item_url %}
+    {% if p.url == item_url %}
       <li class="{{ c }}"><a href="{{ site.url }}/condep-dsl-operations{{ p.url }}">{{ p.title }}</a></li>
     {% endif %}
   {% endfor %}
