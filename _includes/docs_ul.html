@@ -12,9 +12,8 @@
 
   {% for p in site.docs %}
     {% assign p_url = p.url | prepend:"/condep-dsl-operations" %}
-    <li>{{p_url}} == {{item_url}}</li>
 
-    {% if p.url == item_url %}
+    {% if p_url == item_url %}
       <li class="{{ c }}"><a href="{{ site.url }}{{ p.url }}">{{ p.title }}</a></li>
     {% endif %}
   {% endfor %}
