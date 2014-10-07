@@ -2,8 +2,8 @@
 
 <ul>
 {% for item in items %}
-  {% assign item_url = item | prepend:"/condep-dsl-operations/docs/" | append:"/" %}
-  {% assign page_url = page.url | prepend:"/condep-dsl-operations" %}
+  {% assign item_url = item | prepend:"/docs/" | append:"/" %}
+
   {% if item_url == page.url %}
     {% assign c = "current" %}
   {% else %}
@@ -11,10 +11,8 @@
   {% endif %}
 
   {% for p in site.docs %}
-    {% assign p_url = p.url | prepend:"/condep-dsl-operations" %}
-
     {% if p_url == item_url %}
-      <li class="{{ c }}"><a href="{{ site.url }}{{ p_url }}">{{ p.title }}</a></li>
+      <li class="{{ c }}"><a href="{{ site.url }}/condep-dsl-operations{{ p.url }}">{{ p.title }}</a></li>
     {% endif %}
   {% endfor %}
 
