@@ -1,3 +1,4 @@
+baseurl: /condep-dsl-operations
 markdown: kramdown
 highlighter: pygments
 
