@@ -1,0 +1,31 @@
+- title: Local
+  docs:
+  - local/pre-compile
+  - local/transform-config
+  - local/web-request
+- title: Deployment
+  docs:
+  - deployment/directory
+  - deployment/file
+  - deployment/iis-web-application
+  - deployment/nservicebus-endpoint
+  - deployment/ssl-certificate-from-file
+  - deployment/ssl-certificate-from-store
+  - deployment/windows-service
+  - deployment/windows-service-with-installer
+- title: Execution
+  docs:
+  - execution/dos-command
+  - execution/powershell
+- title: Infrastructure
+  docs:
+  - infrastructure/iis
+  - infrastructure/iis-app-pool
+  - infrastructure/iis-web-app
+  - infrastructure/iis-web-site
+  - infrastructure/restart
+  - infrastructure/windows
+- title: Installation
+  docs:
+  - installation/custom
+  - installation/msi
