@@ -2,6 +2,7 @@
 using System.IO;
 using ConDep.Dsl.Operations.Application.Execution.PowerShell;
 using ConDep.Dsl.Operations.Application.Execution.RunCmd;
+using ConDep.Dsl.Operations.Remote.Execution.PowerShell;
 
 namespace ConDep.Dsl
 {
