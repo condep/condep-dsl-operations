@@ -1,32 +1,21 @@
-#ConDep.Dsl.Operations
+condep-dsl-operations
+=====================
+This project contains all of ConDep's built-in Operations.
 
-##Operations
+Need help?
+----------
+Talk and ask questions about ConDep on [Google Groups](https://groups.google.com/forum/#!forum/con-dep).
 
-###Local
-* [PreCompile](./src/ConDep.Dsl.Operations/Docs/operations.precompile.md)
-* TransformConfig
-* WebRequest
+Documentation for ConDep is being worked on right now [(preview here)](http://docs.con-dep.net), and will be available soon.
 
-###Remote
+Found a bug?
+------------
+To report bugs in the condep-dsl repo, use the [project issue tracker here on GitHub](https://github.com/condep/condep-dsl/issues). To report a general ConDep issue (you don't know which component), use the [issue tracker for the old ConDep project](https://github.com/condep/ConDep/issues)
 
-####Deployment
-* Certificate
-* CopyDir
-* CopyFile
-* NServiceBus
-* WebApp
-* WindowsService
+Want to contribute?
+-------------------
+If you fixed a bug, created an operation you beleive should be integrated into ConDep or just want to help make ConDep shine, send us pull requests after you have signed the [Contributor License Agreement](http://www.con-dep.net/contribute/)
 
-####Execution
-* PowerShell
-* RunCmd
-
-####Infrastructure
-* Certificate
-* IIS
-* RestartComputer
-* Windows
-
-####Installation
-* Executable
-* Msi
+License
+-------
+License can be found here: [LICENSE](LICENSE)
