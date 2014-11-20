@@ -10,11 +10,18 @@
             return this;
         }
 
+        IOfferInstallOptions IOfferInstallOptions.Version(string value)
+        {
+            _values.Version = value;
+            return this;
+        }
+
         public InstallOptionsValues Values { get { return _values; } }
 
         public class InstallOptionsValues
         {
             public bool UseCredSSP;
+            public string Version;
         }
     }
 }

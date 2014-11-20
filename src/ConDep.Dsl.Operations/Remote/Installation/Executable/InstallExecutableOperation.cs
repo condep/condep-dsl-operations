@@ -83,7 +83,13 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Executable
 
         private bool InstallCondition(ServerInfo condition)
         {
-            return !condition.OperatingSystem.InstalledSoftwarePackages.ToList().Contains(_packageName);
+            var installedPackages = condition.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayName == _packageName);
+
+            if (_values != null && _values.Version != "")
+            {
+                installedPackages = installedPackages.Where(x => x.DisplayVersion == _values.Version);
+            }
+            return !installedPackages.Any();
         }
 
         private void SetPowerShellOptions(IOfferPowerShellOptions opt)
@@ -93,7 +99,6 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Executable
                 opt.UseCredSSP(true);
             }
         }
-
     }
 
     public class ConDepInstallationFailureException : Exception

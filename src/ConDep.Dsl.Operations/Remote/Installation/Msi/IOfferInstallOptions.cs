@@ -2,6 +2,7 @@
 {
     public interface IOfferInstallOptions
     {
-        IOfferInstallOptions UseCredSSP(bool value);    
+        IOfferInstallOptions UseCredSSP(bool value);
+        IOfferInstallOptions Version(string value);
     }
 }
