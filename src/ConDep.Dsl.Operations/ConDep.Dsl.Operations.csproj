@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="ConDep.Dsl, Version=3.0.55.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ConDep.Dsl.3.0.56-beta\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\..\..\condep-dsl\src\ConDep.Dsl\bin\Debug\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
