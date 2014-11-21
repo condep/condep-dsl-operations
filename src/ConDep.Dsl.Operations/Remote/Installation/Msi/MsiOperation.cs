@@ -72,7 +72,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Msi
 
         private bool InstallCondtion(ServerInfo condtion)
         {
-            var installedPackages = condtion.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayName == _packageName);
+            var installedPackages = condtion.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayVersion == _packageName);
 
             if (_installOptions != null && _installOptions.Version != "")
             {
