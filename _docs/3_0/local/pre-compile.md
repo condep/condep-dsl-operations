@@ -1,7 +1,9 @@
 ---
-layout: page
+layout: doc
 title: PreCompile
-permalink: /docs/local/pre-compile/
+prev_section: 3-0/operations/local/http-get
+next_section: 3-0/operations/local/transform-config
+permalink: /3-0/local/pre-compile/
 ---
 
 PreCompile
@@ -50,8 +52,11 @@ PreCompile(
 
 ## Code Example
 {% highlight csharp %}
-public override void Configure(IOfferLocalOperations onLocalMachine, ConDepSettings settings)
+public class MyLocalArtifact : Artifact.Local
 {
-  onLocalMachine.PreCompile("MyWebApp", @"C:\MyWebApp", @"C:\Compile\MyWebApp");
+	public override void Configure(IOfferLocalOperations onLocalMachine, ConDepSettings settings)
+	{
+	  onLocalMachine.PreCompile("MyWebApp", @"C:\MyWebApp", @"C:\Compile\MyWebApp");
+	}
 }
 {% endhighlight %}
