@@ -25,7 +25,7 @@ namespace ConDep.Dsl.Operations.Application.Deployment.CopyDir
 
         public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
-            _api = new Api(string.Format("http://{0}/ConDepNode/", server.Name), server.DeploymentUser.UserName, server.DeploymentUser.Password, settings.Options.ApiTimout);
+            _api = new Api(new ConDepNodeUrl(server, settings), server.DeploymentUser.UserName, server.DeploymentUser.Password, settings.Options.ApiTimout);
             var result = _api.SyncDir(_srcDir, _dstDir);
 
             if (result == null) return;
