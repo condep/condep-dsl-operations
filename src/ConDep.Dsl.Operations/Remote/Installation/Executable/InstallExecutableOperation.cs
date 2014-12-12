@@ -85,7 +85,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Executable
         {
             var installedPackages = condition.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayName == _packageName);
 
-            if (_values != null && _values.Version != "")
+            if (_values != null && _values.Version != null)
             {
                 installedPackages = installedPackages.Where(x => x.DisplayVersion == _values.Version);
             }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using ConDep.Dsl.Config;
+using ConDep.Dsl.Logging;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Msi
@@ -72,9 +73,9 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Msi
 
         private bool InstallCondtion(ServerInfo condtion)
         {
-            var installedPackages = condtion.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayVersion == _packageName);
+            var installedPackages = condtion.OperatingSystem.InstalledSoftwarePackages.Where(x => x.DisplayName == _packageName);
 
-            if (_installOptions != null && _installOptions.Version != "")
+            if (_installOptions != null && _installOptions.Version != null)
             {
                 installedPackages = installedPackages.Where(x => x.DisplayVersion == _installOptions.Version);
             }
