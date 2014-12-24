@@ -179,9 +179,21 @@ function New-ConDepAppPool {
 	if($AppPoolOptions) {
 		if($AppPoolOptions.Enable32Bit) { $newAppPool.enable32BitAppOnWin64 = $AppPoolOptions.Enable32Bit }
 		if($AppPoolOptions.IdentityUsername) { 
-			$newAppPool.processModel.identityType = 'SpecificUser'
-			$newAppPool.processModel.username = $AppPoolOptions.IdentityUsername
-			$newAppPool.processModel.password = $AppPoolOptions.IdentityPassword
+			if($AppPoolOptions.IdentityUsername -eq 'NetworkService') {
+				$newAppPool.processModel.identityType = 'NetworkService'
+			}
+			elseif($AppPoolOptions.IdentityUsername -eq 'LocalService') {
+				$newAppPool.processModel.identityType = 'LocalService'
+			}
+			elseif($AppPoolOptions.IdentityUsername -eq 'LocalSystem') {
+				$newAppPool.processModel.identityType = 'LocalSystem'
+			}
+			else
+			{
+				$newAppPool.processModel.identityType = 'SpecificUser'
+				$newAppPool.processModel.username = $AppPoolOptions.IdentityUsername
+				$newAppPool.processModel.password = $AppPoolOptions.IdentityPassword
+			}
 		}
 		
 		if($AppPoolOptions.IdleTimeoutInMinutes) { $newAppPool.processModel.idleTimeout = [TimeSpan]::FromMinutes($AppPoolOptions.IdleTimeoutInMinutes) }
