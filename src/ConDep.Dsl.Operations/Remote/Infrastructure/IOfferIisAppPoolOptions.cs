@@ -41,7 +41,7 @@ namespace ConDep.Dsl
         /// Gives options for setting App Pool identity.
         /// </summary>
         /// <returns></returns>
-        IOfferIisAppPoolIdentityOptions Identity();
+        IOfferIisAppPoolIdentityOptions Identity { get; }
 
         /// <summary>
         /// Password for custom account defined in IdentityUsername

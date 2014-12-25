@@ -34,9 +34,9 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
             return this;
         }
 
-        public IOfferIisAppPoolIdentityOptions Identity()
+        public IOfferIisAppPoolIdentityOptions Identity
         {
-            return _identityOptions;
+            get { return _identityOptions; }
         }
 
         IOfferIisAppPoolOptions IOfferIisAppPoolOptions.IdentityPassword(string password)
