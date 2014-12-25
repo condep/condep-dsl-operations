@@ -3,6 +3,12 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
     public class IisAppPoolOptions : IOfferIisAppPoolOptions
     {
         private readonly IisAppPoolOptionsValues _values = new IisAppPoolOptionsValues();
+        private readonly IOfferIisAppPoolIdentityOptions _identityOptions;
+
+        public IisAppPoolOptions()
+        {
+            _identityOptions = new IisAppPoolIdentityOptions(this);
+        }
 
         IOfferIisAppPoolOptions IOfferIisAppPoolOptions.NetFrameworkVersion(NetFrameworkVersion version)
         {
@@ -26,6 +32,11 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
         {
             _values.IdentityUsername = userName;
             return this;
+        }
+
+        public IOfferIisAppPoolIdentityOptions Identity()
+        {
+            return _identityOptions;
         }
 
         IOfferIisAppPoolOptions IOfferIisAppPoolOptions.IdentityPassword(string password)

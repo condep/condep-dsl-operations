@@ -188,6 +188,9 @@ function New-ConDepAppPool {
 			elseif($AppPoolOptions.IdentityUsername -eq 'LocalSystem') {
 				$newAppPool.processModel.identityType = 'LocalSystem'
 			}
+			elseif($AppPoolOptions.IdentityUsername -eq 'ApplicationPoolIdentity') {
+				$newAppPool.processModel.identityType = 'ApplicationPoolIdentity'
+			}
 			else
 			{
 				$newAppPool.processModel.identityType = 'SpecificUser'

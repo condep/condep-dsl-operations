@@ -1,3 +1,4 @@
+using System;
 using ConDep.Dsl.Operations.Infrastructure.IIS;
 
 namespace ConDep.Dsl
@@ -33,13 +34,21 @@ namespace ConDep.Dsl
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
+        [Obsolete("Deprecated. Use options found under Identity() instead.")]
         IOfferIisAppPoolOptions IdentityUsername(string userName);
+
+        /// <summary>
+        /// Gives options for setting App Pool identity.
+        /// </summary>
+        /// <returns></returns>
+        IOfferIisAppPoolIdentityOptions Identity();
 
         /// <summary>
         /// Password for custom account defined in IdentityUsername
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
+        [Obsolete("Deprecated. Use options found under Identity() instead.")]
         IOfferIisAppPoolOptions IdentityPassword(string password);
 
         /// <summary>
