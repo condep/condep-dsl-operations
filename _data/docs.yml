@@ -17,7 +17,7 @@
   docs:
   - execution/dos-command
   - execution/powershell
-- title: Infrastructure
+- title: Configuration
   docs:
   - infrastructure/iis
   - infrastructure/iis-app-pool
