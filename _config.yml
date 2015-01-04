@@ -2,6 +2,8 @@ baseurl: /docs/3-0/operations
 markdown: kramdown
 highlighter: pygments
 
+github_url: https://github.com/condep/condep-dsl-operations/edit/gh-pages
+
 collections:
   docs:
     output: true
