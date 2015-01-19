@@ -64,8 +64,11 @@ function UpdateWebSiteName($id, $name) {
 function UpdateWebSiteBindings($webSite, $bindings) {
     if(!$bindings) {
         Write-Debug "No bindings provided. Using default."
-		$bindings = @(@{protocol='http';bindingInformation=':80:'})
-	}
+	$bindings = @(@{protocol='http';bindingInformation=':80:'})
+    }
+    else {
+    	$bindings = $bindings | foreach-object { @{protocol=$_.protocol;bindingInformation=$_.bindingInformation}  } 
+    }
 
     $name = $webSite.name
 
