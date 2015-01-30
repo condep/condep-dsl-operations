@@ -94,6 +94,8 @@
     <Compile Include="Remote\Execution\RunCmd\ConDepUntrappedExitCodeException.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
+    <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
+    <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Installation\InstallationExtensions.cs" />
     <Compile Include="Remote\Installation\FileSourceType.cs" />
     <Compile Include="Remote\Installation\Executable\InstallExecutableOperation.cs" />
@@ -170,7 +172,9 @@
     <EmbeddedResource Include="Remote\PSScripts\WinService.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\Msi.ps1" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Remote\Execution\Ssh\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

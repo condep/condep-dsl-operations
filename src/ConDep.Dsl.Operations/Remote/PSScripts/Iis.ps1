@@ -64,13 +64,16 @@ function UpdateWebSiteName($id, $name) {
 function UpdateWebSiteBindings($webSite, $bindings) {
     if(!$bindings) {
         Write-Debug "No bindings provided. Using default."
-		$bindings = @(@{protocol='http';bindingInformation=':80:'})
-	}
+		$siteBindings = @(@{protocol='http';bindingInformation=':80:'})
+    }
+    else {
+    	$siteBindings = $bindings | foreach-object { @{protocol=$_.protocol;bindingInformation=$_.bindingInformation}  } 
+    }
 
     $name = $webSite.name
 
     Write-Debug "Updating WebSite bindings now..."
-    Set-ItemProperty -Path "IIS:\Sites\$name" -Name Bindings -Value $bindings
+    Set-ItemProperty -Path "IIS:\Sites\$name" -Name Bindings -Value $siteBindings
 
     Write-Debug "Associating certificates with https bindings now..."
     $bindings | Where-Object {$_.protocol -eq "https"} | AssociateCertificateWithBinding
@@ -187,6 +190,9 @@ function New-ConDepAppPool {
 			}
 			elseif($AppPoolOptions.IdentityUsername -eq 'LocalSystem') {
 				$newAppPool.processModel.identityType = 'LocalSystem'
+			}
+			elseif($AppPoolOptions.IdentityUsername -eq 'ApplicationPoolIdentity') {
+				$newAppPool.processModel.identityType = 'ApplicationPoolIdentity'
 			}
 			else
 			{
