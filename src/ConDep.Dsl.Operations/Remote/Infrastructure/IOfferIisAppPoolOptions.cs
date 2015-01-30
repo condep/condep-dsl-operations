@@ -89,5 +89,13 @@ namespace ConDep.Dsl
         /// <param name="disable"></param>
         /// <returns></returns>
         IOfferIisAppPoolOptions DisableOverlappedRecycle(bool disable);
+
+        /// <summary>
+        /// Wether the AppPool is AlwaysOn
+        /// False is default.
+        /// </summary>
+        /// <param name="alwaysOn"></param>
+        /// <returns></returns>
+        IOfferIisAppPoolOptions AlwaysOn(bool alwaysOn);
     }
 }

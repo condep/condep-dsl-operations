@@ -208,6 +208,7 @@ function New-ConDepAppPool {
 		if($AppPoolOptions.NetFrameworkVersion -eq "" -or $AppPoolOptions.NetFrameworkVersion) { $newAppPool.managedRuntimeVersion = $AppPoolOptions.NetFrameworkVersion }
 		if($AppPoolOptions.RecycleTimeInMinutes -ne $null) { if($AppPoolOptions.RecycleTimeInMinutes -eq 0) { $newAppPool.recycling.periodicrestart.time = [TimeSpan]::Zero } else { $newAppPool.recycling.periodicrestart.time = [TimeSpan]::FromMinutes($AppPoolOptions.RecycleTimeInMinutes)} }
 		if($AppPoolOptions.DisableOverlappedRecycle) { $newAppPool.recycling.disallowOverlappingRotation =  $AppPoolOptions.DisableOverlappedRecycle }
+		if($AppPoolOptions.AlwaysOn) { $newAppPool.startMode = 1 }
 
 		$newAppPool | set-item
 	}
