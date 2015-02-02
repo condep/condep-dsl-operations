@@ -75,6 +75,12 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
             return this;
         }
 
+        IOfferIisAppPoolOptions IOfferIisAppPoolOptions.AlwaysOn(bool alwaysOn)
+        {
+            _values.AlwaysOn = alwaysOn;
+            return this;
+        }
+
         private string ExtractNetFrameworkVersion(NetFrameworkVersion version)
         {
             switch (version)
@@ -118,6 +124,8 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
             public int? RecycleTimeInMinutes { get; set; }
 
             public bool? DisableOverlappedRecycle { get; set; }
+
+            public bool? AlwaysOn { get; set; }
         }
 
     }
