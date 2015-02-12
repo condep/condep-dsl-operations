@@ -1,4 +1,5 @@
 ﻿using System;
+using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
 using ConDep.Dsl.Operations.Remote.Installation.Msi;
 
@@ -150,6 +151,27 @@ namespace ConDep.Dsl
             }
             var exeOperation = new InstallExecutableOperation(packageName, srcExecutableUri, exeParams, installOptions.Values);
             Configure.Operation(install, exeOperation);
+            return install;
+        }
+
+        /// <summary>
+        /// Download files using PowerShell's Invoke-WebRequest. If not destination is specified in options, Windows temp folder will be used.
+        /// </summary>
+        /// <param name="install"></param>
+        /// <param name="url">The url for the file to download</param>
+        /// <param name="options">Additional download options</param>
+        /// <returns></returns>
+        public static IOfferRemoteInstallation Download(this IOfferRemoteInstallation install, string url, Action<IOfferDownloadOptions> options = null)
+        {
+            var downloadOptions = new DownloadOptions();
+
+            if (options != null)
+            {
+                options(downloadOptions);
+            }
+
+            var downloadOperation = new DownloadOperation(url, downloadOptions.Values);
+            Configure.Operation(install, downloadOperation);
             return install;
         }
     }
