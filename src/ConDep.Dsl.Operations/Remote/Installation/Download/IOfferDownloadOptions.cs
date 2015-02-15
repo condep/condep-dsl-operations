@@ -1,4 +1,4 @@
-namespace ConDep.Dsl.Operations.Remote.Installation.Download
+namespace ConDep.Dsl
 {
     public interface IOfferDownloadOptions
     {

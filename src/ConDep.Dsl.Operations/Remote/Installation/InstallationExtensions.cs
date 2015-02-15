@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Web.UI;
 using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
 using ConDep.Dsl.Operations.Remote.Installation.Msi;
+using ConDep.Dsl.Operations.Remote.Installation.Zip;
 
 namespace ConDep.Dsl
 {
@@ -172,6 +175,34 @@ namespace ConDep.Dsl
 
             var downloadOperation = new DownloadOperation(url, downloadOptions.Values);
             Configure.Operation(install, downloadOperation);
+            return install;
+        }
+
+        /// <summary>
+        /// Will unzip archive to specified destination. This uses the DotNetZip library under the hood. For more information go to http://dotnetzip.codeplex.com/
+        /// </summary>
+        /// <param name="install"></param>
+        /// <param name="filePath">Path to zip file</param>
+        /// <param name="destPath">Path to where archive content should be extracted</param>
+        /// <returns></returns>
+        public static IOfferRemoteInstallation UnZip(this IOfferRemoteInstallation install, string filePath, string destPath)
+        {
+            var zipOperation = new UnZipOperation(filePath, destPath);
+            Configure.Operation(install, zipOperation);
+            return install;
+        }
+
+        /// <summary>
+        /// Will take a folder or file and zip into specified zip-file.
+        /// </summary>
+        /// <param name="install"></param>
+        /// <param name="pathToCompress">Path to file or directory to compress</param>
+        /// <param name="destZipFile">Name of zip-file to add compressed content to</param>
+        /// <returns></returns>
+        public static IOfferRemoteInstallation Zip(this IOfferRemoteInstallation install, string pathToCompress, string destZipFile)
+        {
+            var zipOperation = new ZipOperation(pathToCompress, destZipFile);
+            Configure.Operation(install, zipOperation);
             return install;
         }
     }
