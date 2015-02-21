@@ -99,6 +99,7 @@
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
+    <Compile Include="Remote\Installation\Chocolatey\InstallChocolateyOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />
     <Compile Include="Remote\Installation\InstallationExtensions.cs" />
