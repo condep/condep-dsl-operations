@@ -101,6 +101,7 @@
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\AddUserToGroupOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
     <Compile Include="Remote\Installation\Chocolatey\InstallChocolateyOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />

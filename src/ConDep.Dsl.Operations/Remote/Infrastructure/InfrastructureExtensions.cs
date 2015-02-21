@@ -8,6 +8,7 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
 
 namespace ConDep.Dsl
 {
@@ -150,6 +151,19 @@ namespace ConDep.Dsl
             var operation = new AddUserToGroupOperation(userName, groupName);
             Configure.Operation(configuration, operation);
             return configuration;
+        }
+
+        /// <summary>
+        /// Creates a directory, if it not already exists.
+        /// </summary>
+        /// <param name="remote"></param>
+        /// <param name="path">Directory path</param>
+        /// <returns></returns>
+        public static IOfferRemoteOperations CreateDirectory(this IOfferRemoteOperations remote, string path)
+        {
+            var operation = new CreateDirectoryOperation(path);
+            Configure.Operation(remote, operation);
+            return remote;
         }
     }
 }
