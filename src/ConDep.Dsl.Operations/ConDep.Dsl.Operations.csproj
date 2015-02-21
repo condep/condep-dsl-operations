@@ -99,6 +99,7 @@
     <Compile Include="Remote\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
+    <Compile Include="Remote\Infrastructure\IIS\MachineKey\SetIisMachineKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\SetEnvironmentVariableOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\SetRegistryKeyOperation.cs" />
@@ -187,6 +188,7 @@
     <EmbeddedResource Include="Remote\PSScripts\Windows.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\WinService.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\Msi.ps1" />
+    <EmbeddedResource Include="Remote\PSScripts\MachineKey.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Remote\Execution\Ssh\" />

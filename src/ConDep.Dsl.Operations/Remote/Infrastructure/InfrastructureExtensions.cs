@@ -7,6 +7,7 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
+using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
@@ -210,6 +211,21 @@ namespace ConDep.Dsl
             var operation = new SetEnvironmentVariableOperation(name, value, target);
             Configure.Operation(configure, operation);
             return configure;
+        }
+
+        /// <summary>
+        /// Sets the IIS machine key. Overwrites the key if already set.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="validationKey">Validation key</param>
+        /// <param name="decryptionKey">Decryption key</param>
+        /// <param name="validation">Validation</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration IisMachineKey(this IOfferRemoteConfiguration configuration, string validationKey, string decryptionKey, string validation)
+        {
+            var operation = new SetIisMachineKeyOperation(validationKey, decryptionKey, validation);
+            Configure.Operation(configuration, operation);
+            return configuration;
         }
     }
 }
