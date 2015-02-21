@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Management.Automation\v4.0_3.0.0.0__31bf3856ad364e35\System.Management.Automation.dll</HintPath>
@@ -99,6 +100,7 @@
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\AddUserToGroupOperation.cs" />
     <Compile Include="Remote\Installation\Chocolatey\InstallChocolateyOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />

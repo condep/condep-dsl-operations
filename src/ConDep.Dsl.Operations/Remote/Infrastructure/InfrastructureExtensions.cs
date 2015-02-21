@@ -7,6 +7,7 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
 
 namespace ConDep.Dsl
 {
@@ -137,5 +138,18 @@ namespace ConDep.Dsl
         /// </summary>
         public static IOfferSslInfrastructure SslCertificate(this IOfferRemoteConfiguration infra) { return new SslInfrastructureBuilder(infra); }
 
+        /// <summary>
+        /// Adds user to group
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="userName">Username</param>
+        /// <param name="groupName">Group name</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration AddUserToGroup(this IOfferRemoteConfiguration configuration, string userName, string groupName)
+        {
+            var operation = new AddUserToGroupOperation(userName, groupName);
+            Configure.Operation(configuration, operation);
+            return configuration;
+        }
     }
 }
