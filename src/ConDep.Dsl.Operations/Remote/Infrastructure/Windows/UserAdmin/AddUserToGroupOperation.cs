@@ -1,7 +1,7 @@
 ﻿using System.DirectoryServices;
 using ConDep.Dsl.Logging;
 
-namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin
 {
     public class AddUserToGroupOperation : RemoteServerOperation
     {

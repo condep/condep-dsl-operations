@@ -100,8 +100,11 @@
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\AddUserToGroupOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\SetEnvironmentVariableOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\SetRegistryKeyOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToGroupOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\DisableUserAccountControlOperation.cs" />
     <Compile Include="Remote\Installation\Chocolatey\InstallChocolateyOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />

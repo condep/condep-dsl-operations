@@ -8,7 +8,10 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
 
 namespace ConDep.Dsl
 {
@@ -164,6 +167,49 @@ namespace ConDep.Dsl
             var operation = new CreateDirectoryOperation(path);
             Configure.Operation(remote, operation);
             return remote;
+        }
+
+        /// <summary>
+        /// Disables User Account Control. The operation is idempotent and will trigger a restart, but only if UAC not is already disabled. 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration DisableUserAccountControl(this IOfferRemoteConfiguration configuration)
+        {
+            var operation = new DisableUserAccountControlOperation();
+            Configure.Operation(configuration, operation);
+            return configuration;
+        }
+
+        /// <summary>
+        /// Adds a registry key if the key doesn't exists. If the key already exist, this function will update the given key with the given value         
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="keyPath">Key path</param>
+        /// <param name="keyName">Key name</param>
+        /// <param name="keyValue">Key value</param>
+        /// <param name="keyType">Key type</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration RegistryKey(this IOfferRemoteConfiguration configuration, string keyPath, string keyName, string keyValue, string keyType)
+        {
+            var operation = new SetRegistryKeyOperation(keyPath, keyName, keyValue, keyType);
+            Configure.Operation(configuration, operation);
+            return configuration;
+        }
+
+        /// <summary>
+        /// Creates environment variable if not exists. Overwrites the variable if exists.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <param name="name">Variable name </param>
+        /// <param name="value">Variable value</param>
+        /// <param name="target">Variable target</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration EnvironmentVariable(this IOfferRemoteConfiguration configure, string name, string value, string target)
+        {
+            var operation = new SetEnvironmentVariableOperation(name, value, target);
+            Configure.Operation(configure, operation);
+            return configure;
         }
     }
 }
