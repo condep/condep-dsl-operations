@@ -1,18 +1,17 @@
 ﻿using System;
-using ConDep.Dsl.Builders;
+using System.Web.Configuration;
 using ConDep.Dsl.Operations.Builders;
-using ConDep.Dsl.Operations.Infrastructure;
 using ConDep.Dsl.Operations.Infrastructure.IIS;
 using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey;
-using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
+using Microsoft.Win32;
 
 namespace ConDep.Dsl
 {
@@ -150,9 +149,9 @@ namespace ConDep.Dsl
         /// <param name="userName">Username</param>
         /// <param name="groupName">Group name</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration AddUserToGroup(this IOfferRemoteConfiguration configuration, string userName, string groupName)
+        public static IOfferRemoteConfiguration AddUserToLocalGroup(this IOfferRemoteConfiguration configuration, string userName, string groupName)
         {
-            var operation = new AddUserToGroupOperation(userName, groupName);
+            var operation = new AddUserToLocalGroupOperation(userName, groupName);
             Configure.Operation(configuration, operation);
             return configuration;
         }
@@ -174,10 +173,11 @@ namespace ConDep.Dsl
         /// Disables User Account Control. The operation is idempotent and will trigger a restart, but only if UAC not is already disabled. 
         /// </summary>
         /// <param name="configuration"></param>
+        /// <param name="enabled">Specify if you want UAC enabled or not. E.g. setting this to false will disable UAC.</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration DisableUserAccountControl(this IOfferRemoteConfiguration configuration)
+        public static IOfferRemoteConfiguration UserAccountControl(this IOfferRemoteConfiguration configuration, bool enabled)
         {
-            var operation = new DisableUserAccountControlOperation();
+            var operation = new UserAccountControlOperation(enabled);
             Configure.Operation(configuration, operation);
             return configuration;
         }
@@ -191,7 +191,7 @@ namespace ConDep.Dsl
         /// <param name="keyValue">Key value</param>
         /// <param name="keyType">Key type</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration RegistryKey(this IOfferRemoteConfiguration configuration, string keyPath, string keyName, string keyValue, string keyType)
+        public static IOfferRemoteConfiguration RegistryKey(this IOfferRemoteConfiguration configuration, string keyPath, string keyName, string keyValue, RegistryValueKind keyType)
         {
             var operation = new SetRegistryKeyOperation(keyPath, keyName, keyValue, keyType);
             Configure.Operation(configuration, operation);
@@ -206,22 +206,24 @@ namespace ConDep.Dsl
         /// <param name="value">Variable value</param>
         /// <param name="target">Variable target</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration EnvironmentVariable(this IOfferRemoteConfiguration configure, string name, string value, string target)
+        public static IOfferRemoteConfiguration EnvironmentVariable(this IOfferRemoteConfiguration configure, string name, string value, EnvironmentVariableTarget target)
         {
-            var operation = new SetEnvironmentVariableOperation(name, value, target);
+            var operation = new EnvironmentVariableOperation(name, value, target);
             Configure.Operation(configure, operation);
             return configure;
         }
 
         /// <summary>
-        /// Sets the IIS machine key. Overwrites the key if already set.
+        /// Sets the IIS machine key. Configures algorithms and keys to use for encryption, 
+        /// decryption, and validation of forms-authentication data and view-state data, and 
+        /// for out-of-process session state identification.
         /// </summary>
         /// <param name="configuration"></param>
-        /// <param name="validationKey">Validation key</param>
-        /// <param name="decryptionKey">Decryption key</param>
-        /// <param name="validation">Validation</param>
+        /// <param name="validationKey">Specifies the key used to validate encrypted data</param>
+        /// <param name="decryptionKey">Specifies the key that is used to encrypt and decrypt data or the process by which the key is generated</param>
+        /// <param name="validation">Specifies the type of encryption that is used to validate data</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration IisMachineKey(this IOfferRemoteConfiguration configuration, string validationKey, string decryptionKey, string validation)
+        public static IOfferRemoteConfiguration IisMachineKey(this IOfferRemoteConfiguration configuration, string validationKey, string decryptionKey, MachineKeyValidation validation)
         {
             var operation = new SetIisMachineKeyOperation(validationKey, decryptionKey, validation);
             Configure.Operation(configuration, operation);

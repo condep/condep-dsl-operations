@@ -1,4 +1,5 @@
 ﻿using ConDep.Dsl.Validation;
+using Microsoft.Win32;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
 {
@@ -7,9 +8,9 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
         private readonly string _path;
         private readonly string _keyName;
         private readonly string _keyValue;
-        private readonly string _keyType;
+        private readonly RegistryValueKind _keyType;
 
-        public SetRegistryKeyOperation(string path, string keyName, string keyValue, string keyType)
+        public SetRegistryKeyOperation(string path, string keyName, string keyValue, RegistryValueKind keyType)
         {
             _path = path;
             _keyName = keyName;

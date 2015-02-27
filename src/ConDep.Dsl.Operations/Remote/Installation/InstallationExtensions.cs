@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using System.Web.UI;
-using ConDep.Dsl.Operations.Remote.Installation.Chocolatey;
 using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
 using ConDep.Dsl.Operations.Remote.Installation.Msi;
@@ -10,11 +7,6 @@ using ConDep.Dsl.Operations.Remote.Installation.Zip;
 
 namespace ConDep.Dsl
 {
-    /// <summary>
-    /// HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall
-    /// HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall
-    /// HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
-    /// </summary>
     public static class InstallationExtensions
     {
         /// <summary>
@@ -215,7 +207,8 @@ namespace ConDep.Dsl
         /// <param name="packageId">Windows package KB-id. Example: KB1234567</param>
         /// <param name="packageUrl">The URL for the msi install file</param>
         /// <param name="packageName">A uniqe package name (DisplayName in Windows Registry) to make this 
-        /// operation idempotent. If this package name is not correct, ConDep will install this package 
+        /// operation idempotent. Example: Security Update for Microsoft .NET Framework 4.5.1 (KB2972216).
+        /// If this package name is not correct, ConDep will install this package 
         /// on every execution. ConDep looks in these three registry keys for installed software packages: 
         /// HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Uninstall
         /// HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Uninstall
@@ -225,18 +218,6 @@ namespace ConDep.Dsl
         {
             var winUpdateOperation = new InstallWindowsUpdateOperation(packageId, packageUrl, packageName);
             Configure.Operation(install, winUpdateOperation);
-            return install;
-        }
-
-        /// <summary>
-        /// Will install Chocolatey, if not already installed.
-        /// </summary>
-        /// <param name="install"></param>
-        /// <returns></returns>
-        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install)
-        {
-            var chocoOperation = new InstallChocolateyOperation();
-            Configure.Operation(install, chocoOperation);
             return install;
         }
     }

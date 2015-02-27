@@ -1,4 +1,6 @@
-﻿using ConDep.Dsl.Validation;
+﻿using System;
+using System.IO;
+using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Download
 {
@@ -15,6 +17,15 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
 
         public override bool IsValid(Notification notification)
         {
+            try
+            {
+                var uri = new Uri(_url);
+            }
+            catch (Exception ex)
+            {
+                notification.AddError(new ValidationError(ex.Message));
+                return false;
+            }
             return true;
         }
 
@@ -31,7 +42,21 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
             {
                 dest = _values.TargetDir;
             }
-            server.Execute.PowerShell(string.Format("Invoke-WebRequest -Uri {0} -OutFile {1}", _url, dest));
+
+            var uri = new Uri(_url);
+            var fileName = Path.GetFileName(uri.AbsolutePath);
+            var destFile = Path.Combine(dest, fileName);
+
+            server.Execute.PowerShell(string.Format(@"
+$path = $ExecutionContext.InvokeCommand.ExpandString(""{1}"")
+
+if((Test-Path $path)) {{
+    write-warning 'File allready exist. Not downloading again.'  
+}}
+else {{
+    $client = new-object System.Net.WebClient
+    $client.DownloadFile(""{0}"", $path )
+}}", _url, destFile));
         }
     }
 }

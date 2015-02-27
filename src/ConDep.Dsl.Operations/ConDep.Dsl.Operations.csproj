@@ -39,9 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ConDep.Dsl.3.1.0\lib\net40\ConDep.Dsl.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -101,12 +98,11 @@
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IIS\MachineKey\SetIisMachineKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\SetEnvironmentVariableOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\EnvironmentVariableOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\SetRegistryKeyOperation.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToGroupOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToLocalGroupOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\DisableUserAccountControlOperation.cs" />
-    <Compile Include="Remote\Installation\Chocolatey\InstallChocolateyOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\UserAdmin\UserAccountControlOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />
     <Compile Include="Remote\Installation\InstallationExtensions.cs" />
@@ -188,7 +184,6 @@
     <EmbeddedResource Include="Remote\PSScripts\Windows.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\WinService.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\Msi.ps1" />
-    <EmbeddedResource Include="Remote\PSScripts\MachineKey.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Remote\Execution\Ssh\" />

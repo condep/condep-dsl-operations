@@ -1,4 +1,5 @@
-﻿using ConDep.Dsl.Validation;
+﻿using System.Web.Configuration;
+using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey
 {
@@ -6,9 +7,9 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey
     {
         private readonly string _validationKey;
         private readonly string _decryptionKey;
-        private readonly string _validation;
+        private readonly MachineKeyValidation _validation;
 
-        public SetIisMachineKeyOperation(string validationKey, string decryptionKey, string validation)
+        public SetIisMachineKeyOperation(string validationKey, string decryptionKey, MachineKeyValidation validation)
         {
             _validationKey = validationKey;
             _decryptionKey = decryptionKey;
@@ -27,7 +28,7 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.Execute.PowerShell("Set-MachineKeys " + _validationKey + " " + _decryptionKey + " " + _validation);
+            server.Execute.PowerShell(string.Format("Set-ConDepIisMachineKeys {0} {1} {2}", _validationKey, _decryptionKey, _validation));
         }
     }
 }

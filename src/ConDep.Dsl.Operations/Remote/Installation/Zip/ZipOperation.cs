@@ -1,40 +1,41 @@
 using System.IO;
 using ConDep.Dsl.Logging;
-using Ionic.Zip;
+using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 {
-    public class ZipOperation : RemoteServerOperation
+    public class ZipOperation : RemoteCompositeOperation
     {
         private readonly string _pathToCompress;
         private readonly string _destZipFile;
 
         public ZipOperation(string pathToCompress, string destZipFile)
-            : base(pathToCompress, destZipFile)
         {
             _pathToCompress = pathToCompress;
             _destZipFile = destZipFile;
         }
 
-        public override void Execute(ILogForConDep logger)
+        public override bool IsValid(Notification notification)
         {
-            using (var archive = new ZipFile(_destZipFile))
-            {
-                var attr = File.GetAttributes(_pathToCompress);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {
-                    archive.AddDirectory(_pathToCompress);
-                }
-                else
-                {
-                    archive.AddFile(_pathToCompress);
-                }
-            }
+            return true;
         }
 
         public override string Name
         {
             get { return "Zip Operation"; }
+        }
+
+        public override void Configure(IOfferRemoteComposition server)
+        {
+            var script = string.Format(@"
+if(!(Test-Path ""{0}"")) {{
+    throw [System.IO.FileNotFoundException] ""{0} not found.""
+}}
+
+$7z = ""$env:ProgramData\chocolatey\chocolateyinstall\tools\7za.exe""
+cmd /c $7z a ""{0}"" ""{1}"" > NUL
+", _destZipFile, _pathToCompress);
+
         }
     }
 }
