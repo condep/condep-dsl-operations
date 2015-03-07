@@ -31,7 +31,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
 
         public override string Name
         {
-            get { return "Download Operation"; }
+            get { return "Downloading " + Path.GetFileName(new Uri(_url).AbsolutePath); }
         }
 
         public override void Configure(IOfferRemoteComposition server)
@@ -51,7 +51,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
 $path = $ExecutionContext.InvokeCommand.ExpandString(""{1}"")
 
 if((Test-Path $path)) {{
-    write-warning 'File allready exist. Not downloading again.'  
+    write-warning 'File allready exist. Skipping.'  
 }}
 else {{
     $client = new-object System.Net.WebClient

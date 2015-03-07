@@ -23,7 +23,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.WindowsUpdate
 
         public override string Name
         {
-            get { return "Installing " + _packageName; }
+            get { return string.Format("Windows Update ({0})", _packageId); }
         }
 
         public override void Configure(IOfferRemoteComposition server)

@@ -38,7 +38,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Msi
 
         public override string Name
         {
-            get { return "Msi"; }
+            get { return string.Format("Msi ({0})", _packageName); }
         }
 
         public override void Configure(IOfferRemoteComposition server)

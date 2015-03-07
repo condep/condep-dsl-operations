@@ -1,3 +1,4 @@
+using System.IO;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Zip
@@ -20,7 +21,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 
         public override string Name
         {
-            get { return "UnZip Operation"; }
+            get { return string.Format("UnZip ({0})", Path.GetFileName(_filePath)); }
         }
 
         public override void Configure(IOfferRemoteComposition server)

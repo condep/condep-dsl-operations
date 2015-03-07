@@ -20,7 +20,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
 
         public override string Name
         {
-            get { return "Chocolatey Operation"; }
+            get { return string.Format("Chocolatey ({0})", string.Join(", ", _packageNames)); }
         }
 
         public override void Configure(IOfferRemoteComposition server)

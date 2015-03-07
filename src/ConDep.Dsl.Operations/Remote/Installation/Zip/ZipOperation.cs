@@ -22,7 +22,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 
         public override string Name
         {
-            get { return "Zip Operation"; }
+            get { return string.Format("Zip ({0})", Path.GetFileName(_destZipFile)); }
         }
 
         public override void Configure(IOfferRemoteComposition server)
