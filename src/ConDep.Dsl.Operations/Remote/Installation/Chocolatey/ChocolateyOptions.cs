@@ -16,21 +16,9 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             return this;
         }
 
-        public IOfferChocolateyOptions Timeout(int timeoutInSeconds)
+        public IOfferChocolateyOptions Debug(bool debug)
         {
-            _values.TimeoutInSeconds = timeoutInSeconds;
-            return this;
-        }
-
-        public IOfferChocolateyOptions LimitOutput(bool limitOutputToEssentialInfo)
-        {
-            _values.LimitOutput = limitOutputToEssentialInfo;
-            return this;
-        }
-
-        public IOfferChocolateyOptions CacheLocation(string cacheLocation)
-        {
-            _values.CacheLocation = cacheLocation;
+            _values.Debug = debug;
             return this;
         }
 
@@ -46,12 +34,6 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             return this;
         }
 
-        public IOfferChocolateyOptions PreRelese(bool preRelease)
-        {
-            _values.PreRelease = preRelease;
-            return this;
-        }
-
         public IOfferChocolateyOptions ForceX86(bool force32BitInstallOn64BitSystem)
         {
             _values.ForceX86 = force32BitInstallOn64BitSystem;
@@ -63,46 +45,10 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             _values.InstallerArgs = argumentsToNativeInstaller;
             return this;
         }
-
-        public IOfferChocolateyOptions OverrideArgs(bool overrideArgs)
-        {
-            _values.OverrideArgs = overrideArgs;
-            return this;
-        }
-
-        public IOfferChocolateyOptions NotSilent(bool notSilent)
-        {
-            _values.NotSilent = notSilent;
-            return this;
-        }
-
+    
         public IOfferChocolateyOptions PackageParams(string packageParams)
         {
             _values.PackageParams = packageParams;
-            return this;
-        }
-
-        public IOfferChocolateyOptions AllowMultipleVersions(bool multipleVersions)
-        {
-            _values.AllowMultipleVersions = multipleVersions;
-            return this;
-        }
-
-        public IOfferChocolateyOptions IgnoreDependecies(bool ignoreDependencies)
-        {
-            _values.IgnoreDependencies = ignoreDependencies;
-            return this;
-        }
-
-        public IOfferChocolateyOptions ForceDependencies(bool forceDependencies)
-        {
-            _values.ForceDependencies = forceDependencies;
-            return this;
-        }
-
-        public IOfferChocolateyOptions SkipPowerShell(bool skipPowerShell)
-        {
-            _values.SkipPowerShell = skipPowerShell;
             return this;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using ConDep.Dsl.Operations.Remote.Installation.Chocolatey;
 using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
@@ -222,18 +223,21 @@ namespace ConDep.Dsl
             return install;
         }
 
-        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, params string[] packageName)
+        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string[] packageNames, Action<IOfferChocolateyOptions> opt = null)
         {
-            var op = new ChocolateyOperation(packageName, null);
+            var options = new ChocolateyOptions();
+            if (opt != null)
+            {
+                opt(options);
+            }
+            var op = new ChocolateyOperation(packageNames, options.Values);
             Configure.Operation(install, op);
             return install;
         }
 
-        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string packageName, Action<IOfferChocolateyOptions> opt)
+        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string packageName, Action<IOfferChocolateyOptions> opt = null)
         {
-            var op = new ChocolateyOperation(new []{packageName}, null);
-            Configure.Operation(install, op);
-            return install;
+            return Chocolatey(install, new[] {packageName}, opt);
         }
     }
 }

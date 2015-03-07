@@ -17,18 +17,11 @@ namespace ConDep.Dsl
         IOfferChocolateyOptions Verbose(bool verbose);
 
         /// <summary>
-        /// Override the default execution timeout in the configuration of 2700 seconds.
+        /// Run in Debug Mode.
         /// </summary>
-        /// <param name="timeoutInSeconds"></param>
+        /// <param name="debug"></param>
         /// <returns></returns>
-        IOfferChocolateyOptions Timeout(int timeoutInSeconds);
-
-        /// <summary>
-        /// Limit the output to essential information
-        /// </summary>
-        /// <param name="limitOutputToEssentialInfo"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions LimitOutput(bool limitOutputToEssentialInfo);
+        IOfferChocolateyOptions Debug(bool debug);
 
         /// <summary>
         /// The source to find the package(s) to install. Special sources include: ruby, webpi, cygwin, windowsfeatures, 
@@ -46,13 +39,6 @@ namespace ConDep.Dsl
         IOfferChocolateyOptions Version(string version);
 
         /// <summary>
-        /// Include Prereleases? Defaults to false.
-        /// </summary>
-        /// <param name="preRelease"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions PreRelese(bool preRelease);
-
-        /// <summary>
         /// Force x86 (32bit) installation on 64 bit systems. Defaults to false.
         /// </summary>
         /// <param name="force32BitInstallOn64BitSystem"></param>
@@ -67,54 +53,10 @@ namespace ConDep.Dsl
         IOfferChocolateyOptions InstallerArgs(string argumentsToNativeInstaller);
 
         /// <summary>
-        /// Should install arguments be used exclusively without appending to current package passed 
-        /// arguments? Defaults to false.
-        /// </summary>
-        /// <param name="overrideArgs"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions OverrideArgs(bool overrideArgs);
-
-        /// <summary>
-        /// Do not install this silently. Defaults to false.
-        /// </summary>
-        /// <param name="notSilent"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions NotSilent(bool notSilent);
-
-        /// <summary>
         /// Parameters to pass to the package. Defaults to unspecified.
         /// </summary>
         /// <param name="packageParams"></param>
         /// <returns></returns>
         IOfferChocolateyOptions PackageParams(string packageParams);
-
-        /// <summary>
-        /// Should multiple versions of a package be installed? Defaults to false.
-        /// </summary>
-        /// <param name="multipleVersions"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions AllowMultipleVersions(bool multipleVersions);
-
-        /// <summary>
-        /// Ignore dependencies when upgrading package(s). Defaults to false.
-        /// </summary>
-        /// <param name="ignoreDependencies"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions IgnoreDependecies(bool ignoreDependencies);
-
-        /// <summary>
-        /// Force dependencies to be reinstalled when force installing package(s). Must be used in 
-        /// conjunction with --force. Defaults to false.
-        /// </summary>
-        /// <param name="forceDependencies"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions ForceDependencies(bool forceDependencies);
-
-        /// <summary>
-        /// Do not run chocolateyInstall.ps1. Defaults to false.
-        /// </summary>
-        /// <param name="skipPowerShell"></param>
-        /// <returns></returns>
-        IOfferChocolateyOptions SkipPowerShell(bool skipPowerShell);
     }
 }

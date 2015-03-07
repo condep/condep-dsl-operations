@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
@@ -32,34 +33,20 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
 
         private static string BuildOptions(ChocolateyOptionValues options)
         {
-            var switches = "-y";
+            var opt = new List<string> {"-yes"};
             if (options != null)
             {
-                if (options.AllowMultipleVersions) switches += "m";
-                if (options.Force) switches += "f";
-                if (options.ForceDependencies) switches += "x";
-                if (options.IgnoreDependencies) switches += "i";
-                if (options.LimitOutput) switches += "r";
-                if (options.OverrideArgs) switches += "o";
-                if (options.SkipPowerShell) switches += "n";
+                if (options.Debug) opt.Add("-debug");
+                if (options.Force) opt.Add("-force");
+                if (options.ForceX86) opt.Add("-forceX86");
+
+                if (!string.IsNullOrWhiteSpace(options.InstallerArgs)) opt.Add("-installArguments \"" + options.InstallerArgs + "\"");
+                if (!string.IsNullOrWhiteSpace(options.PackageParams)) opt.Add("-packageParameters \"" + options.PackageParams + "\"");
+                if (!string.IsNullOrWhiteSpace(options.Source)) opt.Add("-source " + options.Source);
+                if (!string.IsNullOrWhiteSpace(options.Version)) opt.Add("-version \"" + options.Version + "\"");
             }
 
-            var opt = new List<string> {"--acceptlicense"};
-
-            if (options != null)
-            {
-                if (options.ForceX86) opt.Add("--x86");
-                if (options.NotSilent) opt.Add("--notsilent");
-                if (options.PreRelease) opt.Add("--pre");
-                if (!string.IsNullOrWhiteSpace(options.InstallerArgs)) opt.Add("--ia=\"" + options.InstallerArgs + "\"");
-                if (!string.IsNullOrWhiteSpace(options.PackageParams)) opt.Add("--params=\"" + options.PackageParams + "\"");
-                if (!string.IsNullOrWhiteSpace(options.Source)) opt.Add("--source=" + options.Source);
-                if (options.TimeoutInSeconds > 0) opt.Add("--execution-timeout=" + options.TimeoutInSeconds);
-                if (!string.IsNullOrWhiteSpace(options.Version)) opt.Add("--version=\"" + options.Version + "\"");
-                if (!string.IsNullOrWhiteSpace(options.CacheLocation)) opt.Add("--cache=" + "\"" + options.CacheLocation + "\"");
-            }
-
-            return string.Format("{0} {1}", switches, string.Join(" ", opt));
+            return string.Join(" ", opt);
         }
     }
 }
