@@ -22,7 +22,7 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin
         {
             string uacEnabled = string.Format(@"
 $regKey = Get-ItemProperty -Path hklm:software\microsoft\windows\currentversion\policies\system -Name ""EnableLUA""
-return $regKey.EnableLUA -eq ${0}", _enabled);
+return $regKey.EnableLUA -eq ${0}", !_enabled);
 
             const string restartNeeded = @"
 $restartEnvVar = [Environment]::GetEnvironmentVariable(""CONDEP_RESTART_NEEDED"",""Machine"")
@@ -36,8 +36,16 @@ return $restartEnvVar -eq 'true'
             server
                 .OnlyIf(uacEnabled)
                     .Configure
-                    .RegistryKey(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLUA", _enabled ? "1" : "0", RegistryValueKind.DWord)
-                        .EnvironmentVariable("CONDEP_RESTART_NEEDED", "true", EnvironmentVariableTarget.Machine);
+                    .WindowsRegistry(reg => 
+                        reg.SetValue(
+                            WindowsRegistryRoot.HKEY_LOCAL_MACHINE, 
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", 
+                            "EnableLUA", 
+                            _enabled ? "1" : "0", 
+                            RegistryValueKind.DWord
+                        )
+                    )
+                    .EnvironmentVariable("CONDEP_RESTART_NEEDED", "true", EnvironmentVariableTarget.Machine);
 
             //Restart server and set env variable for restart NOT necessary, since the machine rebooted.
             server

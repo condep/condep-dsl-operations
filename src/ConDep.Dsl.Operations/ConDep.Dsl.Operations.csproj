@@ -35,9 +35,9 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConDep.Dsl, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ConDep.Dsl, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ConDep.Dsl.3.1.0\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.4.0.0-beta\lib\net40\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -95,11 +95,25 @@
     <Compile Include="Remote\Execution\RunCmd\ConDepUntrappedExitCodeException.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryValueOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryKeyOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\SetWindowsRegistryValueOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryValue.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryValueBuilder.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryBuilder.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\IOfferWindowsRegistryOperations.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\IOfferWindowsRegistryValueOperations.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\IOfferWindowsRegistrySubKeyOperations.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistrySubKey.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistrySubKeyBuilder.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\CreateWindowsRegistryKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\IIS\AppPool\IisAppPoolIdentityOptions.cs" />
     <Compile Include="Remote\Infrastructure\IIS\MachineKey\SetIisMachineKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\IOfferIisAppPoolIdentityOptions.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryRoot.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\IOfferWindowsRegistryOptions.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryOptionsBuilder.cs" />
     <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\EnvironmentVariableOperation.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\Registry\SetRegistryKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToLocalGroupOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\UserAccountControlOperation.cs" />

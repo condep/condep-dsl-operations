@@ -27,15 +27,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            var script = string.Format(@"
-if(!(Test-Path ""{0}"")) {{
-    throw [System.IO.FileNotFoundException] ""{0} not found.""
-}}
-
-$7z = ""$env:ProgramData\chocolatey\chocolateyinstall\tools\7za.exe""
-cmd /c $7z a ""{0}"" ""{1}"" > NUL
-", _destZipFile, _pathToCompress);
-
+            server.Execute.DosCommand(string.Format(@"%ProgramData%\chocolatey\chocolateyinstall\tools\7za.exe a -y ""{0}"" ""{1}""", _destZipFile, _pathToCompress));
         }
     }
 }

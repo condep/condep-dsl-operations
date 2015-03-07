@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Web.Configuration;
+using System.Web.Routing;
 using ConDep.Dsl.Operations.Builders;
 using ConDep.Dsl.Operations.Infrastructure.IIS;
 using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
@@ -149,7 +151,7 @@ namespace ConDep.Dsl
         /// <param name="userName">Username</param>
         /// <param name="groupName">Group name</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration AddUserToLocalGroup(this IOfferRemoteConfiguration configuration, string userName, string groupName)
+        public static IOfferRemoteOperations AddUserToLocalGroup(this IOfferRemoteOperations configuration, string userName, string groupName)
         {
             var operation = new AddUserToLocalGroupOperation(userName, groupName);
             Configure.Operation(configuration, operation);
@@ -183,19 +185,105 @@ namespace ConDep.Dsl
         }
 
         /// <summary>
-        /// Adds a registry key if the key doesn't exists. If the key already exist, this function will update the given key with the given value         
+        /// Gives access to Windows Registry operations 
         /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="keyPath">Key path</param>
-        /// <param name="keyName">Key name</param>
-        /// <param name="keyValue">Key value</param>
-        /// <param name="keyType">Key type</param>
+        /// <param name="conf"></param>
+        /// <param name="reg">Windows Registry operations</param>
         /// <returns></returns>
-        public static IOfferRemoteConfiguration RegistryKey(this IOfferRemoteConfiguration configuration, string keyPath, string keyName, string keyValue, RegistryValueKind keyType)
+        public static IOfferRemoteConfiguration WindowsRegistry(this IOfferRemoteConfiguration conf, Action<IOfferWindowsRegistryOperations> reg)
         {
-            var operation = new SetRegistryKeyOperation(keyPath, keyName, keyValue, keyType);
-            Configure.Operation(configuration, operation);
-            return configuration;
+            var builder = new WindowsRegistryBuilder(conf);
+            reg(builder);
+            return conf;
+        }
+
+        /// <summary>
+        /// Creates a Windows Registry key with default value and optional values and sub keys.
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <param name="root">The Windows Registry hive to use. See <see cref="WindowsRegistryRoot"/> for available options. Example: WindowsRegistryRoot.HKEY_LOCAL_MACHINE</param>
+        /// <param name="key">Name of the key to create. Example: SOFTWARE\ConDep</param>
+        /// <param name="defaultValue">The default value of the key</param>
+        /// <param name="options">Additional options for setting Windows Registry values and sub keys.</param>
+        /// <returns></returns>
+        public static IOfferWindowsRegistryOperations CreateKey(this IOfferWindowsRegistryOperations reg, WindowsRegistryRoot root, string key, string defaultValue, Action<IOfferWindowsRegistryOptions> options = null)
+        {
+            var optBuilder = new WindowsRegistryOptionsBuilder();
+
+            if (options != null)
+            {
+                options(optBuilder);
+            }
+
+            var valuesBuilder = optBuilder.Values as WindowsRegistryValueBuilder;
+            var keysBuilder = optBuilder.SubKeys as WindowsRegistrySubKeyBuilder;
+
+            var op = new CreateWindowsRegistryKeyOperation(root, key, defaultValue, valuesBuilder.Values, keysBuilder.Keys);
+            var regBuilder = reg as WindowsRegistryBuilder;
+            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            return reg;
+        }
+
+        /// <summary>
+        /// Creates a Windows Registry key and optional values and sub keys.
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <param name="root">The Windows Registry hive to use. See <see cref="WindowsRegistryRoot"/> for available options. Example: WindowsRegistryRoot.HKEY_LOCAL_MACHINE</param>
+        /// <param name="key">Name of the key to create. Example: SOFTWARE\ConDep</param>
+        /// <param name="options">Additional options for setting Windows Registry values and sub keys.</param>
+        /// <returns></returns>
+        public static IOfferWindowsRegistryOperations CreateKey(this IOfferWindowsRegistryOperations reg, WindowsRegistryRoot root, string key, Action<IOfferWindowsRegistryOptions> options = null)
+        {
+            return CreateKey(reg, root, key, "", options);
+        }
+
+        /// <summary>
+        /// Creates or updates a Windows Registry value.
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <param name="root">The Windows Registry hive to use. See <see cref="WindowsRegistryRoot"/> for available options. Example: WindowsRegistryRoot.HKEY_LOCAL_MACHINE</param>
+        /// <param name="key">Name of the key containing the value you want to create or update. Example: SOFTWARE\ConDep</param>
+        /// <param name="valueName">Name of the registry value</param>
+        /// <param name="valueData">The data value you want to set</param>
+        /// <param name="valueKind">The data type to use when storing values in the registry</param>
+        /// <returns></returns>
+        public static IOfferWindowsRegistryOperations SetValue(this IOfferWindowsRegistryOperations reg, WindowsRegistryRoot root, string key, string valueName, string valueData, RegistryValueKind valueKind)
+        {
+            var op = new SetWindowsRegistryValueOperation(root, key, valueName, valueData, valueKind);
+            var regBuilder = reg as WindowsRegistryBuilder;
+            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            return reg;
+        }
+
+        /// <summary>
+        /// Deletes a Windows Registry key.
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <param name="root">The Windows Registry hive to use. See <see cref="WindowsRegistryRoot"/> for available options. Example: WindowsRegistryRoot.HKEY_LOCAL_MACHINE</param>
+        /// <param name="key">Name of the key you want to delete. Example: SOFTWARE\ConDep</param>
+        /// <returns></returns>
+        public static IOfferWindowsRegistryOperations DeleteKey(this IOfferWindowsRegistryOperations reg, WindowsRegistryRoot root, string key)
+        {
+            var op = new DeleteWindowsRegistryKeyOperation(root, key);
+            var regBuilder = reg as WindowsRegistryBuilder;
+            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            return reg;
+        }
+
+        /// <summary>
+        /// Deletes a value in Windows Registry.
+        /// </summary>
+        /// <param name="reg"></param>
+        /// <param name="root">The Windows Registry hive to use. See <see cref="WindowsRegistryRoot"/> for available options. Example: WindowsRegistryRoot.HKEY_LOCAL_MACHINE</param>
+        /// <param name="key">Name of the key where the value you want to delete exists. Example: SOFTWARE\ConDep</param>
+        /// <param name="valueName">Name of the value you want to delete.</param>
+        /// <returns></returns>
+        public static IOfferWindowsRegistryOperations DeleteValue(this IOfferWindowsRegistryOperations reg, WindowsRegistryRoot root, string key, string valueName)
+        {
+            var op = new DeleteWindowsRegistryValueOperation(root, key, valueName);
+            var regBuilder = reg as WindowsRegistryBuilder;
+            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            return reg;
         }
 
         /// <summary>
