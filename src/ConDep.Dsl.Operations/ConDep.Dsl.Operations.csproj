@@ -117,12 +117,16 @@
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToLocalGroupOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\UserAccountControlOperation.cs" />
+    <Compile Include="Remote\Installation\Chocolatey\ChocolateyOptionValues.cs" />
+    <Compile Include="Remote\Installation\Chocolatey\ChocolateyOptions.cs" />
+    <Compile Include="Remote\Installation\Chocolatey\ChocolateyOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOperation.cs" />
     <Compile Include="Remote\Installation\Download\DownloadOptions.cs" />
     <Compile Include="Remote\Installation\InstallationExtensions.cs" />
     <Compile Include="Remote\Installation\FileSourceType.cs" />
     <Compile Include="Remote\Installation\Executable\InstallExecutableOperation.cs" />
     <Compile Include="Remote\Installation\Download\IOfferDownloadOptions.cs" />
+    <Compile Include="Remote\Installation\Chocolatey\IOfferChocolateyOptions.cs" />
     <Compile Include="Remote\Installation\Msi\IOfferInstallOptions.cs" />
     <Compile Include="Remote\Installation\Msi\InstallOptions.cs" />
     <Compile Include="Remote\Installation\Msi\MsiOperation.cs" />

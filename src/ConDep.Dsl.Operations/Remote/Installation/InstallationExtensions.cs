@@ -1,4 +1,5 @@
 ﻿using System;
+using ConDep.Dsl.Operations.Remote.Installation.Chocolatey;
 using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
 using ConDep.Dsl.Operations.Remote.Installation.Msi;
@@ -218,6 +219,20 @@ namespace ConDep.Dsl
         {
             var winUpdateOperation = new InstallWindowsUpdateOperation(packageId, packageUrl, packageName);
             Configure.Operation(install, winUpdateOperation);
+            return install;
+        }
+
+        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, params string[] packageName)
+        {
+            var op = new ChocolateyOperation(packageName, null);
+            Configure.Operation(install, op);
+            return install;
+        }
+
+        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string packageName, Action<IOfferChocolateyOptions> opt)
+        {
+            var op = new ChocolateyOperation(new []{packageName}, null);
+            Configure.Operation(install, op);
             return install;
         }
     }
