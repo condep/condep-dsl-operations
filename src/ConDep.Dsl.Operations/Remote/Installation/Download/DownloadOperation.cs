@@ -51,7 +51,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
 $path = $ExecutionContext.InvokeCommand.ExpandString(""{1}"")
 
 if((Test-Path $path)) {{
-    write-warning 'File allready exist. Skipping.'  
+    write-host 'File allready exist. Skipping.'  
 }}
 else {{
     $client = new-object System.Net.WebClient
