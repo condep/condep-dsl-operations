@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: UserAccountControl
-permalink: /3-0/remote/uac/
+permalink: /3-0/infrastructure/uac/
 version_added: 3.2.0
 ---
 
