@@ -4,6 +4,7 @@
   - local/transform-config
   - local/web-request
 - title: Remote
+  docs:
   - remote/create-directory
   - remote/restart
 - title: Remote Deployment
