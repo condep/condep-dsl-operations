@@ -5,9 +5,6 @@ permalink: /3-0/options/IOfferCertificateOptions/
 version_added: 3.1.0
 ---
 
-IOfferCertificateOptions
-===========================
-
 <table>
 	<thead>
 		<tr>

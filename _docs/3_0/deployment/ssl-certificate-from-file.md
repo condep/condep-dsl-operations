@@ -5,9 +5,6 @@ permalink: /3-0/deployment/ssl-certificate-from-file/
 version_added: 3.1.0
 ---
 
-SslCertificate().FromFile
-=======================
-
 Will deploy certificate from local file path given correct password for private key, and deploy to certificate store on remote server.
 
 ## Syntax

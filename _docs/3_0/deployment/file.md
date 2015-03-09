@@ -5,9 +5,6 @@ permalink: /3-0/deployment/file/
 version_added: 3.1.0
 ---
 
-File
-====
-
 Will deploy local file and its attributes to remote server. If the file already exist on the server and either the file or its attributes are different, it will be updated to reflect the file on client.
 
 ## Syntax

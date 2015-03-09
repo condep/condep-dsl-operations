@@ -5,9 +5,6 @@ permalink: /3-0/execution/dos-command/
 version_added: 3.1.0
 ---
 
-DosCommand
-==========
-
 Will execute a DOS command using cmd.exe on remote server. ConDep will check the exit code and throw if exit code is different from 0.
 
 ## Syntax

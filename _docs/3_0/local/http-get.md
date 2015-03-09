@@ -6,9 +6,6 @@ permalink: /3-0/local/http-get/
 version_added: 3.1.0
 ---
 
-HttpGet
-==========
-
 Executes a simple HTTP GET to the specified url expecting a 200 (OK) in return.
 
 <div class="note warning">

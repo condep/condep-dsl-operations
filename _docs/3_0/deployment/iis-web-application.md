@@ -5,9 +5,6 @@ permalink: /3-0/deployment/iis-web-application/
 version_added: 3.1.0
 ---
 
-IisWebApplication
-=================
-
 Works exactly as the [Directory](../directory/) operation, except it will mark the directory as a Web Application in IIS on the remote server. If you emit the `destDir`, ConDep will use the physical path from the Web Site and add the Web Application directly under that path.
 
 ## Syntax

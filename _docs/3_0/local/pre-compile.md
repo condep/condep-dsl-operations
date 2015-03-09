@@ -7,8 +7,6 @@ permalink: /3-0/local/pre-compile/
 version_added: 3.1.0
 ---
 
-PreCompile
-==========
 Will pre-compile ASP.NET applications to prevent pre-compilation to occur when the application is first accessed. This will speed up startup times significantly on bigger ASP.NET Web Application.
 
 <div class="note warning">

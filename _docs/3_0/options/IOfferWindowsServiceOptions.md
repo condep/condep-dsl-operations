@@ -5,9 +5,6 @@ permalink: /3-0/options/IOfferWindowsServiceOptions/
 version_added: 3.1.0
 ---
 
-IOfferWindowsServiceOptions
-===========================
-
 <table>
 	<thead>
 		<tr>

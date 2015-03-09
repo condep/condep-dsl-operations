@@ -5,9 +5,6 @@ permalink: /3-0/deployment/nservicebus-endpoint/
 version_added: 3.1.0
 ---
 
-NServiceBusEndpoint
-===================
-
 Exactly the same as the [WindowsService](../windows-service/) operation, only tailored for NServiceBus.
 
 ## Syntax

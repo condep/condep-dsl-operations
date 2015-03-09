@@ -7,9 +7,6 @@ permalink: /3-0/local/transform-config/
 version_added: 3.1.0
 ---
 
-TransformConfig
-===============
-
 This operation transforms .NET configuration files (web and app config), in exactly the same way as msbuild or Visual Studio does.
 
 <div class="note info">

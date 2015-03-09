@@ -5,9 +5,6 @@ permalink: /3-0/deployment/windows-service/
 version_added: 3.1.0
 ---
 
-WindowsService
-==============
-
 Will deploy the given Windows Service to remote server.
 
 ## Syntax

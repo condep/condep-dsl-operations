@@ -5,9 +5,6 @@ permalink: /3-0/deployment/ssl-certificate-from-store/
 version_added: 3.1.0
 ---
 
-SslCertificate().FromStore
-==========================
-
 Will search for certificate in local cert store using the <a href="http://msdn.microsoft.com/en-us/library/vstudio/system.security.cryptography.x509certificates.x509findtype(v=vs.100).aspx">X509FindType</a> and a <code>findValue</code>, and deploy certificate to certificate store on remote server.
 
 ## Syntax

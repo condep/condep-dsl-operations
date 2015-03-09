@@ -1,11 +1,8 @@
 ---
 layout: doc
-title: ConDep.Dsl.Operations
+title: Core Operations
 permalink: /3-0/
 ---
-
-Core Operations
-===============
 
 ConDep's core operations are categorized around the folowing categories:
 

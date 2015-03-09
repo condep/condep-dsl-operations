@@ -5,9 +5,6 @@ permalink: /3-0/deployment/windows-service-with-installer/
 version_added: 3.1.0
 ---
 
-WindowsServiceWithInstaller
-===========================
-
 Will deploy the given Windows Service to remote server, using the build-in installer in the service.
 
 ## Syntax

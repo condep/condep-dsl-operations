@@ -5,9 +5,6 @@ permalink: /3-0/options/IOfferWindowsServiceFailureOptions/
 version_added: 3.1.0
 ---
 
-IOfferWindowsServiceFailureOptions
-==================================
-
 Sets failure options for a Windows Service. You can specify failure options for first, second and subsequent failures using the below properties:
 
 <table>
