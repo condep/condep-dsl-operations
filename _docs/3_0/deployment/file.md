@@ -2,6 +2,7 @@
 layout: doc
 title: File
 permalink: /3-0/deployment/file/
+version_added: 3.1.0
 ---
 
 File

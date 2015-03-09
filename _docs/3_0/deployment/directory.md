@@ -2,6 +2,7 @@
 layout: doc
 title: Directory
 permalink: /3-0/deployment/directory/
+version_added: 3.1.0
 ---
 
 Directory

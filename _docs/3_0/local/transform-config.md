@@ -4,12 +4,13 @@ title: TransformConfig
 prev_section: 3-0/operations/local/pre-compile
 next_section: 3-0/operations/deployment/directory
 permalink: /3-0/local/transform-config/
+version_added: 3.1.0
 ---
 
 TransformConfig
 ===============
 
-This operation transforms .NET configuration files (web and app config), in exactly the same way as msbuild or Visual Studio does. 
+This operation transforms .NET configuration files (web and app config), in exactly the same way as msbuild or Visual Studio does.
 
 <div class="note info">
 	<h2>Transform configurations as part of Deployment, NOT Build!</h2>
@@ -36,8 +37,8 @@ Before ConDep executes the transformation the first time, it makes a copy of the
 
 {% highlight csharp %}
 TransformConfigFile(
-  string configDirPath, 
-  string configName, 
+  string configDirPath,
+  string configName,
   string transformName)
 {% endhighlight %}
 

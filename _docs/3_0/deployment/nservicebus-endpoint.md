@@ -2,6 +2,7 @@
 layout: doc
 title: NServiceBusEndpoint
 permalink: /3-0/deployment/nservicebus-endpoint/
+version_added: 3.1.0
 ---
 
 NServiceBusEndpoint

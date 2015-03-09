@@ -2,6 +2,7 @@
 layout: doc
 title: WindowsService
 permalink: /3-0/deployment/windows-service/
+version_added: 3.1.0
 ---
 
 WindowsService
@@ -13,20 +14,20 @@ Will deploy the given Windows Service to remote server.
 
 {% highlight csharp %}
 WindowsService(
-  string serviceName, 
-  string displayName, 
-  string sourceDir, 
-  string destDir, 
+  string serviceName,
+  string displayName,
+  string sourceDir,
+  string destDir,
   string relativeExePath
 )
 {% endhighlight %}
 {% highlight csharp %}
 WindowsService(
-  string serviceName, 
-  string displayName, 
-  string sourceDir, 
-  string destDir, 
-  string relativeExePath, 
+  string serviceName,
+  string displayName,
+  string sourceDir,
+  string destDir,
+  string relativeExePath,
   Action<IOfferWindowsServiceOptions> options
 )
 {% endhighlight %}

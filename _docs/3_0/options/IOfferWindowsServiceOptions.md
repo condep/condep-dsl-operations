@@ -2,6 +2,7 @@
 layout: doc
 title: IOfferWindowsServiceOptions
 permalink: /3-0/options/IOfferWindowsServiceOptions/
+version_added: 3.1.0
 ---
 
 IOfferWindowsServiceOptions
@@ -22,7 +23,7 @@ UserName(string username)
 {% endhighlight %}
 			</td>
 			<td>
-				To run the Windows Service under a custom account, provide <code>domain\user</code> or <code>.\user</code> for local user. For built-in accounts like NetworkService, use <code>.\NetworkService</code>. If no user is provided, <code>LocalSystem</code> will be used. 
+				To run the Windows Service under a custom account, provide <code>domain\user</code> or <code>.\user</code> for local user. For built-in accounts like NetworkService, use <code>.\NetworkService</code>. If no user is provided, <code>LocalSystem</code> will be used.
 			</td>
 		</tr>
 		<tr>
@@ -62,7 +63,7 @@ ExeParams(string parameters)
 {% endhighlight %}
 			</td>
 			<td>
-Provide any parameters you want to be sent in to the Windows Service executable on startup. 
+Provide any parameters you want to be sent in to the Windows Service executable on startup.
 			</td>
 		</tr>
 		<tr>
@@ -99,7 +100,7 @@ If used, will not start the Windows Service after installation.
 			<td>
 {% highlight csharp %}
 OnServiceFailure(
-  int serviceFailureResetInterval, 
+  int serviceFailureResetInterval,
   Action<IOfferWindowsServiceFailureOptions> options
 )
 {% endhighlight %}

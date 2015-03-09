@@ -4,6 +4,7 @@ title: PreCompile
 prev_section: 3-0/operations/local/http-get
 next_section: 3-0/operations/local/transform-config
 permalink: /3-0/local/pre-compile/
+version_added: 3.1.0
 ---
 
 PreCompile
@@ -21,8 +22,8 @@ Will pre-compile ASP.NET applications to prevent pre-compilation to occur when t
 
 {% highlight csharp %}
 PreCompile(
-	string webApplicationName, 
-	string webApplicationPhysicalPath, 
+	string webApplicationName,
+	string webApplicationPhysicalPath,
 	string preCompileOutputpath
 )
 {% endhighlight %}

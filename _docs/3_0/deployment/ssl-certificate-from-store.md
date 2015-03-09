@@ -2,6 +2,7 @@
 layout: doc
 title: SslCertificate().FromStore
 permalink: /3-0/deployment/ssl-certificate-from-store/
+version_added: 3.1.0
 ---
 
 SslCertificate().FromStore

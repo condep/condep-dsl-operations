@@ -2,6 +2,7 @@
 layout: doc
 title: SslCertificate().FromFile
 permalink: /3-0/deployment/ssl-certificate-from-file/
+version_added: 3.1.0
 ---
 
 SslCertificate().FromFile
@@ -51,7 +52,7 @@ public class MyRemoteArtifact : Artifact.Remote
   {
     server.Deploy
       .SslCertificate().FromFile(
-        path: @"C:\mycerts\mySslCert.pfx", 
+        path: @"C:\mycerts\mySslCert.pfx",
         password: "my$uper$ecretP@ssw0rd".
         options: opt => opt.AddPrivateKeyPermission(@"mydomain\myUser")
       );

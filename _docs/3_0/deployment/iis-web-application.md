@@ -2,6 +2,7 @@
 layout: doc
 title: IisWebApplication
 permalink: /3-0/deployment/iis-web-application/
+version_added: 3.1.0
 ---
 
 IisWebApplication
@@ -55,9 +56,9 @@ public class MyRemoteArtifact : Artifact.Remote
   public override void Configure(IOfferRemoteOperations server, ConDepSettings settings)
   {
     server.Deploy.IisWebApplication(
-                sourceDir: @"C:\MyWebApp", 
+                sourceDir: @"C:\MyWebApp",
                 destDir: @"E:\WebApps\MyWebApp",
-                webAppName: "MyWebApp", 
+                webAppName: "MyWebApp",
                 webSiteName: "MyWebSite");
   }
 }

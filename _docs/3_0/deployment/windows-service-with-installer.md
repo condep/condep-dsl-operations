@@ -2,6 +2,7 @@
 layout: doc
 title: WindowsServiceWithInstaller
 permalink: /3-0/deployment/windows-service-with-installer/
+version_added: 3.1.0
 ---
 
 WindowsServiceWithInstaller
@@ -13,21 +14,21 @@ Will deploy the given Windows Service to remote server, using the build-in insta
 
 {% highlight csharp %}
 WindowsServiceWithInstaller(
-  string serviceName, 
-  string displayName, 
-  string sourceDir, 
-  string destDir, 
-  string relativeExePath, 
+  string serviceName,
+  string displayName,
+  string sourceDir,
+  string destDir,
+  string relativeExePath,
   string installerParams
 )
 {% endhighlight %}
 {% highlight csharp %}
 WindowsService(
-  string serviceName, 
-  string displayName, 
-  string sourceDir, 
-  string destDir, 
-  string relativeExePath, 
+  string serviceName,
+  string displayName,
+  string sourceDir,
+  string destDir,
+  string relativeExePath,
   string installerParams,
   Action<IOfferWindowsServiceOptions> options
 )

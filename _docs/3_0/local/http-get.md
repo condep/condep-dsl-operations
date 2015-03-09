@@ -3,6 +3,7 @@ layout: doc
 title: HttpGet
 next_section: 3-0/operations/local/pre-compile
 permalink: /3-0/local/http-get/
+version_added: 3.1.0
 ---
 
 HttpGet

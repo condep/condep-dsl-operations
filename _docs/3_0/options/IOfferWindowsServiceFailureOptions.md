@@ -2,6 +2,7 @@
 layout: doc
 title: IOfferWindowsServiceFailureOptions
 permalink: /3-0/options/IOfferWindowsServiceFailureOptions/
+version_added: 3.1.0
 ---
 
 IOfferWindowsServiceFailureOptions
@@ -84,8 +85,8 @@ Will restart the Windows Service after given amount of milliseconds on service f
 			<td>
 {% highlight csharp %}
 .RunProgram(
-	string program, 
-	string parameters, 
+	string program,
+	string parameters,
 	int delayInMilliseconds
 )
 {% endhighlight %}
