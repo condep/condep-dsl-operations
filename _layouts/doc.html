@@ -7,6 +7,7 @@
     <section class="doc">
       <div id="nav_menu">☰<div id="nav_menu_text">&nbsp;Documentation</div></div>
       <div class="version">{% if page.version_added != "" %}Version added: ConDep.Dsl.Operations v. {{ page.version_added }}{% endif %} - <a href="{{ site.github_url }}/{{ page.relative_path }}">[Edit on GitHub]</a> - [Version 3.0]</div>
+      <h2>{{ page.title }}</h2>
       {{ page.content }}
       {% include section_nav.html %}
       {% include disqus.html %}
