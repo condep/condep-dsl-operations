@@ -3,7 +3,10 @@
   - local/pre-compile
   - local/transform-config
   - local/web-request
-- title: Deployment
+- title: Remote
+  - remote/create-directory
+  - remote/restart
+- title: Remote Deployment
   docs:
   - deployment/directory
   - deployment/file
@@ -13,20 +16,18 @@
   - deployment/ssl-certificate-from-store
   - deployment/windows-service
   - deployment/windows-service-with-installer
-- title: Execution
+- title: Remote Execution
   docs:
   - execution/dos-command
   - execution/powershell
-- title: Configuration
+- title: Remote Configuration
   docs:
-  - infrastructure/create-directory
   - infrastructure/iis
   - infrastructure/iis-app-pool
   - infrastructure/iis-web-app
   - infrastructure/iis-web-site
-  - infrastructure/restart
   - infrastructure/windows
-- title: Installation
+- title: Remote Installation
   docs:
   - installation/custom
   - installation/msi
