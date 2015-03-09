@@ -27,7 +27,7 @@ Restart(int delayInSeconds)
 	<tbody>
 		<tr>
 			<td>delayInSeconds (optional)</td>
-			<td>How many seconds do wait before issue the restart operation on the server. Default is 10 seconds.</td>
+			<td>How many seconds to wait before issue the restart operation on the server. Default is 10 seconds.</td>
 		</tr>
 	</tbody>
 </table>
