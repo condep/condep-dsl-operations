@@ -19,6 +19,7 @@
   - execution/powershell
 - title: Configuration
   docs:
+  - infrastructure/create-directory
   - infrastructure/iis
   - infrastructure/iis-app-pool
   - infrastructure/iis-web-app
