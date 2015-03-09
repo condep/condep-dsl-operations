@@ -34,8 +34,8 @@ CreateDirectory(string path)
 public class MyRemoteArtifact : Artifact.Remote
 {
   public override void Configure(IOfferRemoteOperations server, ConDepSettings settings)
-	{
+  {
     server.CreateDirectory(@"C:\temp\MyDirectory");
-	}
+  }
 }
 {% endhighlight %}
