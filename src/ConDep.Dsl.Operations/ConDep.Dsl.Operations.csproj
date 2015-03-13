@@ -98,6 +98,7 @@
     <Compile Include="Remote\Execution\RunCmd\ConDepUntrappedExitCodeException.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
+    <Compile Include="Remote\RemoteExtensions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryValueOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryKeyOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\SetWindowsRegistryValueOperation.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Remote\Infrastructure\Windows\Registry\WindowsRegistryOptionsBuilder.cs" />
     <Compile Include="Remote\Infrastructure\Windows\EnvironmentVariable\EnvironmentVariableOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\AddUserToLocalGroupOperation.cs" />
-    <Compile Include="Remote\Infrastructure\Windows\FileStructure\CreateDirectoryOperation.cs" />
+    <Compile Include="Remote\CreateDirectoryOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\UserAdmin\UserAccountControlOperation.cs" />
     <Compile Include="Remote\Installation\Chocolatey\ChocolateyOptionValues.cs" />
     <Compile Include="Remote\Installation\Chocolatey\ChocolateyOptions.cs" />
@@ -149,8 +150,7 @@
     <Compile Include="Builders\RemoteCertDeploymentBuilder.cs" />
     <Compile Include="Remote\Deployment\RemoteCertDeploymentExtensions.cs" />
     <Compile Include="Builders\SslInfrastructureBuilder.cs" />
-    <Compile Include="Remote\Infrastructure\RestartComputer\RestartComputerExtensions.cs" />
-    <Compile Include="Remote\Infrastructure\RestartComputer\RestartComputerOperation.cs" />
+    <Compile Include="Remote\RestartComputerOperation.cs" />
     <Compile Include="Remote\Infrastructure\SslInfrastructureExtensions.cs" />
     <Compile Include="Remote\Infrastructure\Certificate\CertificateInfrastructureProvider.cs" />
     <Compile Include="Remote\Infrastructure\Certificate\ConDepCertificateDuplicationException.cs" />

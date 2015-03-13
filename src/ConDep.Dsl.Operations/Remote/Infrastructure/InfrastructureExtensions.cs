@@ -10,7 +10,6 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
-using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
 using Microsoft.Win32;
@@ -134,7 +133,10 @@ namespace ConDep.Dsl
         /// <returns></returns>
         public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite, Action<IOfferIisWebAppOptions> options)
         {
-            var op = new IisWebAppOperation(name, webSite);
+            var builder = new IisWebAppOptions(name);
+            options(builder);
+
+            var op = new IisWebAppOperation(name, webSite, builder.Values);
             Configure.Operation(infra, op);
             return infra;
         }
@@ -143,33 +145,6 @@ namespace ConDep.Dsl
         /// Provide operations for installing SSL certificates.
         /// </summary>
         public static IOfferSslInfrastructure SslCertificate(this IOfferRemoteConfiguration infra) { return new SslInfrastructureBuilder(infra); }
-
-        /// <summary>
-        /// Adds user to group
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="userName">Username</param>
-        /// <param name="groupName">Group name</param>
-        /// <returns></returns>
-        public static IOfferRemoteOperations AddUserToLocalGroup(this IOfferRemoteOperations configuration, string userName, string groupName)
-        {
-            var operation = new AddUserToLocalGroupOperation(userName, groupName);
-            Configure.Operation(configuration, operation);
-            return configuration;
-        }
-
-        /// <summary>
-        /// Creates a directory, if it not already exists.
-        /// </summary>
-        /// <param name="remote"></param>
-        /// <param name="path">Directory path</param>
-        /// <returns></returns>
-        public static IOfferRemoteOperations CreateDirectory(this IOfferRemoteOperations remote, string path)
-        {
-            var operation = new CreateDirectoryOperation(path);
-            Configure.Operation(remote, operation);
-            return remote;
-        }
 
         /// <summary>
         /// Disables User Account Control. The operation is idempotent and will trigger a restart, but only if UAC not is already disabled. 
