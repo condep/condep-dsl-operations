@@ -242,20 +242,12 @@ function New-ConDepWebApp {
 
 	if(!(Test-Path -path $PhysicalPath)) { New-Item $PhysicalPath -type Directory }; 
 	
-	$webApps = Get-WebApplication -Site $existingWebSite.Name
-    $existingWebApp = $null
-    foreach($value in $webapps) {
-        if($value.path.Substring(1) -eq $Name) {
-            $existingWebApp = $value
-            break
-        }
-    }
-    if($existingWebApp) {
+	$webApps = Get-WebApplication -Site $existingWebSite.Name | % { $_.path.TrimStart("/") }
+    if($webApps -contains $Name) {
         # Remove existing web application since new-webapplication does not set the provided apppool if the application already exists.
         Remove-WebApplication -Site $WebSite -Name $Name
     }
 	New-WebApplication -Name $Name -Site $WebSite -PhysicalPath $PhysicalPath -ApplicationPool $AppPool -force;    
-	New-WebApplication -Name $Name -Site $WebSite -PhysicalPath $PhysicalPath -ApplicationPool $AppPool -force; 
 }
 
 function New-ConDepIisHttpBinding {
