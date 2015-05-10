@@ -46,7 +46,7 @@ namespace ConDep.Dsl.Operations.Application.Deployment.Certificate
                 if (cert.HasPrivateKey)
                 {
                     var guid = Guid.NewGuid();
-                    var destPath = string.Format(@"%temp%\{0}.pfx", guid);
+                    var destPath = string.Format(@"%windir%\temp\{0}.pfx", guid);
                     var sourcePath = Path.Combine(Path.GetTempPath(), guid + ".pfx");
 
                     const string password = "%se65#1s)=3";
