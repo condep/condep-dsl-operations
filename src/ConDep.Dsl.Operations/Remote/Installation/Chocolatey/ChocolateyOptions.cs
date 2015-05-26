@@ -45,10 +45,28 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             _values.InstallerArgs = argumentsToNativeInstaller;
             return this;
         }
+
+        public IOfferChocolateyOptions OverideArgs(bool overrideArgs)
+        {
+            _values.OverrideArgs = overrideArgs;
+            return this;
+        }
     
         public IOfferChocolateyOptions PackageParams(string packageParams)
         {
             _values.PackageParams = packageParams;
+            return this;
+        }
+        
+        public IOfferChocolateyOptions PreRelease(bool preRelease)
+        {
+            _values.PreRelease = preRelease;
+            return this;
+        }
+
+        public IOfferChocolateyOptions OtherArgs(string otherArgs)
+        {
+            _values.OtherArgs = otherArgs;
             return this;
         }
 

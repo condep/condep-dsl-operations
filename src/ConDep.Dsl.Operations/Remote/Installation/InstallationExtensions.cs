@@ -223,21 +223,16 @@ namespace ConDep.Dsl
             return install;
         }
 
-        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string[] packageNames, Action<IOfferChocolateyOptions> opt = null)
+        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string packageName, Action<IOfferChocolateyOptions> opt = null)
         {
             var options = new ChocolateyOptions();
             if (opt != null)
             {
                 opt(options);
             }
-            var op = new ChocolateyOperation(packageNames, options.Values);
+            var op = new ChocolateyOperation(packageName, options.Values);
             Configure.Operation(install, op);
             return install;
-        }
-
-        public static IOfferRemoteInstallation Chocolatey(this IOfferRemoteInstallation install, string packageName, Action<IOfferChocolateyOptions> opt = null)
-        {
-            return Chocolatey(install, new[] {packageName}, opt);
         }
     }
 }

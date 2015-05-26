@@ -58,5 +58,29 @@ namespace ConDep.Dsl
         /// <param name="packageParams"></param>
         /// <returns></returns>
         IOfferChocolateyOptions PackageParams(string packageParams);
+
+        /// <summary>
+        /// Should install arguments be used exclusively
+        /// without appending to current package passed arguments? Defaults to
+        /// false.
+        /// </summary>
+        /// <param name="overrideArgs"></param>
+        /// <returns></returns>
+        IOfferChocolateyOptions OverideArgs(bool overrideArgs);
+
+        /// <summary>
+        /// Include Prereleases? Defaults to false.
+        /// </summary>
+        /// <param name="preRelease"></param>
+        /// <returns></returns>
+        IOfferChocolateyOptions PreRelease(bool preRelease);
+
+        /// <summary>
+        /// Other arguments to pass to Chocolatey. For available arguments 
+        /// see Chocolatey documentation at https://github.com/chocolatey/choco/wiki/CommandsInstall
+        /// </summary>
+        /// <param name="otherArgs"></param>
+        /// <returns></returns>
+        IOfferChocolateyOptions OtherArgs(string otherArgs);
     }
 }
