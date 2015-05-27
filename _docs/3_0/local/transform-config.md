@@ -18,11 +18,7 @@ This operation transforms .NET configuration files (web and app config), in exac
 
 <div class="note warn">
 	<h2>Build Action in Visual Studio</h2>
-	<p>In Visual Studio, set <code>Build Action</code> to <code>Content</code> for transform files or else they will not be available to ConDep.</h2>
-  <p>
-
-		We believe that doing transforms as part of the build is an anti-pattern and forces you to do a new build for every environment. Do config transformations as part of the deployment process instead.
-	</p>
+	<p>In Visual Studio, set <code>Build Action</code> to <code>Content</code> for transform files or else they will not be available to ConDep.</p>
 </div>
 
 Here’s the process we recommend when deploying to multiple environments (e.g. test, pre-prod and prod):
