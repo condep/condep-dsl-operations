@@ -30,18 +30,20 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             server.Execute.PowerShell(string.Format(@"
 function ConDep-ChocoPackageExist($name, $version = $null) {{
     $name = $name.ToLower().Trim()
-    $result = &(ConDep-ChocoExe) search $($name) --local-only
+    $result = choco search $($name) --local-only
 	$resultArray = ($result -split '[\r\n]') |? {{$_}}
 	$packages = @{{}}
 
-    foreach($item in $resultArray) {{
-        $line = $item.Trim() -split ""\s+""
-        $package = New-Object PSObject -Property @{{
-            Name = $line[0].ToLower().Trim()
-            Version = $line[1] |? $null
-        }}
+     foreach($item in $resultArray) {{
+         $line = $item.Trim() -split ""\s+""
+         if($line.Count -eq 2) {{
+           $package = New-Object PSObject -Property @{{
+               Name = $line[0].ToLower().Trim()
+               Version = $line[1].substring(1)
+           }}
 
-        $packages.Add($line[0].ToLower().Trim(), $package)
+           $packages.Add($line[0].ToLower().Trim(), $package)
+         }}
     }}
 
     $foundPackage = $packages[$name]
