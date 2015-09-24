@@ -4,13 +4,13 @@ This project contains all of ConDep's built-in Operations.
 
 Need help?
 ----------
-Talk and ask questions about ConDep on [Google Groups](https://groups.google.com/forum/#!forum/con-dep).
-
-Documentation for ConDep is being worked on right now [(preview here)](http://docs.con-dep.net), and will be available soon.
+* [Documentation](http://www.condep.io/docs)
+* [Google Groups](https://groups.google.com/forum/#!forum/con-dep)
+* [Gitter](https://gitter.im/condep?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 Found a bug?
 ------------
-To report bugs in the condep-dsl repo, use the [project issue tracker here on GitHub](https://github.com/condep/condep-dsl/issues). To report a general ConDep issue (you don't know which component), use the [issue tracker for the old ConDep project](https://github.com/condep/ConDep/issues)
+To report bugs in the condep-dsl repo, use the [project issue tracker here on GitHub](https://github.com/condep/condep-dsl-operations/issues). To report a general ConDep issue (you don't know which component), use the [issue tracker for the old ConDep project](https://github.com/condep/ConDep/issues)
 
 Want to contribute?
 -------------------
