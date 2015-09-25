@@ -5,7 +5,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Deployment.NServiceBus
 {
-    public class NServiceBusOperation : RemoteCompositeOperation, IRequireCustomConfiguration
+    public class NServiceBusOperation : RemoteCompositeOperation
     {
         private string _serviceInstallerName = "NServiceBus.Host.exe";
         private string _sourcePath;

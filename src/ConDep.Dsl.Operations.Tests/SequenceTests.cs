@@ -39,7 +39,7 @@ namespace ConDep.Dsl.Tests
         }
     }
 
-    public class SequenceTestApp : Artifact.Local
+    public class SequenceTestApp : Runbook.Local
     {
         public override void Configure(IOfferLocalOperations local, ConDepSettings settings)
         {

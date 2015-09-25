@@ -21,8 +21,8 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariabl
 
         public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
-            var psExecutor = new PowerShellExecutor(server);
-            psExecutor.Execute(string.Format("[Environment]::SetEnvironmentVariable(\"{0}\", \"{1}\", \"{2}\")", _name, _value, _target));
+            var psExecutor = new PowerShellExecutor();
+            psExecutor.Execute(server, string.Format("[Environment]::SetEnvironmentVariable(\"{0}\", \"{1}\", \"{2}\")", _name, _value, _target));
         }
 
         public override string Name

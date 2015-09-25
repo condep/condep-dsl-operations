@@ -5,7 +5,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
 {
-    public class IisWebSiteOperation : RemoteCompositeOperation, IRequireCustomConfiguration
+    public class IisWebSiteOperation : RemoteCompositeOperation
     {
         private readonly string _webSiteName;
         private readonly int _id;

@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
+using ConDep.Dsl.Operations.Remote.Node;
 using ConDep.Dsl.Remote;
 using ConDep.Dsl.Validation;
 
@@ -26,13 +27,15 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
         public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
         {
             var canPingServer = CanPingServer(server);
+            var startNodeOperation = new StartConDepNodeOperation();
+
             Logger.Verbose(string.Format("Can {0}use ping for validation", canPingServer ? "" : "NOT "));
 
             Logger.WithLogSection("Restarting", () =>
             {
                 Logger.Info(string.Format("Executing restart command on server {0}", server.Name));
-                var powershellExecutor = new PowerShellExecutor(server);
-                powershellExecutor.Execute(string.Format("cmd /c \"shutdown /r /t {0}\"", _delayInSeconds));
+                var powershellExecutor = new PowerShellExecutor();
+                powershellExecutor.Execute(server, string.Format("cmd /c \"shutdown /r /t {0}\"", _delayInSeconds));
 
                 if (canPingServer)
                 {
@@ -57,7 +60,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
                 WaitForWinRm(WaitForStatus.Success, server);
                 Logger.Info("Serve successfully responds to PowerShell commands");
                 Logger.Info("Computer successfully restarted");
-                Logger.WithLogSection("Starting ConDepNode", () => ConDepNodePublisher.StartNode(server));
+                Logger.WithLogSection("Starting ConDepNode", () => startNodeOperation.Execute(server, status, settings, token));
             });
         }
 

@@ -79,13 +79,15 @@ namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
 
         private void ExecuteCommand(string cmd, ServerConfig server)
         {
-            var psExec = new PowerShellExecutor(server);
+            var psExec = new PowerShellExecutor();
             if (_values != null)
             {
-                if (_values.RequireRemoteLib) psExec.LoadConDepDotNetLibrary = true;
                 if (_values.UseCredSSP) psExec.UseCredSSP = true;
             }
-            psExec.Execute(cmd);
+            psExec.Execute(server, cmd, mod =>
+            {
+                mod.LoadConDepDotNetLibrary = _values == null || _values.RequireRemoteLib;
+            });
         }
 
         public override string Name

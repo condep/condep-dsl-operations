@@ -23,8 +23,8 @@ if(!(Test-Path ""{0}""))
 }}
 ", _path);
 
-            var psExecutor = new PowerShellExecutor(server);
-            psExecutor.Execute(createFolderScript);
+            var psExecutor = new PowerShellExecutor();
+            psExecutor.Execute(server, createFolderScript);
         }
 
         public override bool IsValid(Notification notification)

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Logging;
 using ConDep.Dsl.Operations.Application.Local.TransformConfig;
 using ConDep.Dsl.Validation;
+using log4net;
+using log4net.Appender;
+using log4net.Repository.Hierarchy;
 using NUnit.Framework;
+using Logger = ConDep.Dsl.Logging.Logger;
 
 namespace ConDep.Dsl.Tests
 {
@@ -22,7 +25,8 @@ namespace ConDep.Dsl.Tests
             var tokenSource = new CancellationTokenSource();
             _token = tokenSource.Token;
 
-            new Logger().AutoResolveLogger();
+            Logger.Initialize(CreateMemoryLogger());
+            //new Logger().AutoResolveLogger();
             FilesToDeleteAfterTest = new List<string>();
             _settingsDefault = new ConDepSettings
             {
@@ -32,6 +36,20 @@ namespace ConDep.Dsl.Tests
                 }
             };
         }
+
+        private UnitTestLogger CreateMemoryLogger()
+        {
+            var memAppender = new MemoryAppender { Name = "MemoryAppender" };
+            memAppender.ActivateOptions();
+
+            var repo = LogManager.GetRepository() as Hierarchy;
+            repo.Root.AddAppender(memAppender);
+            repo.Configured = true;
+            repo.RaiseConfigurationChanged(EventArgs.Empty);
+
+            return new UnitTestLogger(LogManager.GetLogger("root"), memAppender);
+        }
+
         
         [TearDown]
         public void CleanUpFilesToDeleteList()
