@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceProcess;
 
 namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
@@ -67,6 +69,19 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             return this;
         }
 
+        public IOfferWindowsServiceOptions Dependencies(List<string> dependencies)
+        {
+            if (dependencies != null)
+                _values.ServiceDependencies = dependencies.Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            return this;
+        }
+
+        public IOfferWindowsServiceOptions EnableDelayedAutoStart()
+        {
+            _values.DelayedAutoStart = true;
+            return this;
+        }
+
         public IOfferWindowsServiceOptions OnServiceFailure(int serviceFailureResetInterval, Action<IOfferWindowsServiceFailureOptions> options)
         {
             _values.ServiceFailureResetInterval = serviceFailureResetInterval;
@@ -92,13 +107,30 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             public ServiceStartMode? StartupType { get; set; }
             public bool DoNotStart { get; set; }
             public int? TimeOutInSeconds { get; set; }
+            public List<string> ServiceDependencies { get; set; }
+            public bool DelayedAutoStart { get; set; }
+
             public bool HasServiceGroup
             {
                 get { return !string.IsNullOrWhiteSpace(ServiceGroup); }
             }
 
-            public WindowsServiceFailureOptions.WindowsServiceFailureOptionValues FailureOptions { get; set; }
+            public bool HasCredentials
+            {
+                get { return !string.IsNullOrWhiteSpace(UserName); }
+            }
 
+            public bool HasDependencies
+            {
+                get { return ServiceDependencies != null && ServiceDependencies.Any(); }
+            }
+
+            public bool HasDelayedAutoStart
+            {
+                get { return StartupType.HasValue && StartupType.Value == ServiceStartMode.Automatic && DelayedAutoStart; }
+            }
+
+            public WindowsServiceFailureOptions.WindowsServiceFailureOptionValues FailureOptions { get; set; }
 
             public string GetServiceFailureCommand(string serviceName)
             {
@@ -136,8 +168,10 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
                 var userNameOption = "";
                 var passwordOption = "";
                 var groupOption = "";
+                var dependenciesOption = "";
+                var delayedStartOption = "";
 
-                if(HasCredentials)
+                if (HasCredentials)
                 {
                     userNameOption = "obj= \"" + UserName + "\"";
                     passwordOption = "password= \"" + Password + "\"";
@@ -148,12 +182,19 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
                     groupOption = "group= \"" + ServiceGroup + "\"";
                 }
 
-                return HasCredentials || HasServiceGroup ? string.Format("{0} config \"{1}\" {2} {3} {4}", SERVICE_CONTROLLER_EXE, serviceName, groupOption, userNameOption, passwordOption) : "";
-            }
+                if (HasDependencies)
+                {
+                    dependenciesOption = "depend= \"" + string.Join("/", ServiceDependencies) + "\"";
+                }
 
-            private bool HasCredentials
-            {
-                get { return !string.IsNullOrWhiteSpace(UserName); }
+                if (HasDelayedAutoStart)
+                {
+                    delayedStartOption = "start= \"delayed-auto\"";
+                }
+
+                return HasCredentials || HasServiceGroup || HasDependencies || HasDelayedAutoStart
+                    ? string.Format("{0} config \"{1}\" {2} {3} {4} {5} {6}", SERVICE_CONTROLLER_EXE, serviceName, groupOption, userNameOption, passwordOption, dependenciesOption, delayedStartOption) 
+                    : "";
             }
         }
     }
