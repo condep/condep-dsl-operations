@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ServiceProcess;
 
 namespace ConDep.Dsl
@@ -48,7 +49,7 @@ namespace ConDep.Dsl
         IOfferWindowsServiceOptions IgnoreFailureOnServiceStartStop(bool value);
 
         /// <summary>
-        /// Defined the startup type for the Windows Service.
+        /// Defines the startup type for the Windows Service.
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -69,10 +70,23 @@ namespace ConDep.Dsl
         IOfferWindowsServiceOptions OnServiceFailure(int serviceFailureResetInterval, Action<IOfferWindowsServiceFailureOptions> options);
 
         /// <summary>
-        /// Timeout for how long ConDep will wait on start or stop for windows service
+        /// Timeout for how long ConDep will wait on start or stop for the Windows Service.
         /// </summary>
         /// <param name="timeout">Timeout in seconds</param>
         /// <returns></returns>
         IOfferWindowsServiceOptions TimeoutInSeconds(int timeout);
+
+        /// <summary>
+        /// List of other services that this Windows Service depend on.
+        /// </summary>
+        /// <param name="dependencies">List of service names</param>
+        /// <returns></returns>
+        IOfferWindowsServiceOptions Dependencies(List<string> dependencies);
+
+        /// <summary>
+        /// If the <see cref="StartupType"/> is set to <see cref="ServiceStartMode.Automatic"/>, this method will enable delayed start for the Windows Service.
+        /// </summary>
+        /// <returns></returns>
+        IOfferWindowsServiceOptions EnableDelayedAutoStart();
     }
 }
