@@ -5,7 +5,7 @@ permalink: /3-0/execution/powershell/
 version_added: 3.1.0
 ---
 
-Will execute a DOS command using cmd.exe on remote server. ConDep will check the exit code and throw if exit code is different from 0.
+Will execute a Powershell command on remote server. ConDep will check the exit code and throw if exit code is different from 0.
 
 ## Syntax
 
@@ -81,7 +81,7 @@ public class MyRemoteArtifact : Artifact.Remote
 {
   public override void Configure(IOfferRemoteOperations server, ConDepSettings settings)
   {
-    server.Execute.DosCommand("ipconfig");
+    server.Execute.Powershell("Get-Process");
   }
 }
 {% endhighlight %}
