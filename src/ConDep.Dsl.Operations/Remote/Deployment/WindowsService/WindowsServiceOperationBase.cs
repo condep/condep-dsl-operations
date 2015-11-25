@@ -3,17 +3,13 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
     public abstract class WindowsServiceOperationBase : RemoteCompositeOperation
     {
         protected readonly string _serviceName;
-        protected readonly string _sourceDir;
-        protected readonly string _destDir;
         protected readonly string _relativeExePath;
         protected readonly string _displayName;
         protected readonly WindowsServiceOptions.WindowsServiceOptionValues _values;
 
-        protected WindowsServiceOperationBase(string serviceName, string displayName, string sourceDir, string destDir, string relativeExePath, WindowsServiceOptions.WindowsServiceOptionValues values)
+        protected WindowsServiceOperationBase(string serviceName, string displayName, string relativeExePath, WindowsServiceOptions.WindowsServiceOptionValues values)
         {
             _serviceName = serviceName;
-            _sourceDir = sourceDir;
-            _destDir = destDir;
             _relativeExePath = relativeExePath;
             _displayName = displayName;
             _values = values;
@@ -30,9 +26,9 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             ConfigureServiceStart(server);
         }
 
-        protected void ConfigureDeployment(IOfferRemoteComposition server)
+        protected virtual void ConfigureDeployment(IOfferRemoteComposition server)
         {
-            server.Deploy.Directory(_sourceDir, _destDir);
+            
         }
 
         protected void ConfigureServiceStart(IOfferRemoteComposition server)
@@ -75,6 +71,6 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
                                             o.ContinueOnError(_values.IgnoreFailureOnServiceStartStop));
         }
 
-        protected abstract void ConfigureInstallService(IOfferRemoteComposition server);
+        protected virtual void ConfigureInstallService(IOfferRemoteComposition server) { }
     }
 }

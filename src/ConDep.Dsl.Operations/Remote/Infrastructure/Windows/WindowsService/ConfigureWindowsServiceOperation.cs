@@ -1,24 +1,17 @@
 ﻿using System.IO;
 using System.ServiceProcess;
+using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
 using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.WindowsService
 {
-    public class WindowsServiceDeployOperation : WindowsServiceOperationBase
+    public class ConfigureWindowsServiceOperation : WindowsServiceOperationBase
     {
-        private readonly string _sourceDir;
-        private readonly string _destDir;
+        private readonly string _serviceDirPath;
 
-        public WindowsServiceDeployOperation(string serviceName, string displayName, string sourceDir, string destDir, string relativeExePath, WindowsServiceOptions.WindowsServiceOptionValues values)
-            : base(serviceName, displayName, relativeExePath, values)
+        public ConfigureWindowsServiceOperation(string serviceName, string displayName, string serviceDirPath, string relativeExePath, WindowsServiceOptions.WindowsServiceOptionValues values) : base(serviceName, displayName, relativeExePath, values)
         {
-            _sourceDir = sourceDir;
-            _destDir = destDir;
-        }
-
-        public override string Name
-        {
-            get { return "Windows Service"; }
+            _serviceDirPath = serviceDirPath;
         }
 
         public override bool IsValid(Notification notification)
@@ -26,11 +19,13 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             return true;
         }
 
+        public override string Name { get { return "Configure Windows Service"; } }
+
         protected override void ConfigureInstallService(IOfferRemoteComposition server)
         {
             var installCmd = string.Format("New-ConDepWinService '{0}' '{1}' {2} {3} {4}",
                                            _serviceName,
-                                           Path.Combine(_destDir, _relativeExePath) + " " + _values.ExeParams,
+                                           Path.Combine(_serviceDirPath, _relativeExePath) + " " + _values.ExeParams,
                                            string.IsNullOrWhiteSpace(_displayName) ? "$null" : ("'" + _displayName + "'"),
                                            string.IsNullOrWhiteSpace(_values.Description)
                                                ? "$null"
@@ -41,9 +36,5 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             server.Execute.PowerShell(installCmd);
         }
 
-        protected override void ConfigureDeployment(IOfferRemoteComposition server)
-        {
-            server.Deploy.Directory(_sourceDir, _destDir);
-        }
     }
 }

@@ -70,11 +70,12 @@ namespace ConDep.Dsl
         /// <summary>
         /// Will deploy and start provided Windows Service to remote server.
         /// </summary>
-        /// <param name="serviceName"></param>
-        /// <param name="sourceDir"></param>
-        /// <param name="destDir"></param>
-        /// <param name="relativeExePath"></param>
-        /// <param name="displayName"></param>
+        /// <param name="remote"></param>
+        /// <param name="serviceName">Name of the Windows Service</param>
+        /// <param name="sourceDir">Source directory for where the Windows Service files are located</param>
+        /// <param name="destDir">Destination directory for where you want the Windows Service files to be deployed</param>
+        /// <param name="relativeExePath">The relative location (to destDir) of the executable (.exe) for which the Windows Service will execute</param>
+        /// <param name="displayName">The display name of the Windows Service as will be displayed in Windows Service Manager</param>
         /// <returns></returns>
         public static IOfferRemoteDeployment WindowsService(this IOfferRemoteDeployment remote, string serviceName, string displayName, string sourceDir, string destDir, string relativeExePath)
         {
@@ -84,12 +85,13 @@ namespace ConDep.Dsl
         /// <summary>
         /// Will deploy and start provided Windows Service to remote server with provided options.
         /// </summary>
-        /// <param name="serviceName"></param>
-        /// <param name="sourceDir"></param>
-        /// <param name="destDir"></param>
-        /// <param name="relativeExePath"></param>
-        /// <param name="displayName"></param>
-        /// <param name="options"></param>
+        /// <param name="remote"></param>
+        /// <param name="serviceName">Name of the Windows Service</param>
+        /// <param name="sourceDir">Source directory for where the Windows Service files are located</param>
+        /// <param name="destDir">Destination directory for where you want the Windows Service files to be deployed</param>
+        /// <param name="relativeExePath">The relative location (to destDir) of the executable (.exe) for which the Windows Service will execute</param>
+        /// <param name="displayName">The display name of the Windows Service as will be displayed in Windows Service Manager</param>
+        /// <param name="options">Additional options for the Windows Service</param>
         /// <returns></returns>
         public static IOfferRemoteDeployment WindowsService(this IOfferRemoteDeployment remote, string serviceName, string displayName, string sourceDir, string destDir, string relativeExePath, Action<IOfferWindowsServiceOptions> options)
         {
@@ -99,7 +101,7 @@ namespace ConDep.Dsl
                 options(winServiceOptions);
             }
 
-            var winServiceOperation = new WindowsServiceOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, winServiceOptions.Values);
+            var winServiceOperation = new WindowsServiceDeployOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, winServiceOptions.Values);
             Configure.Operation(remote, winServiceOperation);
             //Configure.DeploymentOperations.AddOperation(winServiceOperation);
             return remote;
@@ -139,7 +141,7 @@ namespace ConDep.Dsl
                 options(winServiceOptions);
             }
 
-            var winServiceOperation = new WindowsServiceWithInstallerOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, installerParams, winServiceOptions.Values);
+            var winServiceOperation = new WindowsServiceDeployWithInstallerOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, installerParams, winServiceOptions.Values);
             Configure.Operation(remote, winServiceOperation);
             //Configure.DeploymentOperations.AddOperation(winServiceOperation);
             return remote;

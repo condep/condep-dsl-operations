@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Web.Configuration;
-using System.Web.Routing;
+using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
 using ConDep.Dsl.Operations.Builders;
 using ConDep.Dsl.Operations.Infrastructure.IIS;
 using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
@@ -14,6 +13,7 @@ using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Acl;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.WindowsService;
 using Microsoft.Win32;
 
 namespace ConDep.Dsl
@@ -295,6 +295,14 @@ namespace ConDep.Dsl
             return configuration;
         }
 
+        /// <summary>
+        /// Sets ACL (Access Control Lists) on files or folders. Like chmod on Linux.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="user">The user account that will get access</param>
+        /// <param name="fileOrFolder">The file or folder to configure ACL for</param>
+        /// <param name="accessRights">The access rights to allow</param>
+        /// <returns></returns>
         public static IOfferRemoteConfiguration Acl(this IOfferRemoteConfiguration configuration, string user, string fileOrFolder, FileSystemRights accessRights)
         {
             var op = new AclOperation(user, fileOrFolder, accessRights, new AclOptions.AclOptionsValues());
@@ -302,6 +310,15 @@ namespace ConDep.Dsl
             return configuration;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="user">The user account that will get access</param>
+        /// <param name="fileOrFolder">The file or folder to configure ACL for</param>
+        /// <param name="accessRights">The access rights to allow or deny</param>
+        /// <param name="options">Additional ACL options</param>
+        /// <returns></returns>
         public static IOfferRemoteConfiguration Acl(this IOfferRemoteConfiguration configuration, string user, string fileOrFolder, FileSystemRights accessRights, Action<IOfferAclOptions> options)
         {
             var opt = new AclOptions();
@@ -311,6 +328,43 @@ namespace ConDep.Dsl
             }
             var op = new AclOperation(user, fileOrFolder, accessRights, opt.Values);
             Configure.Operation(configuration, op);
+            return configuration;
+        }
+
+        /// <summary>
+        /// Will configure provided Windows Service on remote server.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="serviceName">Name of the Windows Service</param>
+        /// <param name="serviceDirPath">Path to the directory where the Windows Service is located</param>
+        /// <param name="relativeExePath">The relative location (to destDir) of the executable (.exe) for which the Windows Service will execute</param>
+        /// <param name="displayName">The display name of the Windows Service as will be displayed in Windows Service Manager</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration WindowsService(this IOfferRemoteConfiguration configuration, string serviceName, string displayName, string serviceDirPath, string relativeExePath)
+        {
+            return WindowsService(configuration, serviceName, displayName, serviceDirPath, relativeExePath, null);
+        }
+
+        /// <summary>
+        /// Will configure provided Windows Service on remote server with provided options.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="serviceName">Name of the Windows Service</param>
+        /// <param name="serviceDirPath">Path to the directory where the Windows Service is located</param>
+        /// <param name="relativeExePath">The relative location (from the Windows Service root directory) of the executable (.exe) for which the Windows Service will execute</param>
+        /// <param name="displayName">The display name of the Windows Service as will be displayed in Windows Service Manager</param>
+        /// <param name="options">Additional options for the Windows Service</param>
+        /// <returns></returns>
+        public static IOfferRemoteConfiguration WindowsService(this IOfferRemoteConfiguration configuration, string serviceName, string displayName, string serviceDirPath, string relativeExePath, Action<IOfferWindowsServiceOptions> options)
+        {
+            var winServiceOptions = new WindowsServiceOptions();
+            if (options != null)
+            {
+                options(winServiceOptions);
+            }
+
+            var winServiceOperation = new ConfigureWindowsServiceOperation(serviceName, displayName, serviceDirPath, relativeExePath, winServiceOptions.Values);
+            Configure.Operation(configuration, winServiceOperation);
             return configuration;
         }
     }

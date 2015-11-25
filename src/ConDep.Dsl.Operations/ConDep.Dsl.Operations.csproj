@@ -98,6 +98,7 @@
     <Compile Include="Remote\Infrastructure\Windows\Acl\AclOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Acl\AclOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferAclOptions.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\WindowsService\ConfigureWindowsServiceOperation.cs" />
     <Compile Include="Remote\Node\NodeExtensions.cs" />
     <Compile Include="Remote\RemoteExtensions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryValueOperation.cs" />
