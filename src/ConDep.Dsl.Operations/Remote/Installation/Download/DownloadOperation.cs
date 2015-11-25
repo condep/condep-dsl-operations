@@ -47,6 +47,13 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
             var fileName = Path.GetFileName(uri.AbsolutePath);
             var destFile = Path.Combine(dest, fileName);
 
+            string basicAuth = "";
+            if (_values.BasicAuth != null)
+            {
+                basicAuth = string.Format(@"
+    $client.Credentials = new-object system.net.networkcredential(""{0}"", ""{1}"")", _values.BasicAuth.Username, _values.BasicAuth.Password);
+            }
+
             server.Execute.PowerShell(string.Format(@"
 $path = $ExecutionContext.InvokeCommand.ExpandString(""{1}"")
 
@@ -55,8 +62,9 @@ if((Test-Path $path)) {{
 }}
 else {{
     $client = new-object System.Net.WebClient
+{2}
     $client.DownloadFile(""{0}"", $path )
-}}", _url, destFile));
+}}", _url, destFile, basicAuth));
         }
     }
 }
