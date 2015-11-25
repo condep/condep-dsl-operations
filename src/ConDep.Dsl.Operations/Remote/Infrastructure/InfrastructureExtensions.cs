@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.AccessControl;
 using System.Web.Configuration;
 using System.Web.Routing;
 using ConDep.Dsl.Operations.Builders;
@@ -9,6 +10,7 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Acl;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
@@ -290,6 +292,25 @@ namespace ConDep.Dsl
         {
             var operation = new SetIisMachineKeyOperation(validationKey, decryptionKey, validation);
             Configure.Operation(configuration, operation);
+            return configuration;
+        }
+
+        public static IOfferRemoteConfiguration Acl(this IOfferRemoteConfiguration configuration, string user, string fileOrFolder, FileSystemRights accessRights)
+        {
+            var op = new AclOperation(user, fileOrFolder, accessRights, new AclOptions.AclOptionsValues());
+            Configure.Operation(configuration, op);
+            return configuration;
+        }
+
+        public static IOfferRemoteConfiguration Acl(this IOfferRemoteConfiguration configuration, string user, string fileOrFolder, FileSystemRights accessRights, Action<IOfferAclOptions> options)
+        {
+            var opt = new AclOptions();
+            if (options != null)
+            {
+                options(opt);
+            }
+            var op = new AclOperation(user, fileOrFolder, accessRights, opt.Values);
+            Configure.Operation(configuration, op);
             return configuration;
         }
     }

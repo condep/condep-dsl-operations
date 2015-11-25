@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Operations.Application.Execution.PowerShell;
@@ -7,7 +9,7 @@ using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
 {
-    public class RemotePowerShellHostOperation : ForEachServerOperation
+    public class PowerShellOperation : ForEachServerOperation
     {
         private enum CommandType
         {
@@ -20,14 +22,39 @@ namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
         private readonly PowerShellOptions.PowerShellOptionValues _values;
         private readonly CommandType _commandType;
 
-        public RemotePowerShellHostOperation(string cmd, PowerShellOptions.PowerShellOptionValues values = null)
+        public PowerShellOperation(Dictionary<string, string> parameters)
+        {
+            if (parameters.ContainsKey("cmd") && !parameters.ContainsKey("file"))
+            {
+                _commandType = CommandType.ScriptFile;
+            }
+            else if (!parameters.ContainsKey("cmd") && parameters.ContainsKey("file"))
+            {
+                _commandType = CommandType.CmdLine;
+            }
+            else
+            {
+                throw new ConDepMissingOptionsException(new [] {"cmd or file"});
+            }
+
+            _cmd = parameters.ContainsKey("cmd") ? parameters["cmd"] : null;
+            _scriptFile = parameters.ContainsKey("file") ? new FileInfo(parameters["file"]) : null;
+
+            _values = new PowerShellOptions.PowerShellOptionValues();
+
+            if(parameters.ContainsKey("ContinueOnError")) _values.ContinueOnError = Convert.ToBoolean(parameters["ContinueOnError"]);
+            if(parameters.ContainsKey("RequireRemoteLib")) _values.RequireRemoteLib = Convert.ToBoolean(parameters["RequireRemoteLib"]);
+            if(parameters.ContainsKey("UseCredSSP")) _values.ContinueOnError = Convert.ToBoolean(parameters["UseCredSSP"]);
+        }
+
+        public PowerShellOperation(string cmd, PowerShellOptions.PowerShellOptionValues values = null)
         {
             _cmd = cmd;
             _values = values;
             _commandType = CommandType.CmdLine;
         }
 
-        public RemotePowerShellHostOperation(FileInfo scriptFile, PowerShellOptions.PowerShellOptionValues values = null)
+        public PowerShellOperation(FileInfo scriptFile, PowerShellOptions.PowerShellOptionValues values = null)
         {
             _scriptFile = scriptFile;
             _values = values;

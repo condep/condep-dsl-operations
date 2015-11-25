@@ -26,7 +26,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 
         public override void Configure(IOfferRemoteComposition server)
         {
-            server.Execute.DosCommand(string.Format(@"%ProgramData%\chocolatey\chocolateyinstall\tools\7za.exe x -y -o""{1}"" ""{0}""", _filePath, _destPath));
+            server.Execute.DosCommand(string.Format(@"%ProgramData%\chocolatey\tools\7za.exe x -y -o""{1}"" ""{0}""", _filePath, _destPath));
         }
     }
 }

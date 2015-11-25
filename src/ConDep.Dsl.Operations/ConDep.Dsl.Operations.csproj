@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConDep.Dsl, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ConDep.Dsl.5.0.0-beta5\lib\net40\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.5.0.0-beta9\lib\net40\ConDep.Dsl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
@@ -90,11 +90,14 @@
     <Compile Include="Remote\Deployment\WindowsService\WindowsServiceOptions.cs" />
     <Compile Include="Remote\Deployment\WindowsService\WindowsServiceWithInstallerOperation.cs" />
     <Compile Include="Remote\Execution\PowerShell\PowerShellOptions.cs" />
-    <Compile Include="Remote\Execution\PowerShell\RemotePowerShellHostOperation.cs" />
+    <Compile Include="Remote\Execution\PowerShell\PowerShellOperation.cs" />
     <Compile Include="Remote\Execution\RemoteExecutionExtensions.cs" />
     <Compile Include="Remote\Execution\RunCmd\ConDepUntrappedExitCodeException.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdOptions.cs" />
     <Compile Include="Remote\Execution\RunCmd\RunCmdPsOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Acl\AclOperation.cs" />
+    <Compile Include="Remote\Infrastructure\Windows\Acl\AclOptions.cs" />
+    <Compile Include="Remote\Infrastructure\IOfferAclOptions.cs" />
     <Compile Include="Remote\Node\NodeExtensions.cs" />
     <Compile Include="Remote\RemoteExtensions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryValueOperation.cs" />
@@ -196,6 +199,7 @@
     <Compile Include="Remote\Installation\Zip\ZipOperation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Docs\operations.precompile.md" />
     <None Include="Remote\Deployment\NServiceBus\NServiceBus.ps1" />
     <None Include="packages.config" />

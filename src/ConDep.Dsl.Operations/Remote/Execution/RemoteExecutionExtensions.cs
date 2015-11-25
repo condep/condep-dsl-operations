@@ -42,7 +42,7 @@ namespace ConDep.Dsl
         /// <returns></returns>
         public static IOfferRemoteExecution PowerShell(this IOfferRemoteExecution execute, string command)
         {
-            var psProvider = new RemotePowerShellHostOperation(command);
+            var psProvider = new PowerShellOperation(command);
             Configure.Operation(execute, psProvider);
             return execute;
         }
@@ -55,7 +55,7 @@ namespace ConDep.Dsl
         /// <returns></returns>
         public static IOfferRemoteExecution PowerShell(this IOfferRemoteExecution execute, FileInfo scriptFile)
         {
-            var psProvider = new RemotePowerShellHostOperation(scriptFile);
+            var psProvider = new PowerShellOperation(scriptFile);
             Configure.Operation(execute, psProvider);
             return execute;
         }
@@ -69,7 +69,7 @@ namespace ConDep.Dsl
         {
             var options = new PowerShellOptions();
             powerShellOptions(options);
-            var operation = new RemotePowerShellHostOperation(command, options.Values);
+            var operation = new PowerShellOperation(command, options.Values);
             Configure.Operation(execute, operation);
             return execute;
         }
@@ -84,7 +84,7 @@ namespace ConDep.Dsl
         {
             var options = new PowerShellOptions();
             powerShellOptions(options);
-            var operation = new RemotePowerShellHostOperation(scriptFile, options.Values);
+            var operation = new PowerShellOperation(scriptFile, options.Values);
             Configure.Operation(execute, operation);
             return execute;
         }
