@@ -5,7 +5,7 @@ permalink: /3-0/deployment/iis-web-application/
 version_added: 3.1.0
 ---
 
-Works exactly as the [Directory](../directory/) operation, except it will mark the directory as a Web Application in IIS on the remote server. If you emit the `destDir`, ConDep will use the physical path from the Web Site and add the Web Application directly under that path.
+Works exactly as the [Directory](../directory/) operation, except it will mark the directory as a Web Application in IIS on the remote server. If you omit the `destDir`, ConDep will use the physical path from the Web Site and add the Web Application directly under that path.
 
 ## Syntax
 
@@ -31,7 +31,7 @@ IisWebApplication(string sourceDir, string destDir, string webAppName, string we
 		</tr>
 		<tr>
 			<td style="white-space: nowrap;">destDir</td>
-			<td>Destination directory on the server. If emitted, ConDep will use the physical path from the Web Site and add the Web Application directly under that path.</td>
+			<td>Destination directory on the server. If omitted, ConDep will use the physical path from the Web Site and add the Web Application directly under that path.</td>
 		</tr>
 		<tr>
 			<td>webAppName</td>
