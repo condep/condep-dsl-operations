@@ -1,14 +1,16 @@
+using System.Threading;
+using ConDep.Dsl.Builders;
+using ConDep.Dsl.Config;
+
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
 {
-    internal class WindowsRegistryBuilder : IOfferWindowsRegistryOperations
+    internal class WindowsRegistryBuilder : RemoteBuilder, IOfferWindowsRegistryOperations
     {
-        private readonly IOfferRemoteConfiguration _conf;
-
-        public WindowsRegistryBuilder(IOfferRemoteConfiguration conf)
+        public WindowsRegistryBuilder(IOfferRemoteConfiguration remoteConfig, ServerConfig server, ConDepSettings settings, CancellationToken token) : base(server, settings, token)
         {
-            _conf = conf;
+            RemoteConfigurationBuilder = remoteConfig;
         }
 
-        public IOfferRemoteConfiguration RemoteConfigurationBuilder { get { return _conf; } }
+        public IOfferRemoteConfiguration RemoteConfigurationBuilder { get; }
     }
 }

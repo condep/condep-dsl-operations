@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ConDep.Dsl.Operations</RootNamespace>
     <AssemblyName>ConDep.Dsl.Operations</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\ConDep.Dsl.Operations.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,11 +34,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\ConDep.Dsl.Operations.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConDep.Dsl, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ConDep.Dsl.5.0.0-beta9\lib\net40\ConDep.Dsl.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\condep-dsl\src\ConDep.Dsl\bin\Debug\ConDep.Dsl.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -99,7 +101,10 @@
     <Compile Include="Remote\Infrastructure\Windows\Acl\AclOptions.cs" />
     <Compile Include="Remote\Infrastructure\IOfferAclOptions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\WindowsService\ConfigureWindowsServiceOperation.cs" />
+    <Compile Include="Remote\Installation\Executable\ConDepInstallationFailureException.cs" />
     <Compile Include="Remote\Node\NodeExtensions.cs" />
+    <Compile Include="Remote\Node\StartConDepNodeOperation.cs" />
+    <Compile Include="Remote\Node\StopConDepNodeOperation.cs" />
     <Compile Include="Remote\RemoteExtensions.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryValueOperation.cs" />
     <Compile Include="Remote\Infrastructure\Windows\Registry\DeleteWindowsRegistryKeyOperation.cs" />
@@ -137,13 +142,11 @@
     <Compile Include="Remote\Installation\Msi\InstallOptions.cs" />
     <Compile Include="Remote\Installation\Msi\MsiOperation.cs" />
     <Compile Include="Local\IOfferTerminateOperations.cs" />
-    <Compile Include="Builders\BootstrapOperationsBuilder.cs" />
     <Compile Include="Local\IOfferBootstrapOperations.cs" />
     <Compile Include="Local\PreCompile\ClientBuildManagerWrapper.cs" />
     <Compile Include="Local\PreCompile\IWrapClientBuildManager.cs" />
     <Compile Include="Local\PreCompile\PreCompileCallback.cs" />
     <Compile Include="Local\PreCompile\PreCompileOperation.cs" />
-    <Compile Include="Builders\TerminateOperationsBuilder.cs" />
     <Compile Include="Local\TransformConfig\CondepWebConfigTransformException.cs" />
     <Compile Include="Local\TransformConfig\TransformConfigBuildEngine.cs" />
     <Compile Include="Local\LocalOperationsExtensions.cs" />

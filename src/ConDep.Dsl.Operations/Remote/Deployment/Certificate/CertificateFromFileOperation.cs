@@ -2,12 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using ConDep.Dsl.Config;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Deployment.Certificate
+namespace ConDep.Dsl.Operations.Remote.Deployment.Certificate
 {
-    public class CertificateFromFileOperation : RemoteCompositeOperation
+    public class CertificateFromFileOperation : RemoteOperation
     {
         private readonly string _path;
         private readonly string _password;
@@ -20,40 +21,40 @@ namespace ConDep.Dsl.Operations.Application.Deployment.Certificate
             _certOptions = certOptions;
         }
 
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
+            var result = Result.SuccessChanged();
+            result.Data.HasPrivateKey = false;
+            result.Data.PrivateKeyPermissionsSet = false;
+
             var path = Path.GetFullPath(_path);
             var cert = string.IsNullOrWhiteSpace(_password) ? new X509Certificate2(path) : new X509Certificate2(path, _password);
 
-            if(cert.HasPrivateKey)
+            if (cert.HasPrivateKey)
             {
+                result.Data.HasPrivateKey = true;
+
                 string psUserArray = "@()";
-                if(_certOptions != null && _certOptions.Values.PrivateKeyPermissions.Count > 0)
+                if (_certOptions != null && _certOptions.Values.PrivateKeyPermissions.Count > 0)
                 {
                     var formattedUserArray = _certOptions.Values.PrivateKeyPermissions.Select(user => "'" + user + "'").ToList();
                     var users = string.Join(",", formattedUserArray);
-                    psUserArray = string.Format("@({0})", users);
+                    psUserArray = $"@({users})";
+                    result.Data.PrivateKeyPermissionsSet = true;
                 }
 
-                var destPath = string.Format(@"{0}\temp\{1}.pfx", "%windir%", Guid.NewGuid());
-                server.Deploy.File(path, destPath);
-                server.Execute.PowerShell("$path=\"" + destPath + "\"; $password='" + _password + "'; $privateKeyUsers = " + psUserArray + "; [ConDep.Dsl.Remote.Helpers.CertificateInstaller]::InstallPfx($path, $password, $privateKeyUsers);", opt => opt.RequireRemoteLib());
+                var destPath = $@"{"%windir%"}\temp\{Guid.NewGuid()}.pfx";
+                remote.Deploy.File(path, destPath);
+                remote.Execute.PowerShell("$path=\"" + destPath + "\"; $password='" + _password + "'; $privateKeyUsers = " + psUserArray + "; [ConDep.Dsl.Remote.Helpers.CertificateInstaller]::InstallPfx($path, $password, $privateKeyUsers);", opt => opt.RequireRemoteLib());
             }
             else
             {
                 var base64Cert = Convert.ToBase64String(cert.RawData);
-                server.Execute.PowerShell(string.Format("[ConDep.Dsl.Remote.Helpers.CertificateInstaller]::InstallCertFromBase64('{0}');", base64Cert), opt => opt.RequireRemoteLib());
+                remote.Execute.PowerShell($"[ConDep.Dsl.Remote.Helpers.CertificateInstaller]::InstallCertFromBase64('{base64Cert}');", opt => opt.RequireRemoteLib());
             }
+            return result;
         }
 
-        public override string Name
-        {
-            get { return "CertificateFromFile"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
+        public override string Name => "CertificateFromFile";
     }
 }

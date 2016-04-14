@@ -1,8 +1,10 @@
-﻿using ConDep.Dsl.Validation;
+﻿using System.Threading;
+using ConDep.Dsl.Config;
+using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
 {
-    public class RunCmdPsOperation : RemoteCompositeOperation
+    public class RunCmdPsOperation : RemoteOperation
     {
         private readonly string _cmd;
         private readonly RunCmdOptions.RunCmdOptionValues _values;
@@ -13,19 +15,9 @@ namespace ConDep.Dsl.Operations.Application.Execution.RunCmd
             _values = values ?? new RunCmdOptions.RunCmdOptionValues();
         }
 
-        public override string Name
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            get { return "Run Command (PS)"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            server.Execute.PowerShell(string.Format(@"
+            return remote.Execute.PowerShell(string.Format(@"
 $continueOnError = {0}
 cmd /c {1}
 if($lastexitcode -gt 0) {{
@@ -35,7 +27,12 @@ if($lastexitcode -gt 0) {{
     else {{
         throw ""Exit code $lastexitcode""
     }}
-}}", _values.ContinueOnError ? "$true": "$false", _cmd));
+}}", _values.ContinueOnError ? "$true" : "$false", _cmd)).Result;
+        }
+
+        public override string Name
+        {
+            get { return "Run Command (PS)"; }
         }
     }
 }

@@ -1,17 +1,16 @@
+using System.Threading;
+using ConDep.Dsl.Builders;
+using ConDep.Dsl.Config;
+
 namespace ConDep.Dsl.Operations.Builders
 {
-    public class SslInfrastructureBuilder : IOfferSslInfrastructure
+    public class SslInfrastructureBuilder : RemoteBuilder, IOfferSslInfrastructure
     {
-        private readonly IOfferRemoteConfiguration _infraBuilder;
-
-        public SslInfrastructureBuilder(IOfferRemoteConfiguration infraBuilder)
+        public SslInfrastructureBuilder(IOfferRemoteConfiguration remoteConf, ServerConfig server, ConDepSettings settings, CancellationToken token) : base(server, settings, token)
         {
-            _infraBuilder = infraBuilder;
+            InfrastructureBuilder = remoteConf;
         }
 
-        public IOfferRemoteConfiguration InfrastructureBuilder
-        {
-            get { return _infraBuilder; }
-        }
+        public IOfferRemoteConfiguration InfrastructureBuilder { get; }
     }
 }

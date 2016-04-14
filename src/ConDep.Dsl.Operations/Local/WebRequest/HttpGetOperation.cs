@@ -1,11 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Local.WebRequest
+namespace ConDep.Dsl.Operations.Local.WebRequest
 {
     public class HttpGetOperation : LocalOperation
     {
@@ -16,13 +14,9 @@ namespace ConDep.Dsl.Operations.Application.Local.WebRequest
             _url = url;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(ConDepSettings settings, CancellationToken token)
         {
-            return !string.IsNullOrWhiteSpace(_url) && Uri.IsWellFormedUriString(_url, UriKind.Absolute);
-        }
-
-        public override void Execute(IReportStatus status, ConDepSettings settings, CancellationToken token)
-        {
+            var result = Result.SuccessChanged();
             Thread.Sleep(1000);
             var webRequest = System.Net.WebRequest.Create(_url);
             webRequest.Method = "GET";
@@ -32,6 +26,8 @@ namespace ConDep.Dsl.Operations.Application.Local.WebRequest
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
 
             HttpStatusCode statusCode = ((HttpWebResponse)webRequest.GetResponse()).StatusCode;
+            result.Data.StatusCode = statusCode.ToString();
+            result.Data.Url = _url;
 
             if (statusCode == HttpStatusCode.OK)
             {
@@ -39,13 +35,12 @@ namespace ConDep.Dsl.Operations.Application.Local.WebRequest
             }
             else
             {
-                throw new WebException(string.Format("GET request did not return with 200 (OK), but {0} ({1})", (int)statusCode, statusCode));
+                Logger.Error("GET request did not return with 200 (OK), but {0} ({1})", (int)statusCode, statusCode);
+                result.Success = false;
             }
+            return result;
         }
 
-        public override string Name
-        {
-            get { return "Http Get"; }
-        }
+        public override string Name => "Http Get";
     }
 }

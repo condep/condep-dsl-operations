@@ -1,10 +1,12 @@
 ﻿using System;
-using ConDep.Dsl.Validation;
+using System.Diagnostics;
+using System.Threading;
+using ConDep.Dsl.Config;
 using Microsoft.Win32;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin
 {
-    public class UserAccountControlOperation : RemoteCompositeOperation
+    public class UserAccountControlOperation : RemoteOperation
     {
         private readonly bool _enabled;
 
@@ -13,50 +15,53 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin
             _enabled = enabled;
         }
 
-        public override string Name
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            get { return "User Account Control"; }
-        }
+            var result = Result.SuccessUnChanged();
+            result.Data.CausedRestart = false;
 
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            string uacEnabled = string.Format(@"
+            string uacEnabled = $@"
 $regKey = Get-ItemProperty -Path hklm:software\microsoft\windows\currentversion\policies\system -Name ""EnableLUA""
-return $regKey.EnableLUA -eq ${0}", !_enabled);
+return ConvertTo-ConDepResult ($regKey.EnableLUA -eq ${!_enabled})";
 
             const string restartNeeded = @"
 $restartEnvVar = [Environment]::GetEnvironmentVariable(""CONDEP_RESTART_NEEDED"",""Machine"")
-return $restartEnvVar -eq 'true'
+return ConvertTo-ConDepResult ($restartEnvVar -eq 'true')
 ";
 
             //Assume restart is not necessary.
-            server.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
 
             //Set uac if not set. Set env variable for restarting server necessary.
-            server
-                .OnlyIf(uacEnabled)
-                    .Configure
-                    .WindowsRegistry(reg => 
+            var uacResult = remote.Execute.PowerShell(uacEnabled).Result;
+            if (uacResult.Data.PsResult == true)
+            {
+                result.Changed = true;
+                remote.Configure
+                    .WindowsRegistry(reg =>
                         reg.SetValue(
-                            WindowsRegistryRoot.HKEY_LOCAL_MACHINE, 
-                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", 
-                            "EnableLUA", 
-                            _enabled ? "1" : "0", 
+                            WindowsRegistryRoot.HKEY_LOCAL_MACHINE,
+                            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+                            "EnableLUA",
+                            _enabled ? "1" : "0",
                             RegistryValueKind.DWord
                         )
                     )
                     .EnvironmentVariable("CONDEP_RESTART_NEEDED", "true", EnvironmentVariableTarget.Machine);
+            }
 
             //Restart server and set env variable for restart NOT necessary, since the machine rebooted.
-            server
-                .OnlyIf(restartNeeded)
+            var restartResult = remote.Execute.PowerShell(restartNeeded).Result;
+            if (restartResult.Data.PsResult == true)
+            {
+                result.Data.CausedRestart = true;
+                remote
                     .Restart()
                     .Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
+            }
+            return result;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
+        public override string Name => "User Account Control";
     }
 }

@@ -1,13 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Logging;
-using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Msi
 {
-    public class MsiOperation : RemoteCompositeOperation
+    public class MsiOperation : RemoteOperation
     {
         private readonly string _packageName;
         private readonly string _srcMsiFilePath;
@@ -31,36 +30,30 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Msi
             _srcType = FileSourceType.Url;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return string.Format("Msi ({0})", _packageName); }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             switch (_srcType)
             {
                 case FileSourceType.File:
-                    InstallMsiFromFile(server, _srcMsiFilePath);
-                    break;
+                    return InstallMsiFromFile(remote, server.GetServerInfo(), _srcMsiFilePath);
                 case FileSourceType.Url:
-                    InstallMsiFromUrl(server, _srcMsiUri);
-                    break;
+                    return InstallMsiFromUrl(remote, server.GetServerInfo(), _srcMsiUri);
                 default:
                     throw new Exception("Source type unknown");
             }
         }
 
-        private void InstallMsiFromUrl(IOfferRemoteComposition server, Uri url)
+        public override string Name => $"Msi ({_packageName})";
+
+        private Result InstallMsiFromUrl(IOfferRemoteOperations remote, ServerInfo serverInfo, Uri url)
         {
-            var dstPath = string.Format(@"$env:temp\{0}", Guid.NewGuid() + ".msi");
-            server.OnlyIf(InstallCondtion)
-                .Execute.PowerShell(string.Format("Install-ConDepMsiFromUri \"{0}\" \"{1}\"", url, dstPath), SetPowerShellOptions);
+            var dstPath = $@"$env:temp\{Guid.NewGuid() + ".msi"}";
+            if (InstallCondtion(serverInfo))
+            {
+                remote.Execute.PowerShell($"Install-ConDepMsiFromUri \"{url}\" \"{dstPath}\"", SetPowerShellOptions);
+                return Result.SuccessChanged();
+            }
+            return Result.SuccessUnChanged();
         }
 
         private void SetPowerShellOptions(IOfferPowerShellOptions opt)
@@ -82,15 +75,17 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Msi
             return !installedPackages.Any();
         }
 
-        private void InstallMsiFromFile(IOfferRemoteComposition server, string src)
+        private Result InstallMsiFromFile(IOfferRemoteOperations remote, ServerInfo serverInfo, string src)
         {
             var dstPath = Path.Combine(@"%temp%\", Path.GetFileName(src));
 
-            server.OnlyIf(InstallCondtion)
-                .Deploy.File(src, dstPath);
-
-            server.OnlyIf(InstallCondtion)
-                .Execute.PowerShell(string.Format("Install-ConDepMsiFromFile \"{0}\"", dstPath), SetPowerShellOptions);
+            if (InstallCondtion(serverInfo))
+            {
+                remote.Deploy.File(src, dstPath);
+                remote.Execute.PowerShell($"Install-ConDepMsiFromFile \"{dstPath}\"", SetPowerShellOptions);
+                return Result.SuccessChanged();
+            }
+            return Result.SuccessUnChanged();
         }
     }
 }

@@ -1,9 +1,10 @@
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 using Microsoft.Win32;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
 {
-    internal class SetWindowsRegistryValueOperation : RemoteCompositeOperation
+    internal class SetWindowsRegistryValueOperation : RemoteOperation
     {
         private readonly WindowsRegistryRoot _root;
         private readonly string _key;
@@ -20,20 +21,12 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
             _valueKind = valueKind;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Windows Registry Value"; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var fullPath = _root + @"\" + _key;
-            server.Execute.PowerShell(string.Format(@"New-ItemProperty -Path ""Microsoft.PowerShell.Core\Registry::{0}"" -Name ""{1}"" -PropertyType {2} -Value ""{3}"" -force", fullPath, _valueName, _valueKind, _valueData));
+            return remote.Execute.PowerShell($@"New-ItemProperty -Path ""Microsoft.PowerShell.Core\Registry::{fullPath}"" -Name ""{_valueName}"" -PropertyType {_valueKind} -Value ""{_valueData}"" -force").Result;
         }
+
+        public override string Name => "Windows Registry Value";
     }
 }

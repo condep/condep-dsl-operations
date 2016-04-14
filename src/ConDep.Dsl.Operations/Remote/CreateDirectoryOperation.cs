@@ -1,11 +1,9 @@
 ﻿using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Remote;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure
+namespace ConDep.Dsl.Operations.Remote
 {
-    public class CreateDirectoryOperation : ForEachServerOperation
+    public class CreateDirectoryOperation : RemoteOperation
     {
         private readonly string _path;
 
@@ -14,27 +12,21 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure
             _path = path;
         }
 
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var createFolderScript = string.Format(@"
 if(!(Test-Path ""{0}""))
 {{
     New-Item -ItemType directory -Path ""{0}""
+    return $true
 }}
+return ConvertTo-ConDepResult $false
 ", _path);
 
-            var psExecutor = new PowerShellExecutor();
-            psExecutor.Execute(server, createFolderScript);
+            var changed = remote.Execute.PowerShell(createFolderScript).Result.Data;
+            return new Result(true, changed);
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Create Folder " + _path; }
-        }
+        public override string Name => "Create Folder " + _path;
     }
 }

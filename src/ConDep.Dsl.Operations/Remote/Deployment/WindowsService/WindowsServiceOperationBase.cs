@@ -1,6 +1,10 @@
-namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
+using System.Threading;
+using ConDep.Dsl.Config;
+using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
+
+namespace ConDep.Dsl.Operations.Remote.Deployment.WindowsService
 {
-    public abstract class WindowsServiceOperationBase : RemoteCompositeOperation
+    public abstract class WindowsServiceOperationBase : RemoteOperation
     {
         protected readonly string _serviceName;
         protected readonly string _relativeExePath;
@@ -15,62 +19,63 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             _values = values;
         }
 
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            ConfigureRemoveService(server);
-            ConfigureDeployment(server);
-            ConfigureInstallService(server);
-            ConfigureUserRights(server);
-            ConfigureServiceFailure(server);
-            ConfigureServiceConfig(server);
-            ConfigureServiceStart(server);
+            ExecuteRemoveService(remote);
+            ExecuteDeployment(remote);
+            ExecuteInstallService(remote);
+            ExecuteUserRights(remote);
+            ExecuteServiceFailure(remote);
+            ExecuteServiceConfig(remote);
+            ExecuteServiceStart(remote);
+
+            return Result.SuccessChanged();
         }
 
-        protected virtual void ConfigureDeployment(IOfferRemoteComposition server)
+
+        protected virtual void ExecuteDeployment(IOfferRemoteOperations remote)
         {
             
         }
 
-        protected void ConfigureServiceStart(IOfferRemoteComposition server)
+        protected void ExecuteServiceStart(IOfferRemoteOperations remote)
         {
             if (!_values.DoNotStart)
             {
-                var start = string.Format("Start-ConDepWinService '{0}' {1} {2}", _serviceName, _values.TimeOutInSeconds,
-                                          "$" + _values.IgnoreFailureOnServiceStartStop);
-                server.Execute.PowerShell(start,
+                var start = $"Start-ConDepWinService '{_serviceName}' {_values.TimeOutInSeconds} {"$" + _values.IgnoreFailureOnServiceStartStop}";
+                remote.Execute.PowerShell(start,
                                                 o => o.ContinueOnError(
                                                     _values.IgnoreFailureOnServiceStartStop));
             }
         }
 
-        protected void ConfigureServiceConfig(IOfferRemoteComposition server)
+        protected void ExecuteServiceConfig(IOfferRemoteOperations remote)
         {
             var serviceConfigCommand = _values.GetServiceConfigCommand(_serviceName);
-            if (!string.IsNullOrWhiteSpace(serviceConfigCommand)) server.Execute.DosCommand(serviceConfigCommand);
+            if (!string.IsNullOrWhiteSpace(serviceConfigCommand)) remote.Execute.DosCommand(serviceConfigCommand);
         }
 
-        protected void ConfigureUserRights(IOfferRemoteComposition server)
+        protected void ExecuteUserRights(IOfferRemoteOperations remote)
         {
             if (string.IsNullOrWhiteSpace(_values.UserName)) return;
 
-            server.Execute.PowerShell("$userName=\"" + _values.UserName + "\"; [ConDep.Dsl.Remote.Helpers.LsaWrapperCaller]::AddLogonAsAServiceRights($userName)", opt => opt.RequireRemoteLib());
+            remote.Execute.PowerShell("$userName=\"" + _values.UserName + "\"; [ConDep.Dsl.Remote.Helpers.LsaWrapperCaller]::AddLogonAsAServiceRights($userName)", opt => opt.RequireRemoteLib());
         }
 
-        protected void ConfigureServiceFailure(IOfferRemoteComposition server)
+        protected void ExecuteServiceFailure(IOfferRemoteOperations remote)
         {
             var serviceFailureCommand = _values.GetServiceFailureCommand(_serviceName);
-            if (!string.IsNullOrWhiteSpace(serviceFailureCommand)) server.Execute.DosCommand(serviceFailureCommand);
+            if (!string.IsNullOrWhiteSpace(serviceFailureCommand)) remote.Execute.DosCommand(serviceFailureCommand);
         }
 
-        protected void ConfigureRemoveService(IOfferRemoteComposition server)
+        protected void ExecuteRemoveService(IOfferRemoteOperations remote)
         {
-            var remove = string.Format("Remove-ConDepWinService '{0}' {1} {2}", _serviceName, _values.TimeOutInSeconds,
-                                       "$" + _values.IgnoreFailureOnServiceStartStop);
-            server.Execute.PowerShell(remove,
+            var remove = $"Remove-ConDepWinService '{_serviceName}' {_values.TimeOutInSeconds} {"$" + _values.IgnoreFailureOnServiceStartStop}";
+            remote.Execute.PowerShell(remove,
                                             o =>
                                             o.ContinueOnError(_values.IgnoreFailureOnServiceStartStop));
         }
 
-        protected virtual void ConfigureInstallService(IOfferRemoteComposition server) { }
+        protected virtual void ExecuteInstallService(IOfferRemoteOperations remote) { }
     }
 }

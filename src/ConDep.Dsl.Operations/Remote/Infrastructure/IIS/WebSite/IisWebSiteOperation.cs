@@ -1,11 +1,12 @@
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Validation;
+using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 
-namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.WebSite
 {
-    public class IisWebSiteOperation : RemoteCompositeOperation
+    public class IisWebSiteOperation : RemoteOperation
     {
         private readonly string _webSiteName;
         private readonly int _id;
@@ -25,19 +26,9 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
             _options = options;
         }
 
-        public override string Name
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            get { return "IIS Web Site - " + _webSiteName; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return !string.IsNullOrWhiteSpace(_webSiteName);
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            var bindings = _options.Values.HttpBindings.Select(httpBinding => string.Format("@{{protocol='http';bindingInformation='{0}:{1}:{2}'}}", httpBinding.Ip, httpBinding.Port, httpBinding.HostName)).ToList();
+            var bindings = _options.Values.HttpBindings.Select(httpBinding => $"@{{protocol='http';bindingInformation='{httpBinding.Ip}:{httpBinding.Port}:{httpBinding.HostName}'}}").ToList();
 
             foreach (var httpsBinding in _options.Values.HttpsBindings)
             {
@@ -46,21 +37,22 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
                     httpsBinding.FindName = httpsBinding.FindName.Replace(" ", "");
                 }
                 var type = httpsBinding.FindType.GetType();
-                bindings.Add(string.Format("@{{protocol='https';bindingInformation='{0}:{1}:{2}';findType=[{3}]::{4};findValue='{5}'}}", httpsBinding.BindingOptions.Ip, httpsBinding.BindingOptions.Port, httpsBinding.BindingOptions.HostName, type.FullName, httpsBinding.FindType, httpsBinding.FindName));
+                bindings.Add($"@{{protocol='https';bindingInformation='{httpsBinding.BindingOptions.Ip}:{httpsBinding.BindingOptions.Port}:{httpsBinding.BindingOptions.HostName}';findType=[{type.FullName}]::{httpsBinding.FindType};findValue='{httpsBinding.FindName}'}}");
             }
 
-            server.Execute.PowerShell(string.Format(@"New-ConDepIisWebSite '{0}' {1} {2} {3} '{4}' '{5}';"
-                , _webSiteName
-                , _id
-                , "@(" + string.Join(",", bindings) + ")"
-                , (string.IsNullOrWhiteSpace(_options.Values.PhysicalPath) ? "$null" : "'" + _options.Values.PhysicalPath + "'")
-                , _options.Values.AppPool
-                , _options.Values.LogDirectory));
+            remote.Execute.PowerShell($@"New-ConDepIisWebSite '{_webSiteName}' {_id} {"@(" + string.Join(",", bindings) + ")"} {
+                    (string.IsNullOrWhiteSpace(_options.Values.PhysicalPath)
+                        ? "$null"
+                        : "'" + _options.Values.PhysicalPath + "'")} '{_options.Values.AppPool}' '{
+                    _options.Values.LogDirectory}';");
 
-            foreach(var webApp in _options.Values.WebApps)
+            foreach (var webApp in _options.Values.WebApps)
             {
-                server.Configure.IISWebApp(webApp.Item1, _webSiteName, webApp.Item2);
+                remote.Configure.IISWebApp(webApp.Item1, _webSiteName, webApp.Item2);
             }
+            return Result.SuccessChanged();
         }
+
+        public override string Name => "IIS Web Site - " + _webSiteName;
     }
 }

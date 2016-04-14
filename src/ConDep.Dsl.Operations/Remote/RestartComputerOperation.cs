@@ -4,13 +4,10 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
-using ConDep.Dsl.Operations.Remote.Node;
-using ConDep.Dsl.Remote;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
+namespace ConDep.Dsl.Operations.Remote
 {
-    public class RestartComputerOperation : ForEachServerOperation
+    public class RestartComputerOperation : RemoteOperation
     {
         private readonly int _delayInSeconds;
 
@@ -24,18 +21,16 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
             Success,
             Failure
         }
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var canPingServer = CanPingServer(server);
-            var startNodeOperation = new StartConDepNodeOperation();
 
-            Logger.Verbose(string.Format("Can {0}use ping for validation", canPingServer ? "" : "NOT "));
+            Logger.Verbose($"Can {(canPingServer ? "" : "NOT ")}use ping for validation");
 
             Logger.WithLogSection("Restarting", () =>
             {
-                Logger.Info(string.Format("Executing restart command on server {0}", server.Name));
-                var powershellExecutor = new PowerShellExecutor();
-                powershellExecutor.Execute(server, string.Format("cmd /c \"shutdown /r /t {0}\"", _delayInSeconds));
+                Logger.Info($"Executing restart command on server {server.Name}");
+                remote.Execute.PowerShell($"cmd /c \"shutdown /r /t {_delayInSeconds}\"");
 
                 if (canPingServer)
                 {
@@ -60,8 +55,10 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
                 WaitForWinRm(WaitForStatus.Success, server);
                 Logger.Info("Serve successfully responds to PowerShell commands");
                 Logger.Info("Computer successfully restarted");
-                Logger.WithLogSection("Starting ConDepNode", () => startNodeOperation.Execute(server, status, settings, token));
+                Logger.WithLogSection("Starting ConDepNode", () => remote.StartConDepNode());
             });
+
+            return Result.SuccessChanged();
         }
 
         private void WaitForWinRm(WaitForStatus status, ServerConfig server)
@@ -69,9 +66,8 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
             try
             {
                 var cmd = server.DeploymentUser.IsDefined()
-                    ? string.Format("id -r:{0} -u:{1} -p:\"{2}\"", server.Name,
-                        server.DeploymentUser.UserName, server.DeploymentUser.Password)
-                    : string.Format("id -r:{0}", server.Name);
+                    ? $"id -r:{server.Name} -u:{server.DeploymentUser.UserName} -p:\"{server.DeploymentUser.Password}\""
+                    : $"id -r:{server.Name}";
 
                 var path = Environment.ExpandEnvironmentVariables(@"%windir%\system32\WinRM.cmd");
                 var startInfo = new ProcessStartInfo(path)
@@ -173,14 +169,6 @@ namespace ConDep.Dsl.Operations.Infrastructure.RestartComputer
             return result;
         }
 
-        public override string Name
-        {
-            get { return "Restart Computer"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
+        public override string Name => "Restart Computer";
     }
 }

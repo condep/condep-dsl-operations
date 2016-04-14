@@ -1,28 +1,24 @@
 using System.Collections.Generic;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
-namespace ConDep.Dsl.Operations.Infrastructure.Windows
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows
 {
-    public class WindowsFeatureInfrastructureOperation : RemoteCompositeOperation
+    public class WindowsFeatureInfrastructureOperation : RemoteOperation
     {
         private readonly List<string> _featuresToAdd = new List<string>();
         private readonly List<string> _featuresToRemove = new List<string>();
 
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var removeFeatures = _featuresToRemove.Count > 0 ? string.Join(",", _featuresToRemove) : "$null";
             var addFeatures = string.Join(",", _featuresToAdd);
-            server.Execute.PowerShell(string.Format("Set-ConDepWindowsFeatures {0} {1}", addFeatures, removeFeatures));
+            return remote.Execute.PowerShell(string.Format("Set-ConDepWindowsFeatures {0} {1}", addFeatures, removeFeatures)).Result;
         }
 
         public override string Name
         {
             get { return "Windows Feature Installer"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
         }
 
         public void AddWindowsFeature(string roleService)

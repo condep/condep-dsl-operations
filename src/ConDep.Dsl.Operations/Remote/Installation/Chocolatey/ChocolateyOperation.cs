@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Threading;
+using ConDep.Dsl.Config;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
 {
-    internal class ChocolateyOperation : RemoteCompositeOperation
+    internal class ChocolateyOperation : RemoteOperation
     {
         private readonly ChocolateyOptionValues _options;
         private readonly string _packageName;
@@ -14,20 +16,10 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             _packageName = packageName;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return string.Format("Chocolatey ({0})", _packageName); }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var options = BuildOptions(_options);
-            server.Execute.PowerShell(string.Format(@"
+            return remote.Execute.PowerShell(string.Format(@"
 function ConDep-ChocoPackageExist($name, $version = $null) {{
     $name = $name.ToLower().Trim()
     $result = choco search $($name) --local-only
@@ -65,7 +57,13 @@ if((ConDep-ChocoPackageExist $package)) {{
 else {{
     choco install $package {1}
 }}
-", _packageName, options));
+", _packageName, options)).Result;
+
+        }
+
+        public override string Name
+        {
+            get { return string.Format("Chocolatey ({0})", _packageName); }
         }
 
         private static string BuildOptions(ChocolateyOptionValues options)

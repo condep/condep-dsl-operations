@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.ServiceProcess;
 using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
-using ConDep.Dsl.Validation;
+using ConDep.Dsl.Operations.Remote.Deployment.WindowsService;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.WindowsService
 {
@@ -14,14 +14,9 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.WindowsService
             _serviceDirPath = serviceDirPath;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
         public override string Name { get { return "Configure Windows Service"; } }
 
-        protected override void ConfigureInstallService(IOfferRemoteComposition server)
+        protected override void ExecuteInstallService(IOfferRemoteOperations remote)
         {
             var installCmd = string.Format("New-ConDepWinService '{0}' '{1}' {2} {3} {4}",
                                            _serviceName,
@@ -33,7 +28,7 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.WindowsService
                                            _values.StartupType.HasValue ? "'" + _values.StartupType + "'" : "'" + ServiceStartMode.Manual + "'"
                 );
 
-            server.Execute.PowerShell(installCmd);
+            remote.Execute.PowerShell(installCmd);
         }
 
     }

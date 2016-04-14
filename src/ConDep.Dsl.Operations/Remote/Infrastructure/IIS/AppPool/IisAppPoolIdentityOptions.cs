@@ -1,9 +1,10 @@
-namespace ConDep.Dsl.Operations.Infrastructure.IIS.AppPool
+using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
+
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.AppPool
 {
     public class IisAppPoolIdentityOptions : IOfferIisAppPoolIdentityOptions
     {
         private readonly IisAppPoolOptions _appPoolOptions;
-        private readonly IisAppPoolOptions.IisAppPoolOptionsValues _values;
 
         public IisAppPoolIdentityOptions(IisAppPoolOptions appPoolOptions)
         {

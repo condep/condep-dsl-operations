@@ -1,11 +1,13 @@
 ﻿using System;
 using ConDep.Dsl.Builders;
-using ConDep.Dsl.Operations.Application.Deployment.CopyDir;
 using ConDep.Dsl.Operations.Application.Deployment.CopyFile;
-using ConDep.Dsl.Operations.Application.Deployment.WebApp;
 using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
-using ConDep.Dsl.Operations.Application.Deployment.NServiceBus;
 using ConDep.Dsl.Operations.Builders;
+using ConDep.Dsl.Operations.Remote.Deployment.CopyDir;
+using ConDep.Dsl.Operations.Remote.Deployment.CopyFile;
+using ConDep.Dsl.Operations.Remote.Deployment.NServiceBus;
+using ConDep.Dsl.Operations.Remote.Deployment.WebApp;
+using ConDep.Dsl.Operations.Remote.Deployment.WindowsService;
 
 namespace ConDep.Dsl
 {
@@ -20,8 +22,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment Directory(this IOfferRemoteDeployment remote, string sourceDir, string destDir)
         {
             var copyDirOperation = new CopyDirOperation(sourceDir, destDir);
-            Configure.Operation(remote, copyDirOperation);
-            //Configure.DeploymentOperations.AddOperation(copyDirOperation);
+            OperationExecutor.Execute((RemoteBuilder) remote, copyDirOperation);
             return remote;
         }
 
@@ -34,8 +35,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment File(this IOfferRemoteDeployment remote, string sourceFile, string destFile)
         {
             var copyFileOperation = new CopyFileOperation(sourceFile, destFile);
-            Configure.Operation(remote, copyFileOperation);
-            //Configure.DeploymentOperations.AddOperation(copyFileOperation);
+            OperationExecutor.Execute((RemoteBuilder)remote, copyFileOperation);
             return remote;
         }
 
@@ -62,8 +62,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment IisWebApplication(this IOfferRemoteDeployment remote, string sourceDir, string destDir, string webAppName, string webSiteName)
         {
             var webAppOperation = new WebAppOperation(sourceDir, webAppName, webSiteName, destDir);
-            Configure.Operation(remote, webAppOperation);
-            //Configure.DeploymentOperations.AddOperation(webAppOperation);
+            OperationExecutor.Execute((RemoteBuilder)remote, webAppOperation);
             return remote;
         }
 
@@ -102,8 +101,7 @@ namespace ConDep.Dsl
             }
 
             var winServiceOperation = new WindowsServiceDeployOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, winServiceOptions.Values);
-            Configure.Operation(remote, winServiceOperation);
-            //Configure.DeploymentOperations.AddOperation(winServiceOperation);
+            OperationExecutor.Execute((RemoteBuilder)remote, winServiceOperation);
             return remote;
         }
 
@@ -142,8 +140,7 @@ namespace ConDep.Dsl
             }
 
             var winServiceOperation = new WindowsServiceDeployWithInstallerOperation(serviceName, displayName, sourceDir, destDir, relativeExePath, installerParams, winServiceOptions.Values);
-            Configure.Operation(remote, winServiceOperation);
-            //Configure.DeploymentOperations.AddOperation(winServiceOperation);
+            OperationExecutor.Execute((RemoteBuilder)remote, winServiceOperation);
             return remote;
         }
 
@@ -172,14 +169,17 @@ namespace ConDep.Dsl
         public static IOfferRemoteDeployment NServiceBusEndpoint(this IOfferRemoteDeployment remote, string sourceDir, string destDir, string serviceName, string profile, Action<IOfferWindowsServiceOptions> options)
         {
             var nServiceBusProvider = new NServiceBusOperation(sourceDir, destDir, serviceName, profile, options);
-            Configure.Operation(remote, nServiceBusProvider);
-            //Configure.DeploymentOperations.AddOperation(nServiceBusProvider);
+            OperationExecutor.Execute((RemoteBuilder)remote, nServiceBusProvider);
             return remote;
         }
 
         /// <summary>
         /// Provide operations for deploying SSL certificates to remote server.
         /// </summary>
-        public static IOfferRemoteCertDeployment SslCertificate(this IOfferRemoteDeployment remoteDeployment) { return new RemoteCertDeploymentBuilder(remoteDeployment); }
+        public static IOfferRemoteCertDeployment SslCertificate(this IOfferRemoteDeployment remoteDeployment)
+        {
+            var builder = remoteDeployment as RemoteDeploymentBuilder;
+            return new RemoteCertDeploymentBuilder(remoteDeployment, builder.Server, builder.Settings, builder.Token);
+        }
     }
 }

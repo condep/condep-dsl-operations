@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.AccessControl;
 using System.Web.Configuration;
+using ConDep.Dsl.Builders;
 using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
 using ConDep.Dsl.Operations.Builders;
 using ConDep.Dsl.Operations.Infrastructure.IIS;
@@ -8,7 +9,12 @@ using ConDep.Dsl.Operations.Infrastructure.IIS.AppPool;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebApp;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
 using ConDep.Dsl.Operations.Infrastructure.Windows;
+using ConDep.Dsl.Operations.Remote.Infrastructure.IIS;
+using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.AppPool;
 using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.MachineKey;
+using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.WebApp;
+using ConDep.Dsl.Operations.Remote.Infrastructure.IIS.WebSite;
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Acl;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry;
@@ -30,7 +36,7 @@ namespace ConDep.Dsl
             var op = new IisInfrastructureOperation();
             options(new IisInfrastructureOptions(op));
 
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder) infra, op);
             return infra;
         }
 
@@ -41,7 +47,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IIS(this IOfferRemoteConfiguration infra)
         {
             var op = new IisInfrastructureOperation();
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -53,7 +59,7 @@ namespace ConDep.Dsl
         {
             var op = new WindowsFeatureInfrastructureOperation();
             options(new WindowsInfrastructureOptions(op));
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -66,7 +72,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISWebSite(this IOfferRemoteConfiguration infra, string name, int id)
         {
             var op = new IisWebSiteOperation(name, id);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -82,7 +88,7 @@ namespace ConDep.Dsl
             var opt = new IisWebSiteOptions();
             options(opt);
             var op = new IisWebSiteOperation(name, id, opt);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -94,7 +100,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISAppPool(this IOfferRemoteConfiguration infra, string name)
         {
             var op = new IisAppPoolOperation(name);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -109,7 +115,7 @@ namespace ConDep.Dsl
             var opt = new IisAppPoolOptions();
             options(opt);
             var op = new IisAppPoolOperation(name, opt.Values);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -122,7 +128,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IISWebApp(this IOfferRemoteConfiguration infra, string name, string webSite)
         {
             var op = new IisWebAppOperation(name, webSite);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
@@ -139,14 +145,18 @@ namespace ConDep.Dsl
             options(builder);
 
             var op = new IisWebAppOperation(name, webSite, builder.Values);
-            Configure.Operation(infra, op);
+            OperationExecutor.Execute((RemoteBuilder)infra, op);
             return infra;
         }
 
         /// <summary>
         /// Provide operations for installing SSL certificates.
         /// </summary>
-        public static IOfferSslInfrastructure SslCertificate(this IOfferRemoteConfiguration infra) { return new SslInfrastructureBuilder(infra); }
+        public static IOfferSslInfrastructure SslCertificate(this IOfferRemoteConfiguration infra)
+        {
+            var builder = infra as RemoteConfigurationBuilder;
+            return new SslInfrastructureBuilder(infra, builder.Server, builder.Settings, builder.Token);
+        }
 
         /// <summary>
         /// Disables User Account Control. The operation is idempotent and will trigger a restart, but only if UAC not is already disabled. 
@@ -157,7 +167,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration UserAccountControl(this IOfferRemoteConfiguration configuration, bool enabled)
         {
             var operation = new UserAccountControlOperation(enabled);
-            Configure.Operation(configuration, operation);
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
             return configuration;
         }
 
@@ -169,7 +179,8 @@ namespace ConDep.Dsl
         /// <returns></returns>
         public static IOfferRemoteConfiguration WindowsRegistry(this IOfferRemoteConfiguration conf, Action<IOfferWindowsRegistryOperations> reg)
         {
-            var builder = new WindowsRegistryBuilder(conf);
+            var confBuilder = conf as RemoteConfigurationBuilder;
+            var builder = new WindowsRegistryBuilder(conf, confBuilder.Server, confBuilder.Settings, confBuilder.Token);
             reg(builder);
             return conf;
         }
@@ -197,7 +208,7 @@ namespace ConDep.Dsl
 
             var op = new CreateWindowsRegistryKeyOperation(root, key, defaultValue, valuesBuilder.Values, keysBuilder.Keys);
             var regBuilder = reg as WindowsRegistryBuilder;
-            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            OperationExecutor.Execute((RemoteBuilder)reg, op);
             return reg;
         }
 
@@ -228,7 +239,7 @@ namespace ConDep.Dsl
         {
             var op = new SetWindowsRegistryValueOperation(root, key, valueName, valueData, valueKind);
             var regBuilder = reg as WindowsRegistryBuilder;
-            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            OperationExecutor.Execute((RemoteBuilder)reg, op);
             return reg;
         }
 
@@ -243,7 +254,7 @@ namespace ConDep.Dsl
         {
             var op = new DeleteWindowsRegistryKeyOperation(root, key);
             var regBuilder = reg as WindowsRegistryBuilder;
-            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            OperationExecutor.Execute((RemoteBuilder)reg, op);
             return reg;
         }
 
@@ -259,7 +270,7 @@ namespace ConDep.Dsl
         {
             var op = new DeleteWindowsRegistryValueOperation(root, key, valueName);
             var regBuilder = reg as WindowsRegistryBuilder;
-            Configure.Operation(regBuilder.RemoteConfigurationBuilder, op);
+            OperationExecutor.Execute((RemoteBuilder)reg, op);
             return reg;
         }
 
@@ -274,7 +285,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration EnvironmentVariable(this IOfferRemoteConfiguration configure, string name, string value, EnvironmentVariableTarget target)
         {
             var operation = new EnvironmentVariableOperation(name, value, target);
-            Configure.Operation(configure, operation);
+            OperationExecutor.Execute((RemoteBuilder)configure, operation);
             return configure;
         }
 
@@ -291,7 +302,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration IisMachineKey(this IOfferRemoteConfiguration configuration, string validationKey, string decryptionKey, MachineKeyValidation validation)
         {
             var operation = new SetIisMachineKeyOperation(validationKey, decryptionKey, validation);
-            Configure.Operation(configuration, operation);
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
             return configuration;
         }
 
@@ -306,7 +317,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteConfiguration Acl(this IOfferRemoteConfiguration configuration, string user, string fileOrFolder, FileSystemRights accessRights)
         {
             var op = new AclOperation(user, fileOrFolder, accessRights, new AclOptions.AclOptionsValues());
-            Configure.Operation(configuration, op);
+            OperationExecutor.Execute((RemoteBuilder)configuration, op);
             return configuration;
         }
 
@@ -327,7 +338,7 @@ namespace ConDep.Dsl
                 options(opt);
             }
             var op = new AclOperation(user, fileOrFolder, accessRights, opt.Values);
-            Configure.Operation(configuration, op);
+            OperationExecutor.Execute((RemoteBuilder)configuration, op);
             return configuration;
         }
 
@@ -364,7 +375,7 @@ namespace ConDep.Dsl
             }
 
             var winServiceOperation = new ConfigureWindowsServiceOperation(serviceName, displayName, serviceDirPath, relativeExePath, winServiceOptions.Values);
-            Configure.Operation(configuration, winServiceOperation);
+            OperationExecutor.Execute((RemoteBuilder)configuration, winServiceOperation);
             return configuration;
         }
     }

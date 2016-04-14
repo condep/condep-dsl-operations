@@ -1,5 +1,5 @@
-using ConDep.Dsl.Operations.Infrastructure.RestartComputer;
-using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.FileStructure;
+using ConDep.Dsl.Builders;
+using ConDep.Dsl.Operations.Remote;
 using ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin;
 
 namespace ConDep.Dsl
@@ -15,14 +15,14 @@ namespace ConDep.Dsl
         public static IOfferRemoteOperations CreateDirectory(this IOfferRemoteOperations remote, string path)
         {
             var operation = new CreateDirectoryOperation(path);
-            Configure.Operation(remote, operation);
+            OperationExecutor.Execute((RemoteBuilder)remote, operation);
             return remote;
         }
 
         public static IOfferRemoteOperations Restart(this IOfferRemoteOperations remote, int delayInSeconds = 10)
         {
             var restartOperation = new RestartComputerOperation(delayInSeconds);
-            Configure.Operation(remote, restartOperation);
+            OperationExecutor.Execute((RemoteBuilder)remote, restartOperation);
             return remote;
         }
 
@@ -36,7 +36,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteOperations AddUserToLocalGroup(this IOfferRemoteOperations configuration, string userName, string groupName)
         {
             var operation = new AddUserToLocalGroupOperation(userName, groupName);
-            Configure.Operation(configuration, operation);
+            OperationExecutor.Execute((RemoteBuilder)configuration, operation);
             return configuration;
         }
     }

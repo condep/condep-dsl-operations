@@ -4,9 +4,9 @@ using System.Threading;
 using System.Web.Compilation;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
-using ConDep.Dsl.Validation;
+using ConDep.Dsl.Operations.Application.Local.PreCompile;
 
-namespace ConDep.Dsl.Operations.Application.Local.PreCompile
+namespace ConDep.Dsl.Operations.Local.PreCompile
 {
     public class PreCompileOperation : LocalOperation
 	{
@@ -31,30 +31,26 @@ namespace ConDep.Dsl.Operations.Application.Local.PreCompile
             _buildManager = buildManager;
         }
 
-        public override void Execute(IReportStatus status, ConDepSettings settings, CancellationToken token)
-		{
-			try
-			{
-				if(Directory.Exists(_preCompileOutputpath))
-					Directory.Delete(_preCompileOutputpath, true);
-
-				_buildManager.PrecompileApplication(new PreCompileCallback());
-			}
-			catch (Exception ex)
-			{
-                Logger.Error(ex.Message);
-				throw;
-			}
-		}
-
         public override string Name
         {
             get { return "Pre Compile"; }
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(ConDepSettings settings, CancellationToken token)
         {
-            return !string.IsNullOrWhiteSpace(_webApplicationName);
+            try
+            {
+                if (Directory.Exists(_preCompileOutputpath))
+                    Directory.Delete(_preCompileOutputpath, true);
+
+                _buildManager.PrecompileApplication(new PreCompileCallback());
+                return Result.SuccessChanged();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                return Result.Failed();
+            }
         }
 	}
 }

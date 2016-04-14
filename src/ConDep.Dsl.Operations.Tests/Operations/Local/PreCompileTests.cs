@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Operations.Application.Local.PreCompile;
+using ConDep.Dsl.Operations.Local.PreCompile;
 using ConDep.Dsl.Validation;
 using Moq;
 using NUnit.Framework;

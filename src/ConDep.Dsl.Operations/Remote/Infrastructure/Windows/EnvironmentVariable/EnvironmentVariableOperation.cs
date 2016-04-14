@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Remote;
-using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariable
 {
-    public class EnvironmentVariableOperation : ForEachServerOperation
+    public class EnvironmentVariableOperation : RemoteOperation
     {
         private readonly string _name;
         private readonly string _value;
@@ -19,20 +17,11 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.EnvironmentVariabl
             _target = target;
         }
 
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            var psExecutor = new PowerShellExecutor();
-            psExecutor.Execute(server, string.Format("[Environment]::SetEnvironmentVariable(\"{0}\", \"{1}\", \"{2}\")", _name, _value, _target));
+            return remote.Execute.PowerShell($"[Environment]::SetEnvironmentVariable(\"{_name}\", \"{_value}\", \"{_target}\")").Result;
         }
 
-        public override string Name
-        {
-            get { return "Set Environment Variable " + _name; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
+        public override string Name => "Set Environment Variable " + _name;
     }
 }

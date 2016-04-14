@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using ConDep.Dsl.Builders;
 using ConDep.Dsl.Operations.Remote.Installation.Chocolatey;
 using ConDep.Dsl.Operations.Remote.Installation.Download;
 using ConDep.Dsl.Operations.Remote.Installation.Executable;
@@ -28,7 +29,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, string srcMsiFilePath)
         {
             var msiOperation = new MsiOperation(packageName, srcMsiFilePath);
-            Configure.Operation(install, msiOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, msiOperation);
             return install;
         }
 
@@ -52,7 +53,7 @@ namespace ConDep.Dsl
             var msiOptions = new InstallOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiFilePath, msiOptions.Values);
-            Configure.Operation(install, msiOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, msiOperation);
             return install;
         }
 
@@ -75,7 +76,7 @@ namespace ConDep.Dsl
             var msiOptions = new InstallOptions();
             options(msiOptions);
             var msiOperation = new MsiOperation(packageName, srcMsiUri, msiOptions.Values);
-            Configure.Operation(install, msiOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, msiOperation);
             return install;
         }
 
@@ -95,7 +96,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Msi(this IOfferRemoteInstallation install, string packageName, Uri srcMsiUri)
         {
             var msiOperation = new MsiOperation(packageName, srcMsiUri);
-            Configure.Operation(install, msiOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, msiOperation);
             return install;
         }
 
@@ -122,7 +123,7 @@ namespace ConDep.Dsl
                 options(installOptions);
             }
             var exeOperation = new InstallExecutableOperation(packageName, srcExecutableFilePath, exeParams, installOptions.Values);
-            Configure.Operation(install, exeOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, exeOperation);
             return install;
         }
 
@@ -149,7 +150,7 @@ namespace ConDep.Dsl
                 options(installOptions);
             }
             var exeOperation = new InstallExecutableOperation(packageName, srcExecutableUri, exeParams, installOptions.Values);
-            Configure.Operation(install, exeOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, exeOperation);
             return install;
         }
 
@@ -170,7 +171,7 @@ namespace ConDep.Dsl
             }
 
             var downloadOperation = new DownloadOperation(url, downloadOptions.Values);
-            Configure.Operation(install, downloadOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, downloadOperation);
             return install;
         }
 
@@ -184,7 +185,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation UnZip(this IOfferRemoteInstallation install, string filePath, string destPath)
         {
             var zipOperation = new UnZipOperation(filePath, destPath);
-            Configure.Operation(install, zipOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, zipOperation);
             return install;
         }
 
@@ -198,7 +199,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation Zip(this IOfferRemoteInstallation install, string pathToCompress, string destZipFile)
         {
             var zipOperation = new ZipOperation(pathToCompress, destZipFile);
-            Configure.Operation(install, zipOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, zipOperation);
             return install;
         }
 
@@ -219,7 +220,7 @@ namespace ConDep.Dsl
         public static IOfferRemoteInstallation WindowsUpdate(this IOfferRemoteInstallation install, string packageId, string packageUrl, string packageName)
         {
             var winUpdateOperation = new InstallWindowsUpdateOperation(packageId, packageUrl, packageName);
-            Configure.Operation(install, winUpdateOperation);
+            OperationExecutor.Execute((RemoteBuilder)install, winUpdateOperation);
             return install;
         }
 
@@ -231,7 +232,7 @@ namespace ConDep.Dsl
                 opt(options);
             }
             var op = new ChocolateyOperation(packageName, options.Values);
-            Configure.Operation(install, op);
+            OperationExecutor.Execute((RemoteBuilder)install, op);
             return install;
         }
     }

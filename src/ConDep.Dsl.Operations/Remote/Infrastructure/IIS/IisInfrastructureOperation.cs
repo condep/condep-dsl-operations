@@ -1,26 +1,17 @@
 ﻿using System.Collections.Generic;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
-namespace ConDep.Dsl.Operations.Infrastructure.IIS
+namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS
 {
-    public class IisInfrastructureOperation : RemoteCompositeOperation
+    public class IisInfrastructureOperation : RemoteOperation
     {
         private readonly List<string> _featuresToAdd = new List<string>();
         private readonly List<string> _featuresToRemove = new List<string>();
 
-        public override string Name
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            get { return "IIS Installer"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            server.Configure
+            return remote.Configure
                 .Windows(win =>
                 {
                     win.InstallFeature("Web-Server");
@@ -35,7 +26,12 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS
                     {
                         win.UninstallFeature(feature);
                     }
-                });
+                }).Result;
+        }
+
+        public override string Name
+        {
+            get { return "IIS Installer"; }
         }
 
         public void AddRoleService(string roleService)

@@ -1,7 +1,8 @@
 using System.IO;
+using ConDep.Dsl.Operations.Application.Deployment.WindowsService;
 using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
+namespace ConDep.Dsl.Operations.Remote.Deployment.WindowsService
 {
     public class WindowsServiceDeployWithInstallerOperation : WindowsServiceOperationBase
     {
@@ -22,20 +23,15 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WindowsService
             get { return "Windows Service With Installer"; }
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        protected override void ConfigureInstallService(IOfferRemoteComposition server)
+        protected override void ExecuteInstallService(IOfferRemoteOperations remote)
         {
             var installCmd = string.Format("{0} {1}", Path.Combine(_destDir, _relativeExePath), _installerParams);
-            server.Execute.DosCommand(installCmd);
+            remote.Execute.DosCommand(installCmd);
         }
 
-        protected override void ConfigureDeployment(IOfferRemoteComposition server)
+        protected override void ExecuteDeployment(IOfferRemoteOperations remote)
         {
-            server.Deploy.Directory(_sourceDir, _destDir);
+            remote.Deploy.Directory(_sourceDir, _destDir);
         }
     }
 }

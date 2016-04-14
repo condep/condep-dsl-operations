@@ -1,9 +1,10 @@
 ﻿using System;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.WindowsUpdate
 {
-    public class InstallWindowsUpdateOperation : RemoteCompositeOperation
+    public class InstallWindowsUpdateOperation : RemoteOperation
     {
         private readonly string _packageId;
         private readonly string _packageUrl;
@@ -16,30 +17,29 @@ namespace ConDep.Dsl.Operations.Remote.Installation.WindowsUpdate
             _packageName = packageName;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return string.Format("Windows Update ({0})", _packageId); }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            var notAlreadyInstalled = string.Format(@"
+            var notAlreadyInstalled = $@"
 $progs = Get-WmiObject -Class Win32_Product | Select-Object -Property Name
 
 	foreach($prog in $progs){{
-		if($prog.Name -eq ""{0}""){{
-            return $false
+		if($prog.Name -eq ""{_packageId}""){{
+            return ConvertTo-ConDepResult $false
 		}}
 	}}
-	return $true
-", _packageId);
+	return ConvertTo-ConDepResult $true
+";
 
-            server.OnlyIf(notAlreadyInstalled).Install.Msi(_packageName, new Uri(_packageUrl));
+            var notInstalledResult = remote.Execute.PowerShell(notAlreadyInstalled).Result;
+
+            if (notInstalledResult.Data.PsResult == true)
+            {
+                remote.Install.Msi(_packageName, new Uri(_packageUrl));
+                return Result.SuccessChanged();
+            }
+            return Result.SuccessUnChanged();
         }
+
+        public override string Name => $"Windows Update ({_packageId})";
     }
 }

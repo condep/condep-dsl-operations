@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Download
 {
-    public class DownloadOperation : RemoteCompositeOperation
+    public class DownloadOperation : RemoteOperation
     {
         private readonly string _url;
         private readonly DownloadOptions.DownloadOptionsValues _values;
@@ -15,26 +16,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
             _values = values;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            try
-            {
-                var uri = new Uri(_url);
-            }
-            catch (Exception ex)
-            {
-                notification.AddError(new ValidationError(ex.Message));
-                return false;
-            }
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Downloading " + Path.GetFileName(new Uri(_url).AbsolutePath); }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var dest = "$env:temp";
 
@@ -54,7 +36,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Download
     $client.Credentials = new-object system.net.networkcredential(""{0}"", ""{1}"")", _values.BasicAuth.Username, _values.BasicAuth.Password);
             }
 
-            server.Execute.PowerShell(string.Format(@"
+            return remote.Execute.PowerShell(string.Format(@"
 $path = $ExecutionContext.InvokeCommand.ExpandString(""{1}"")
 
 if((Test-Path $path)) {{
@@ -64,7 +46,13 @@ else {{
     $client = new-object System.Net.WebClient
 {2}
     $client.DownloadFile(""{0}"", $path )
-}}", _url, destFile, basicAuth));
+}}", _url, destFile, basicAuth)).Result;
         }
+
+        public override string Name
+        {
+            get { return "Downloading " + Path.GetFileName(new Uri(_url).AbsolutePath); }
+        }
+
     }
 }

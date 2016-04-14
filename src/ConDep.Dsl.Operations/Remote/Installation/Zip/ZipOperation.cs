@@ -1,10 +1,10 @@
 using System.IO;
-using ConDep.Dsl.Logging;
-using ConDep.Dsl.Validation;
+using System.Threading;
+using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Zip
 {
-    public class ZipOperation : RemoteCompositeOperation
+    public class ZipOperation : RemoteOperation
     {
         private readonly string _pathToCompress;
         private readonly string _destZipFile;
@@ -15,19 +15,14 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Zip
             _destZipFile = destZipFile;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            return true;
+            return remote.Execute.DosCommand(string.Format(@"%ProgramData%\chocolatey\tools\7za.exe a -y ""{0}"" ""{1}""", _destZipFile, _pathToCompress)).Result;
         }
 
         public override string Name
         {
             get { return string.Format("Zip ({0})", Path.GetFileName(_destZipFile)); }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            server.Execute.DosCommand(string.Format(@"%ProgramData%\chocolatey\tools\7za.exe a -y ""{0}"" ""{1}""", _destZipFile, _pathToCompress));
         }
     }
 }

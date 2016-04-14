@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using ConDep.Dsl.Config;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
 {
-    internal class CreateWindowsRegistryKeyOperation : RemoteCompositeOperation
+    internal class CreateWindowsRegistryKeyOperation : RemoteOperation
     {
         private readonly WindowsRegistryRoot _root;
         private readonly string _key;
@@ -29,22 +31,17 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
             _keys = keys;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            return true;
+            var builder = new StringBuilder();
+            CreateKeyCmd(builder, _root.ToString(), new WindowsRegistrySubKey(_key, _defaultValue, _values, _keys));
+
+            return remote.Execute.PowerShell(builder.ToString()).Result;
         }
 
         public override string Name
         {
             get { return "Windows Registry Key"; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
-        {
-            var builder = new StringBuilder();
-            CreateKeyCmd(builder, _root.ToString(), new WindowsRegistrySubKey(_key, _defaultValue, _values, _keys));
-
-            server.Execute.PowerShell(builder.ToString());
         }
 
         private void CreateKeyCmd(StringBuilder builder, string parentKey, WindowsRegistrySubKey key)

@@ -1,9 +1,9 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using ConDep.Dsl.Builders;
-using ConDep.Dsl.Operations.Application.Deployment.Certificate;
 using ConDep.Dsl.Operations.Builders;
 using ConDep.Dsl.Operations.Infrastructure.IIS.WebSite;
+using ConDep.Dsl.Operations.Remote.Deployment.Certificate;
 
 namespace ConDep.Dsl
 {
@@ -19,7 +19,7 @@ namespace ConDep.Dsl
         {
             var infraBuilder = ((SslInfrastructureBuilder) sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromStoreOperation(findType, findValue);
-            Configure.Operation(infraBuilder, certOp);
+            OperationExecutor.Execute((RemoteBuilder)sslInfra, certOp);
             return infraBuilder;
         }
 
@@ -37,7 +37,7 @@ namespace ConDep.Dsl
             options(certOpt);
 
             var certOp = new CertificateFromStoreOperation(findType, findValue, certOpt);
-            Configure.Operation(infraBuilder, certOp);
+            OperationExecutor.Execute((RemoteBuilder)sslInfra, certOp);
             return infraBuilder;
         }
 
@@ -51,7 +51,7 @@ namespace ConDep.Dsl
         {
             var infraBuilder = ((SslInfrastructureBuilder)sslInfra).InfrastructureBuilder;
             var certOp = new CertificateFromFileOperation(path, password);
-            Configure.Operation(infraBuilder, certOp);
+            OperationExecutor.Execute((RemoteBuilder)sslInfra, certOp);
             return infraBuilder;
         }
 
@@ -69,7 +69,7 @@ namespace ConDep.Dsl
             options(certOpt);
 
             var certOp = new CertificateFromFileOperation(path, password, certOpt);
-            Configure.Operation(infraBuilder, certOp);
+            OperationExecutor.Execute((RemoteBuilder)sslInfra, certOp);
             return infraBuilder;
         }
     }

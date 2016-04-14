@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using ConDep.Dsl.Config;
+using ConDep.Dsl.Logging;
 using ConDep.Dsl.Operations.Application.Execution.PowerShell;
 using ConDep.Dsl.Remote;
 using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
 {
-    public class PowerShellOperation : ForEachServerOperation
+    public class PowerShellOperation : RemoteOperation
     {
         private enum CommandType
         {
@@ -61,24 +62,26 @@ namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
             _commandType = CommandType.ScriptFile;
         }
 
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             switch (_commandType)
             {
                 case CommandType.CmdLine:
-                    ExecuteCommand(_cmd, server);
-                    break;
+                    return ExecuteCommand(_cmd, server);
                 case CommandType.ScriptFile:
-                    ExecuteScriptFile(_scriptFile, server);
-                    break;
+                    return ExecuteScriptFile(_scriptFile, server);
                 default:
                     throw new ConDepInvalidEnumValueException(_commandType);
             }
         }
 
-        private void ExecuteScriptFile(FileInfo scriptFile, ServerConfig server)
+        private Result ExecuteScriptFile(FileInfo scriptFile, ServerConfig server)
         {
-            if(!scriptFile.Exists) throw new FileNotFoundException(scriptFile.FullName);
+            if (!scriptFile.Exists)
+            {
+                Logger.Error("File not found: {0}", scriptFile.FullName);
+                return Result.Failed();
+            }
 
             string script;
             using (var fileStream = File.OpenRead(scriptFile.FullName))
@@ -92,7 +95,7 @@ namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
                 }
             }
 
-            ExecuteCommand(script, server);
+            return ExecuteCommand(script, server);
         }
 
         private static MemoryStream GetMemoryStreamWithCorrectEncoding(Stream stream)
@@ -104,27 +107,26 @@ namespace ConDep.Dsl.Operations.Remote.Execution.PowerShell
             }
         }
 
-        private void ExecuteCommand(string cmd, ServerConfig server)
+        private Result ExecuteCommand(string cmd, ServerConfig server)
         {
+            var result = Result.SuccessUnChanged();
+
             var psExec = new PowerShellExecutor();
             if (_values != null)
             {
                 if (_values.UseCredSSP) psExec.UseCredSSP = true;
             }
-            psExec.Execute(server, cmd, mod =>
+            var execResult = psExec.Execute(server, cmd, mod =>
             {
                 mod.LoadConDepDotNetLibrary = _values == null || _values.RequireRemoteLib;
             });
+            result.Data.PsResult = execResult;
+            return result;
         }
 
         public override string Name
         {
             get { return "Remote PowerShell"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
         }
     }
 }

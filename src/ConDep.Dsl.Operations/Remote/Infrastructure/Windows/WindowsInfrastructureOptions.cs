@@ -1,3 +1,5 @@
+using ConDep.Dsl.Operations.Remote.Infrastructure.Windows;
+
 namespace ConDep.Dsl.Operations.Infrastructure.Windows
 {
     public class WindowsInfrastructureOptions : IOfferWindowsInfrastructureOptions

@@ -2,11 +2,10 @@ using System.Threading;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.Logging;
 using ConDep.Dsl.Remote.Node;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Deployment.WebApp
+namespace ConDep.Dsl.Operations.Remote.Deployment.WebApp
 {
-    public class WebAppOperation : ForEachServerOperation
+    public class WebAppOperation : RemoteOperation
     {
         private readonly string _sourceDir;
         private readonly string _webAppName;
@@ -22,17 +21,12 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WebApp
             _destDir = destDir;
         }
 
-        public override bool IsValid(Notification notification)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            return true;
-        }
-
-        public override void Execute(ServerConfig server, IReportStatus status, ConDepSettings settings, CancellationToken token)
-        {
-            _api = new Api(new ConDepNodeUrl(server, settings), server.DeploymentUser.UserName, server.DeploymentUser.Password, server.Node.TimeoutInSeconds.Value * 1000);
+            _api = new Api(new ConDepNodeUrl(server), server.DeploymentUser.UserName, server.DeploymentUser.Password, server.Node.TimeoutInSeconds.Value * 1000);
             var result = _api.SyncWebApp(_destinationWebSiteName, _webAppName, _sourceDir, _destDir);
 
-            if (result == null) return;
+            if (result == null) return Result.SuccessUnChanged();
 
             if (result.Log.Count > 0)
             {
@@ -44,13 +38,11 @@ namespace ConDep.Dsl.Operations.Application.Deployment.WebApp
             else
             {
                 Logger.Info("Nothing to deploy. Everything is in sync.");
+                return Result.SuccessUnChanged();
             }
+            return Result.SuccessChanged();
         }
 
-        public override string Name { get { return "Web Application"; } }
-        public void DryRun()
-        {
-            Logger.WithLogSection(Name, () => { });
-        }
+        public override string Name => "Web Application";
     }
 }

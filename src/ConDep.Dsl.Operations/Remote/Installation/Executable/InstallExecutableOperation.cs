@@ -1,13 +1,14 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using ConDep.Dsl.Config;
+using ConDep.Dsl.Logging;
 using ConDep.Dsl.Operations.Remote.Installation.Msi;
-using ConDep.Dsl.Validation;
 
 namespace ConDep.Dsl.Operations.Remote.Installation.Executable
 {
-    public class InstallExecutableOperation : RemoteCompositeOperation
+    public class InstallExecutableOperation : RemoteOperation
     {
         private readonly Uri _srcExecutableUri;
         private readonly FileSourceType _sourceType;
@@ -34,51 +35,51 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Executable
             _sourceType = FileSourceType.Url;
         }
 
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
-
-        public override string Name
-        {
-            get { return "Custom installer for " + _packageName; }
-        }
-
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             switch (_sourceType)
             {
                 case FileSourceType.File:
-                    InstallExecutableFromFile(server, _srcExecutableFilePath, _exeParams);
-                    break;
+                    return InstallExecutableFromFile(remote, server.GetServerInfo(), _srcExecutableFilePath, _exeParams);
                 case FileSourceType.Url:
-                    InstallExecutableFromUri(server, _srcExecutableUri, _exeParams);
-                    break;
+                    return InstallExecutableFromUri(remote, server.GetServerInfo(), _srcExecutableUri, _exeParams);
                 default:
-                    throw new ConDepInstallationFailureException("Invalid fine source type");
+                    Logger.Error("Invalid find source type");
+                    return Result.Failed();
             }
         }
 
-        private void InstallExecutableFromUri(IOfferRemoteComposition server, Uri srcExecutableUri, string exeParams)
+        public override string Name => "Custom installer for " + _packageName;
+
+        private Result InstallExecutableFromUri(IOfferRemoteOperations remote, ServerInfo serverInfo, Uri srcExecutableUri, string exeParams)
         {
             var filename = Guid.NewGuid() + ".exe";
-            var psDstPath = string.Format(@"$env:temp\{0}", filename);
-            server.OnlyIf(InstallCondition)
-                    .Execute
-                        .PowerShell(string.Format("Get-ConDepRemoteFile \"{0}\" \"{1}\"", srcExecutableUri, psDstPath))
-                        .PowerShell(string.Format("cd $env:temp; cmd /c \"{0} {1}\"", filename, exeParams), SetPowerShellOptions);
+            var psDstPath = $@"$env:temp\{filename}";
+
+            if (InstallCondition(serverInfo))
+            {
+                remote.Execute
+                    .PowerShell($"Get-ConDepRemoteFile \"{srcExecutableUri}\" \"{psDstPath}\"")
+                    .PowerShell($"cd $env:temp; cmd /c \"{filename} {exeParams}\"", SetPowerShellOptions);
+
+                return Result.SuccessChanged();
+            }
+            return Result.SuccessUnChanged();
         }
 
-        private void InstallExecutableFromFile(IOfferRemoteComposition server, string srcExecutableFilePath, string exeParams)
+        private Result InstallExecutableFromFile(IOfferRemoteOperations remote, ServerInfo serverInfo, string srcExecutableFilePath, string exeParams)
         {
             var filename = Path.GetFileName(srcExecutableFilePath);
             var dstPath = Path.Combine(@"%temp%\", filename);
 
-            server.OnlyIf(InstallCondition)
-                .Deploy.File(srcExecutableFilePath, dstPath);
+            if (InstallCondition(serverInfo))
+            {
+                remote.Deploy.File(srcExecutableFilePath, dstPath);
+                remote.Execute.PowerShell($"cd $env:temp; cmd /c \"{filename} {exeParams}\"", SetPowerShellOptions);
 
-            server.OnlyIf(InstallCondition)
-                .Execute.PowerShell(string.Format("cd $env:temp; cmd /c \"{0} {1}\"", filename, exeParams), SetPowerShellOptions);
+                return Result.SuccessChanged();
+            }
+            return Result.SuccessUnChanged();
         }
 
         private bool InstallCondition(ServerInfo condition)
@@ -98,14 +99,6 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Executable
             {
                 opt.UseCredSSP(true);
             }
-        }
-    }
-
-    public class ConDepInstallationFailureException : Exception
-    {
-        public ConDepInstallationFailureException(string message) : base(message)
-        {
-            
         }
     }
 }

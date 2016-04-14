@@ -1,15 +1,15 @@
 using System;
 using System.IO;
+using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Validation;
 
-namespace ConDep.Dsl.Operations.Application.Deployment.NServiceBus
+namespace ConDep.Dsl.Operations.Remote.Deployment.NServiceBus
 {
-    public class NServiceBusOperation : RemoteCompositeOperation
+    public class NServiceBusOperation : RemoteOperation
     {
         private string _serviceInstallerName = "NServiceBus.Host.exe";
-        private string _sourcePath;
-        private string _destPath;
+        private readonly string _sourcePath;
+        private readonly string _destPath;
         private readonly string _serviceName;
         private readonly string _profile;
         private readonly Action<IOfferWindowsServiceOptions> _options;
@@ -23,21 +23,13 @@ namespace ConDep.Dsl.Operations.Application.Deployment.NServiceBus
             _options = options;
         }
 
-        public override void Configure(IOfferRemoteComposition server)
+        public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
             var installParams = string.Format("/install /serviceName:\"{0}\" /displayName:\"{0}\" {1}", _serviceName, _profile);
-            server.Deploy.WindowsServiceWithInstaller(_serviceName, _serviceName, _sourcePath, _destPath, _serviceInstallerName,
-                                                      installParams, _options);
+            return remote.Deploy.WindowsServiceWithInstaller(_serviceName, _serviceName, _sourcePath, _destPath, _serviceInstallerName,
+                                                      installParams, _options).Result;
         }
 
-        public override string Name
-        {
-            get { return "NServiceBus"; }
-        }
-
-        public override bool IsValid(Notification notification)
-        {
-            return true;
-        }
+        public override string Name => "NServiceBus";
     }
 }

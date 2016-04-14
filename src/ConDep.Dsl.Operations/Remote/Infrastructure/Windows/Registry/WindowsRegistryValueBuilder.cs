@@ -13,6 +13,6 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.Registry
             return this;
         }
 
-        public IEnumerable<WindowsRegistryValue> Values { get { return _values; } }
+        public IEnumerable<WindowsRegistryValue> Values => _values;
     }
 }
