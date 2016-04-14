@@ -1,5 +1,7 @@
 condep-dsl-operations
 =====================
+[![Build Status: Windows](https://ci.appveyor.com/api/projects/status/nc3dlr3t566399s1/branch/master?svg=true)](https://ci.appveyor.com/project/condep/condep-dsl-operations/branch/master)
+
 This project contains all of ConDep's built-in Operations.
 
 Need help?
