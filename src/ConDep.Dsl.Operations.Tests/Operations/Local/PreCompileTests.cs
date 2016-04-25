@@ -43,26 +43,10 @@ namespace ConDep.Dsl.Tests.Operations.Local
             var operation = new PreCompileOperation("MyWebApp", @"C:\temp\MyWebApp", @"C:\temp\MyWebAppCompiled", _buildManager.Object);
             
             var status = new StatusReporter();
-            operation.Execute(status, _settingsDefault, _token);
+            operation.Execute(_settingsDefault, _token);
 
             Assert.That(status.HasErrors, Is.False);
             _buildManager.Verify(manager => manager.PrecompileApplication(It.IsAny<PreCompileCallback>()));
-        }
-
-        [Test]
-        public void TestThatValidationsFailsWhenAppNameIsEmpty()
-        {
-            var operation = new PreCompileOperation("", _validWebAppPath, _validOutputPath, _buildManager.Object);
-            var notification = new Notification();
-            Assert.That(operation.IsValid(notification), Is.False);
-        }
-
-        [Test]
-        public void TestThatValidationsSucceedsWhenDirectoriesExists()
-        {
-            var operation = new PreCompileOperation("MyWebApp", _validWebAppPath, _validOutputPath, _buildManager.Object);
-            var notification = new Notification();
-            Assert.That(operation.IsValid(notification));
         }
     }
 }
