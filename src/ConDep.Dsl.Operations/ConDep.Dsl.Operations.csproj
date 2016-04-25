@@ -38,8 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConDep.Dsl, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\condep-dsl\src\ConDep.Dsl\bin\Debug\ConDep.Dsl.dll</HintPath>
+      <HintPath>..\packages\ConDep.Dsl.5.0.0-beta95\lib\net40\ConDep.Dsl.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -203,10 +203,14 @@
     <Compile Include="Remote\Installation\Zip\ZipOperation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Docs\operations.precompile.md" />
     <None Include="Remote\Deployment\NServiceBus\NServiceBus.ps1" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="Remote\PSScripts\Iis.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\Windows.ps1" />
     <EmbeddedResource Include="Remote\PSScripts\WinService.ps1" />

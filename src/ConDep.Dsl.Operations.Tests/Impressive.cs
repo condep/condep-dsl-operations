@@ -7,11 +7,11 @@ using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Tests
 {
-    public class Impressive : Runbook.Remote
+    public class Impressive : Runbook
     {
-        public override void Configure(IOfferRemoteOperations server, ConDepSettings settings)
+        public override void Execute(IOfferOperations dsl, ConDepSettings settings)
         {
-            server.Execute.PowerShell("asdlfkj");
+            dsl.Remote(x => x.Execute.PowerShell("asdlfkj"));
         }
     }
 }
