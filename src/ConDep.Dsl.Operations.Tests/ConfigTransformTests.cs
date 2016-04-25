@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using ConDep.Dsl.Config;
-using ConDep.Dsl.Operations.Application.Local.TransformConfig;
 using ConDep.Dsl.Operations.Local.TransformConfig;
-using ConDep.Dsl.Validation;
 using log4net;
 using log4net.Appender;
 using log4net.Repository.Hierarchy;
@@ -85,8 +83,7 @@ namespace ConDep.Dsl.Tests
             var expectedResultFile = WriteTextToTempFile(Consts.Result01);
 
             var trans = new TransformConfigOperation(Path.GetDirectoryName(source), Path.GetFileName(source), Path.GetFileName(transform));
-            var webDepStatus = new StatusReporter();
-            trans.Execute(webDepStatus, _settingsDefault, _token);
+            trans.Execute(_settingsDefault, _token);
 
             //Assert.That(webDepStatus.HasErrors, Is.False);
 
