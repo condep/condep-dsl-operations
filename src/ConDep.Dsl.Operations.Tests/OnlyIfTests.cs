@@ -1,7 +1,7 @@
 ﻿using ConDep.Dsl.Builders;
 using ConDep.Dsl.Config;
 using ConDep.Dsl.LoadBalancer;
-using ConDep.Dsl.Sequence;
+//using ConDep.Dsl.Sequence;
 using NUnit.Framework;
 
 namespace ConDep.Dsl.Tests
@@ -9,27 +9,27 @@ namespace ConDep.Dsl.Tests
     [TestFixture]
     public class OnlyIfTests
     {
-        private ExecutionSequenceManager _sequenceManager;
-        private ServerInfo _serverInfo;
+        //private ExecutionSequenceManager _sequenceManager;
+        //private ServerInfo _serverInfo;
 
-        [SetUp]
-        public void Setup()
-        {
-            var app = new OnlyIfTestApp();
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    var app = new OnlyIfTestApp();
 
-            var config = new ConDepEnvConfig { EnvironmentName = "bogusEnv" };
-            var server = new ServerConfig { Name = "bogusHost" };
-            config.Servers = new[] { server };
+        //    var config = new ConDepEnvConfig { EnvironmentName = "bogusEnv" };
+        //    var server = new ServerConfig { Name = "bogusHost" };
+        //    config.Servers = new[] { server };
 
-            _sequenceManager = new ExecutionSequenceManager(config.Servers, new DefaultLoadBalancer());
+        //    _sequenceManager = new ExecutionSequenceManager(config.Servers, new DefaultLoadBalancer());
 
-            var settings = new ConDepSettings { Config = config };
+        //    var settings = new ConDepSettings { Config = config };
 
-            var local = new LocalOperationsBuilder(_sequenceManager.NewLocalSequence("Test"));
-            app.Configure(local, settings);
+        //    var local = new LocalOperationsBuilder(_sequenceManager.NewLocalSequence("Test"));
+        //    app.Configure(local, settings);
 
-            _serverInfo = new ServerInfo {OperatingSystem = new OperatingSystemInfo {Name = "Windows Server 2012"}};
-        }
+        //    _serverInfo = new ServerInfo {OperatingSystem = new OperatingSystemInfo {Name = "Windows Server 2012"}};
+        //}
 
         //[Test]
         //public void TestThat_ConditionIsTrue()
@@ -43,23 +43,12 @@ namespace ConDep.Dsl.Tests
     }
 
 
-    public class OnlyIfTestApp : Runbook.Local
+    public class OnlyIfTestApp : Runbook
     {
-        public override void Configure(IOfferLocalOperations onLocalMachine, ConDepSettings settings)
+        public override void Execute(IOfferOperations dsl, ConDepSettings settings)
         {
-            onLocalMachine.ToEachServer(server => {
-
-                server
-                    .Configure
-                        .OnlyIf(x => x.OperatingSystem.Name.StartsWith("Windows"))
-                            .IIS();
-
-                server
-                    .OnlyIf(x => x.OperatingSystem.Name.StartsWith("Windows"))
-                    .Execute.PowerShell("write-host ''");
-
-            }
-            );
+            //OnlyIf is removed from the newwst ConDep.Dsl
+            throw new System.NotImplementedException();
         }
     }
 }
