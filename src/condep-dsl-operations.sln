@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConDep.Dsl.Operations", "ConDep.Dsl.Operations\ConDep.Dsl.Operations.csproj", "{A1FF699A-76FF-440C-8FD2-9FCA9EE3B26F}"
 EndProject
@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConDep.Dsl.Operations.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6AC10674-C596-47BD-9ED8-038776FD7002}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\nuget.config = .nuget\nuget.config
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
