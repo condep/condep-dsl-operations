@@ -27,7 +27,7 @@ namespace ConDep.Dsl.Operations.Remote.Deployment.WindowsService
             ExecuteUserRights(remote);
             ExecuteServiceFailure(remote);
             ExecuteServiceConfig(remote);
-            ExecuteServiceStart(remote);
+            if(!_values.DoNotStart) ExecuteServiceStart(remote);
 
             return Result.SuccessChanged();
         }
