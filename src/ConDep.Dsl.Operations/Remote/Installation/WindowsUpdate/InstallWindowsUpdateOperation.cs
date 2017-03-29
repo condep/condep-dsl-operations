@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Management.Automation;
 using System.Threading;
 using ConDep.Dsl.Config;
 
@@ -24,15 +27,16 @@ $progs = Get-WmiObject -Class Win32_Product | Select-Object -Property Name
 
 	foreach($prog in $progs){{
 		if($prog.Name -eq ""{_packageId}""){{
-            return ConvertTo-ConDepResult $false
+            return $false
 		}}
 	}}
-	return ConvertTo-ConDepResult $true
+	return $true
 ";
 
-            var notInstalledResult = remote.Execute.PowerShell(notAlreadyInstalled).Result;
+            var ExecutionResult = ((Collection<PSObject>)remote.Execute.PowerShell(notAlreadyInstalled).Result.Data.PsResult).First().ToString().ToLowerInvariant();
+            var notInstalledResult = Convert.ToBoolean(ExecutionResult);
 
-            if (notInstalledResult.Data.PsResult == true)
+            if (notInstalledResult == true)
             {
                 remote.Install.Msi(_packageName, new Uri(_packageUrl));
                 return Result.SuccessChanged();

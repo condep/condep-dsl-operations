@@ -1,4 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Management.Automation;
+using System.Threading;
 using ConDep.Dsl.Config;
 
 namespace ConDep.Dsl.Operations.Remote
@@ -20,10 +24,12 @@ if(!(Test-Path ""{0}""))
     New-Item -ItemType directory -Path ""{0}""
     return $true
 }}
-return ConvertTo-ConDepResult $false
+return $false
 ", _path);
 
-            var changed = remote.Execute.PowerShell(createFolderScript).Result.Data;
+            var executionResult = ((Collection<PSObject>)remote.Execute.PowerShell(createFolderScript).Result.Data.PsResult).First().ToString().ToLowerInvariant();
+            var changed = Convert.ToBoolean(executionResult);
+            
             return new Result(true, changed);
         }
 

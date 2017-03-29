@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Management.Automation;
 using System.Threading;
 using ConDep.Dsl.Config;
 using Microsoft.Win32;
@@ -22,19 +24,21 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.Windows.UserAdmin
 
             string uacEnabled = $@"
 $regKey = Get-ItemProperty -Path hklm:software\microsoft\windows\currentversion\policies\system -Name ""EnableLUA""
-return ConvertTo-ConDepResult ($regKey.EnableLUA -eq ${!_enabled})";
+return $regKey.EnableLUA -eq ${!_enabled}";
 
             const string restartNeeded = @"
 $restartEnvVar = [Environment]::GetEnvironmentVariable(""CONDEP_RESTART_NEEDED"",""Machine"")
-return ConvertTo-ConDepResult ($restartEnvVar -eq 'true')
+return $restartEnvVar -eq 'true'
 ";
 
             //Assume restart is not necessary.
             remote.Configure.EnvironmentVariable("CONDEP_RESTART_NEEDED", "false", EnvironmentVariableTarget.Machine);
 
             //Set uac if not set. Set env variable for restarting server necessary.
-            var uacResult = remote.Execute.PowerShell(uacEnabled).Result;
-            if (uacResult.Data.PsResult == true)
+            var uacExecutionResult = ((Collection<PSObject>)remote.Execute.PowerShell(uacEnabled).Result.Data.PsResult).First().ToString().ToLowerInvariant();
+            var uacResult = Convert.ToBoolean(uacExecutionResult);
+
+            if (uacResult == true)
             {
                 result.Changed = true;
                 remote.Configure
@@ -51,8 +55,10 @@ return ConvertTo-ConDepResult ($restartEnvVar -eq 'true')
             }
 
             //Restart server and set env variable for restart NOT necessary, since the machine rebooted.
-            var restartResult = remote.Execute.PowerShell(restartNeeded).Result;
-            if (restartResult.Data.PsResult == true)
+            var restartExecutionResult = ((Collection<PSObject>)remote.Execute.PowerShell(restartNeeded).Result.Data.PsResult).First().ToString().ToLowerInvariant();
+            var restartResult = Convert.ToBoolean(restartExecutionResult);
+            
+            if (restartResult == true)
             {
                 result.Data.CausedRestart = true;
                 remote
