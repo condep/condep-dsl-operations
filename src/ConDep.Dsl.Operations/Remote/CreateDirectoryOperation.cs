@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Management.Automation;
 using System.Threading;
@@ -28,9 +27,11 @@ return $false
 ", _path);
 
             var executionResult = ((Collection<PSObject>)remote.Execute.PowerShell(createFolderScript).Result.Data.PsResult).First().ToString().ToLowerInvariant();
-            var changed = Convert.ToBoolean(executionResult);
-            
-            return new Result(true, changed);
+
+            if (executionResult == _path)
+                return new Result(true, true);
+
+            return new Result(true, false);
         }
 
         public override string Name => "Create Folder " + _path;
