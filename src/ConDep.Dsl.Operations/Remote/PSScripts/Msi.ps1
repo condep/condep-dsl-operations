@@ -1,7 +1,7 @@
 ﻿function Install-ConDepMsiFromUri($uri, $tempFilePath) {
     $tempFilePath = $ExecutionContext.InvokeCommand.ExpandString($tempFilePath)
 	write-Host "Downloading Msi from $uri"
-	Invoke-WebRequest $uri -OutFile $tempFilePath 
+	(New-Object System.Net.WebClient).DownloadFile($uri,$tempFilePath) 
 	write-Host "Download finished"
 	write-Host "Installing"
 	InstallMsi $tempFilePath
@@ -33,6 +33,6 @@ function Install-ConDepExecutableFromFile($path, $params) {
 function Get-ConDepRemoteFile($uri, $tempFilePath) {
     $tempFilePath = $ExecutionContext.InvokeCommand.ExpandString($tempFilePath)
 	write-Host "Downloading executable from $uri"
-	Invoke-WebRequest $uri -OutFile $tempFilePath 
+	(New-Object System.Net.WebClient).DownloadFile($uri,$tempFilePath)
 	write-Host "Download finished"
 }
