@@ -1,5 +1,6 @@
 ﻿function Install-ConDepMsiFromUri($uri, $tempFilePath) {
     $tempFilePath = $ExecutionContext.InvokeCommand.ExpandString($tempFilePath)
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 	write-Host "Downloading Msi from $uri"
 	(New-Object System.Net.WebClient).DownloadFile($uri,$tempFilePath) 
 	write-Host "Download finished"
@@ -32,6 +33,7 @@ function Install-ConDepExecutableFromFile($path, $params) {
 
 function Get-ConDepRemoteFile($uri, $tempFilePath) {
     $tempFilePath = $ExecutionContext.InvokeCommand.ExpandString($tempFilePath)
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 	write-Host "Downloading executable from $uri"
 	(New-Object System.Net.WebClient).DownloadFile($uri,$tempFilePath)
 	write-Host "Download finished"
