@@ -21,7 +21,7 @@ function New-ConDepIisWebSite {
         write-debug "WebSite $Name does not exist. Creating now..."
 
 		if(!$Bindings) {
-			$Bindings = @(@{protocol='http';bindingInformation=':80:'})
+			$Bindings = @(@{protocol='http';bindingInformation=':80:';sslFlags=0})
 		}
 	
 
@@ -64,10 +64,10 @@ function UpdateWebSiteName($id, $name) {
 function UpdateWebSiteBindings($webSite, $bindings) {
     if(!$bindings) {
         Write-Debug "No bindings provided. Using default."
-		$siteBindings = @(@{protocol='http';bindingInformation=':80:'})
+		$siteBindings = @(@{protocol='http';bindingInformation=':80:';sslFlags=0})
     }
     else {
-    	$siteBindings = $bindings | foreach-object { @{protocol=$_.protocol;bindingInformation=$_.bindingInformation}  } 
+    	$siteBindings = $bindings | foreach-object { @{protocol=$_.protocol;bindingInformation=$_.bindingInformation;sslFlags=$_.sslFlags}  } 
     }
 
     $name = $webSite.name

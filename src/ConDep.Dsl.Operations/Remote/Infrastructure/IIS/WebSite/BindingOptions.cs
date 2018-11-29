@@ -25,6 +25,12 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
             return this;
         }
 
+        public IOfferBindingOptions RequireServerNameIndication(bool requireSNI)
+        {
+            _values.RequireSNI = requireSNI;
+            return this;
+        }
+
         public BindingOptionsValues Values { get { return _values; } }
 
         public class BindingOptionsValues
@@ -32,6 +38,7 @@ namespace ConDep.Dsl.Operations.Infrastructure.IIS.WebSite
             public int Port { get; set; }
             public string Ip { get; set; }
             public string HostName { get; set; }
+            public bool RequireSNI { get; set; }
         }
 
         public class SslBindingOptionsValues

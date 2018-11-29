@@ -22,5 +22,12 @@ namespace ConDep.Dsl
         /// <param name="hostName"></param>
         /// <returns></returns>
         IOfferBindingOptions HostName(string hostName);
+
+        /// <summary>
+        /// Wether to require Server Name Indication.
+        /// </summary>
+        /// <param name="requireSNI"></param>
+        /// <returns></returns>
+        IOfferBindingOptions RequireServerNameIndication(bool requireSNI);
     }
 }
