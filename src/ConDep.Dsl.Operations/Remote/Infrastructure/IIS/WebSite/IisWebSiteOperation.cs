@@ -28,7 +28,7 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.WebSite
 
         public override Result Execute(IOfferRemoteOperations remote, ServerConfig server, ConDepSettings settings, CancellationToken token)
         {
-            var bindings = _options.Values.HttpBindings.Select(httpBinding => $"@{{protocol='http';bindingInformation='{httpBinding.Ip}:{httpBinding.Port}:{httpBinding.HostName}'}}").ToList();
+            var bindings = _options.Values.HttpBindings.Select(httpBinding => $"@{{protocol='http';bindingInformation='{httpBinding.Ip}:{httpBinding.Port}:{httpBinding.HostName}';sslFlags=0}}").ToList();
 
             foreach (var httpsBinding in _options.Values.HttpsBindings)
             {
@@ -37,7 +37,8 @@ namespace ConDep.Dsl.Operations.Remote.Infrastructure.IIS.WebSite
                     httpsBinding.FindName = httpsBinding.FindName.Replace(" ", "");
                 }
                 var type = httpsBinding.FindType.GetType();
-                bindings.Add($"@{{protocol='https';bindingInformation='{httpsBinding.BindingOptions.Ip}:{httpsBinding.BindingOptions.Port}:{httpsBinding.BindingOptions.HostName}';findType=[{type.FullName}]::{httpsBinding.FindType};findValue='{httpsBinding.FindName}'}}");
+                var sslFlags = httpsBinding.BindingOptions.RequireSNI ? "1" : "0";
+                bindings.Add($"@{{protocol='https';bindingInformation='{httpsBinding.BindingOptions.Ip}:{httpsBinding.BindingOptions.Port}:{httpsBinding.BindingOptions.HostName}';sslFlags={sslFlags};findType=[{type.FullName}]::{httpsBinding.FindType};findValue='{httpsBinding.FindName}'}}");
             }
 
             remote.Execute.PowerShell($@"New-ConDepIisWebSite '{_webSiteName}' {_id} {"@(" + string.Join(",", bindings) + ")"} {
