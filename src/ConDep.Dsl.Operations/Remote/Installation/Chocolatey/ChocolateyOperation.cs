@@ -31,7 +31,7 @@ function ConDep-ChocoPackageExist($name, $version = $null) {{
          if($line.Count -eq 2) {{
            $package = New-Object PSObject -Property @{{
                Name = $line[0].ToLower().Trim()
-               Version = $line[1].substring(1)
+               Version = $line[1]
            }}
 
            $packages.Add($line[0].ToLower().Trim(), $package)
