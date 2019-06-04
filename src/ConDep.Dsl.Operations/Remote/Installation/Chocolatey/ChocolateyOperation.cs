@@ -22,7 +22,7 @@ namespace ConDep.Dsl.Operations.Remote.Installation.Chocolatey
             return remote.Execute.PowerShell(string.Format(@"
 function ConDep-ChocoPackageExist($name, $version = $null) {{
     $name = $name.ToLower().Trim()
-    $result = choco search $($name) --local-only
+    $result = choco list -lo | select -Skip 1 | Where-object {{ $_.ToLower().StartsWith($name.ToLower()) }}
 	$resultArray = ($result -split '[\r\n]') |? {{$_}}
 	$packages = @{{}}
 
