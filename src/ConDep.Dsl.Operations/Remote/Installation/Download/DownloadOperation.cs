@@ -43,6 +43,7 @@ if((Test-Path $path)) {{
     write-host 'File allready exist. Skipping.'  
 }}
 else {{
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
     $client = new-object System.Net.WebClient
 {2}
     $client.DownloadFile(""{0}"", $path )
